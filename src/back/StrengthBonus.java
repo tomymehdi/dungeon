@@ -1,11 +1,6 @@
 package back;
 
-public class StrengthBonus extends Bonus implements Grabable{
+public class StrengthBonus {
 
-	@Override
-	public void grab() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
