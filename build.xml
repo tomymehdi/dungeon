@@ -1,0 +1,34 @@
+<project name="dungeon" default="dist" basedir=".">
+	<!-- Compila el proyecto, deja los archivos class en el directorio bin -->
+	<target name="compile">
+		<mkdir dir="bin" />
+		<javac srcdir="src" destdir="bin" classpath="lib/junit-4.7.jar" />
+	</target>
+	<!-- Crea la documentacion en formato Javadoc, en el directorio doc. -->
+	<target name="doc" depends="compile">
+		<javadoc sourcepath="src" destdir="doc" classpath="lib/junit-4.7.jar" />
+	</target>
+	<!-- Ejecuta los tests. -->
+	<target name="tests" depends="compile">
+		<junit>
+			<formatter type="brief" usefile="false" />
+			<classpath path="lib/junit-4.7.jar;bin" />
+			<test name="tests.dungeonTest1" />
+			<test name="tests.dungeonTest2" />
+		</junit>
+	</target>
+	<!-- Crea el jar ejecutable con todo el proyecto compilado. -->
+	<target name="dist" depends="compile, doc, tests">
+		<jar destfile="dungeon.jar" basedir="bin">
+			<manifest>
+				<attribute name="Main-Class" value="front.App" />
+			</manifest>
+		</jar>
+	</target>
+	<!-- Borra todos los archivos generados luego de compilar. -->
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="doc" />
+		<delete file="dungeon.jar" />
+	</target>
+</project>

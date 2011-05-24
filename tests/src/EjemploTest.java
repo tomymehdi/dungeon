@@ -1,4 +1,4 @@
-package tests;
+package src;
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -6,13 +6,14 @@ import org.junit.*;
 /**
  * 
  * @author tomas
- *
- * pruebassadkfjasdlkfj
+ * 
+ *         pruebassadkfjasdlkfj
  */
 
 public class EjemploTest {
 
 	private Integer i;
+
 	/**
 	 * asdfasdfasdf
 	 */
@@ -20,6 +21,7 @@ public class EjemploTest {
 	public void setup() {
 		i = new Integer(5);
 	}
+
 	/**
 	 * asdfasdfasefaes
 	 */
@@ -28,6 +30,7 @@ public class EjemploTest {
 		assertTrue(5 == i);
 		assertEquals(new Integer(5), i);
 	}
+
 	/**
 	 * alsdfjasdlkfjasdf
 	 */
