@@ -13,8 +13,9 @@
 		<junit>
 			<formatter type="brief" usefile="false" />
 			<classpath path="lib/junit-4.7.jar;bin" />
-			<test name="tests.dungeonTest1" />
-			<test name="tests.dungeonTest2" />
+			<batchtest fork="yes">
+				<fileset dir="tests" includes="**/*Test.java" />
+			</batchtest>
 		</junit>
 	</target>
 	<!-- Crea el jar ejecutable con todo el proyecto compilado. -->
