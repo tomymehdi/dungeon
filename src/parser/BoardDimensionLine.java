@@ -1,6 +1,6 @@
 package parser;
 
-import java.awt.Point;
+import back.Point;
 
 public class BoardDimensionLine extends Lines {
 
