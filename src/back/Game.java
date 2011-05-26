@@ -1,11 +1,12 @@
 package back;
 
 import loadAndSave.LoadGame;
+import loadAndSave.SaveGame;
 import parser.BoardParser;
 
 public class Game {
 
-	public static final Integer LEVEL = 3;
+	public static Integer LEVEL = 3;
 	static Integer LIFE = 10;
 	static Integer STRENGTH = 5;
 
@@ -58,6 +59,10 @@ public class Game {
 	public void resetGame(){
 		boardParser = new BoardParser(boardPath);
 		player = new Player( player.getName(), boardParser.getPlayerPosition(), LIFE, STRENGTH);
+	}
+	
+	public void saveGame(){
+		new SaveGame(this);
 	}
 	
 	public BoardParser getBoardParser() {

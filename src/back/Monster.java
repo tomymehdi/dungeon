@@ -48,6 +48,8 @@ public class Monster extends Character implements Putable {
 
 	@Override
 	public void standOver(Game game) {
+		game.getBoardParser().getBoard()[game.getPlayer().getPosition().x][game
+				.getPlayer().getPosition().y] = new Floor();
 	}
 
 }

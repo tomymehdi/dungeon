@@ -18,7 +18,7 @@ public class SaveGame {
 		try {
 			save();
 		} catch (IOException e) {
-			//TODO NO OLVIDAR AGARRARLA DSPS
+			// TODO NO OLVIDAR AGARRARLA DSPS
 			throw new SavingCorruptedException();
 		}
 	}
@@ -58,9 +58,26 @@ public class SaveGame {
 		out.write(gameToSave.getPlayer().getPosition().x + ","
 				+ gameToSave.getPlayer().getPosition().y);
 		out.newLine();
+		out.write("#Player experience,experienceToLevel at moment of saving");
+		out.newLine();
+		out.write(gameToSave.getPlayer().getExperience().toString());
+		out.newLine();
+		out.write("#Player health,max health at moment of saving");
+		out.newLine();
+		out.write(gameToSave.getPlayer().getHealth() + ","
+				+ gameToSave.getPlayer().getMaxHealth());
+		out.newLine();
+		out.write("#Player strength at moment of saving");
+		out.newLine();
+		out.write(gameToSave.getPlayer().getStrength().toString());
+		out.newLine();
 		out.write("#Count of steps done at the moment of saving");
 		out.newLine();
-		out.write(gameToSave.getPlayer().getSteps());
+		out.write(gameToSave.getPlayer().getSteps().toString());
+		out.newLine();
+		out.write("#Dungeon map");
+		out.newLine();
+		out.write(gameToSave.getPlayer().getSteps().toString());
 		out.newLine();
 
 		out.flush();

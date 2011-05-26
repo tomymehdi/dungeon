@@ -1,0 +1,14 @@
+#Board dimensions
+10,10
+#Player starting position, help if gameloaded and restarted
+4,4
+#Player current position at the moment of saving
+4,4
+#Player experience,experienceToLevel at moment of saving
+0
+#Player health,max health at moment of saving
+10,10
+#Player strength at moment of saving
+5
+#Count of steps done at the moment of saving
+0
