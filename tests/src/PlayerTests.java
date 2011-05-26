@@ -24,20 +24,20 @@ public class PlayerTests {
 
 	@Test
 	public void goodFunctionamientPlayerMovementTest() {
-		assertEquals(new Point(3,3), player.getPosition());
+		assertEquals(new Point(4,4), player.getPosition());
 		player.move(MoveTypes.UP);
-		assertEquals(new Point(2,3), player.getPosition());
+		assertEquals(new Point(3,4), player.getPosition());
 		player.move(MoveTypes.LEFT);
-		assertEquals(new Point(2,2), player.getPosition());
-		player.move(MoveTypes.DOWN);
-		assertEquals(new Point(3,2), player.getPosition());
-		player.move(MoveTypes.RIGHT);
 		assertEquals(new Point(3,3), player.getPosition());
+		player.move(MoveTypes.DOWN);
+		assertEquals(new Point(4,3), player.getPosition());
+		player.move(MoveTypes.RIGHT);
+		assertEquals(new Point(4,4), player.getPosition());
 	}
 	
 	@Test
 	public void goodFunctionamientPlayerVsMonsterFightTest(){
-		Monster monster = ((Monster)boardParser.getBoard()[4][6]);
+		Monster monster = ((Monster)boardParser.getBoard()[5][7]);
 		player.fightAnotherCharacter(monster);
 		assertEquals(new Integer(player.getMaxHealth()-monster.getStrength()), player.getHealth());
 		assertEquals(new Integer(monster.getMaxHealth()-player.getStrength()), monster.getHealth());
@@ -46,8 +46,8 @@ public class PlayerTests {
 	@Test
 	public void goodFunctionamientPlayerEarningBonusTest(){
 		player.setHealth(1);
-		((Bonus)boardParser.getBoard()[7][1]).giveBonus(player);
-		((Bonus)boardParser.getBoard()[1][7]).giveBonus(player);
+		((Bonus)boardParser.getBoard()[8][2]).giveBonus(player);
+		((Bonus)boardParser.getBoard()[2][8]).giveBonus(player);
 		assertEquals(new Integer(6), player.getHealth());
 		assertEquals(new Integer(8), player.getStrength());
 		

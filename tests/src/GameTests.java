@@ -29,13 +29,13 @@ public class GameTests {
 		assertEquals(new Integer(4), game.getPlayer().getHealth());
 		assertEquals(new Integer(1), game.getPlayer().getExperience());
 		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(3,2),game.getPlayer().getPosition());
+		assertEquals(new Point(4,3),game.getPlayer().getPosition());
 		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(3,1),game.getPlayer().getPosition());
+		assertEquals(new Point(4,2),game.getPlayer().getPosition());
 		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(3,1),game.getPlayer().getPosition());
+		assertEquals(new Point(4,2),game.getPlayer().getPosition());
 		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(3,1),game.getPlayer().getPosition());
+		assertEquals(new Point(4,2),game.getPlayer().getPosition());
 	}
 	
 	@Test
@@ -56,13 +56,11 @@ public class GameTests {
 		Bonus bonus2 = new StrengthBonus(50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
-		game.getPlayer().setPosition(new Point(3,5));
+		game.getPlayer().setPosition(new Point(4,6));
 		game.movePlayer(MoveTypes.UP);
-		assertTrue(((Monster)(game.getBoardParser().getBoard()[2][5])).isDead());
+		assertTrue(((Monster)(game.getBoardParser().getBoard()[3][6])).isDead());
 		game.resetGame();
-		assertFalse(((Monster)(game.getBoardParser().getBoard()[2][5])).isDead());
-		assertEquals(new Point(3,3), game.getPlayer().getPosition());
-		
-		
+		assertFalse(((Monster)(game.getBoardParser().getBoard()[3][6])).isDead());
+		assertEquals(new Point(4,4), game.getPlayer().getPosition());
 	}
 }

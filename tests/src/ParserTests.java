@@ -32,6 +32,15 @@ public class ParserTests {
 	public void startPlayerPositionOverAWallTest() {
 		new BoardParser("./testBoard/boardForTest3");
 	}
+	
+	@Test
+	public void mapWithoutSurroundingWalls() {
+		BoardParser boardParser = new BoardParser("./testBoard/boardForTest4");
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,0)).getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,0)).getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,11)).getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,11)).getClass());
+	}
 
 	@Test(expected = CorruptedFileException.class)
 	public void badPathPassedTest() {
@@ -50,45 +59,45 @@ public class ParserTests {
 
 	@Test
 	public void goodParseOfPlayerPositionTest() {
-		assertEquals(new Point(3, 3), boardParser.getPlayerPosition());
+		assertEquals(new Point(4, 4), boardParser.getPlayerPosition());
 	}
 
 	@Test
 	public void goodParseOfAnyCellPositionTest() {
-		assertEquals(Wall.class, boardParser.getBoard()[0][0].getClass());
-		assertEquals(Wall.class, boardParser.getBoard()[9][0].getClass());
-		assertEquals(Wall.class, boardParser.getBoard()[0][9].getClass());
-		assertEquals(Wall.class, boardParser.getBoard()[9][9].getClass());
+		assertEquals(Wall.class, boardParser.getBoard()[1][1].getClass());
+		assertEquals(Wall.class, boardParser.getBoard()[10][1].getClass());
+		assertEquals(Wall.class, boardParser.getBoard()[1][10].getClass());
+		assertEquals(Wall.class, boardParser.getBoard()[10][10].getClass());
 		assertEquals(StrengthBonus.class,
-				boardParser.getBoard()[1][7].getClass());
-		assertEquals(LifeBonus.class, boardParser.getBoard()[7][1].getClass());
-		assertEquals(Monster.class, boardParser.getBoard()[4][6].getClass());
-		assertEquals(Monster.class, boardParser.getBoard()[2][5].getClass());
-		assertEquals(Monster.class, boardParser.getBoard()[1][3].getClass());
+				boardParser.getBoard()[2][8].getClass());
+		assertEquals(LifeBonus.class, boardParser.getBoard()[8][2].getClass());
+		assertEquals(Monster.class, boardParser.getBoard()[5][7].getClass());
+		assertEquals(Monster.class, boardParser.getBoard()[3][6].getClass());
+		assertEquals(Monster.class, boardParser.getBoard()[2][4].getClass());
 	}
 
 	@Test
 	public void goodParseOfMonsterTest() {
 		assertEquals(MonsterTypes.DRAGON,
-				((Monster) boardParser.getBoard()[8][1]).getMonsterType());
+				((Monster) boardParser.getBoard()[9][2]).getMonsterType());
 		assertEquals(new Integer(3),
-				((Monster) boardParser.getBoard()[8][1]).getLevel());
+				((Monster) boardParser.getBoard()[9][2]).getLevel());
 	}
 
 	@Test
 	public void goodParseOfBonusTest() {
 		assertEquals(new Integer(5),
-				((LifeBonus) boardParser.getBoard()[7][1]).getLifeBonus());
+				((LifeBonus) boardParser.getBoard()[8][2]).getLifeBonus());
 		assertEquals(new Integer(3),
-				((StrengthBonus) boardParser.getBoard()[1][7])
+				((StrengthBonus) boardParser.getBoard()[2][8])
 						.getStrengthBonus());
 	}
 	
 	@Test
 	public void boardWatchTest(){
 		String resp = "";
-		for (int i = 0; i < boardParser.getBoardRows(); i++) {
-			for (int j = 0; j < boardParser.getBoardColums(); j++) {
+		for (int i = 0; i < boardParser.getBoardRows()+2; i++) {
+			for (int j = 0; j < boardParser.getBoardColums()+2; j++) {
 				resp += boardParser.getBoard()[i][j] + " ";
 			}
 			resp += "\n";

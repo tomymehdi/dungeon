@@ -1,5 +1,6 @@
 package back;
 
+import loadAndSave.LoadGame;
 import parser.BoardParser;
 
 public class Game {
@@ -20,6 +21,10 @@ public class Game {
 		//TODO
 		player = new Player("Tomas"/*nameListener.nameRequest()*/,
 				boardParser.getPlayerPosition(), LIFE, STRENGTH);
+	}
+	
+	public Game(LoadGame loadgame){
+		
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {

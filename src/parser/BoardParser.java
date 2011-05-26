@@ -13,16 +13,17 @@ import back.StrengthBonus;
 import back.Wall;
 
 /**
- * @author tomas
- * Class full dedicated to read a file and transform it to a board.
+ * @author tomas Class full dedicated to read a file and transform it to a
+ *         board.
  */
 public class BoardParser {
 
 	private BufferedReader inputBoard;
-	private Point boardDimension; //cantidad de filas x cantidad de columnas
+	private Point boardDimension; // cantidad de filas x cantidad de columnas
 	private String boardName;
 	private Point playerPosition;
-	private Putable[][] board;  //si tengo un elemento en 1,7 es fila 1 columna 7
+	private Putable[][] board; // si tengo un elemento en 1,7 es fila 1 columna
+								// 7
 
 	public BoardParser(String path) {
 
@@ -30,6 +31,7 @@ public class BoardParser {
 			inputBoard = new BufferedReader(new FileReader(path));
 			fileParser();
 		} catch (IOException e) {
+			// TODO NO OLVIDAR AGARRARLA DSPS
 			throw new CorruptedFileException();
 		}
 	}
@@ -52,7 +54,7 @@ public class BoardParser {
 							line);
 					this.boardDimension = boardDimensionLine
 							.getBoardDimension();
-					board = new Putable[this.boardDimension.x][this.boardDimension.y];
+					board = new Putable[this.boardDimension.x + 2][this.boardDimension.y + 2];
 					dimensionFlag = true;
 				} else if (!nameFlag) {
 					BoardNameLine boardNameLine = new BoardNameLine(line);
@@ -65,40 +67,60 @@ public class BoardParser {
 						throw new CorruptedFileException();
 					}
 
-					Point point = new Point(cell.getData(1), cell.getData(2));
+					Point point = (new Point(cell.getData(1), cell.getData(2)))
+							.add(new Point(1, 1));
 
 					if (cell.isPlayerLine()) {
 						playerPosition = point;
 						playerFlag = true;
 
 						// TODO PREGUNTAR POR MANERA DE TENER UNA LISTA DE
-						// CLASES Y PODER CREAR UNA INSTANCIA DE UNA DE LAS CLASES DE
+						// CLASES Y PODER CREAR UNA INSTANCIA DE UNA DE LAS
+						// CLASES DE
 						// ESA LISTA
 					} else if (cell.isWallLine()) {
 						board[point.x][point.y] = new Wall();
 					} else if (cell.isMonsterLine()) {
-						Monster monster = new Monster(point,cell.getData(3), cell.getData(4));
+						Monster monster = new Monster(point, cell.getData(3),
+								cell.getData(4));
 						board[point.x][point.y] = monster;
 					} else if (cell.isLifeBonusLine()) {
 						board[point.x][point.y] = new LifeBonus(cell.getData(5));
 					} else {
-						board[point.x][point.y] = new StrengthBonus(cell.getData(5));
+						board[point.x][point.y] = new StrengthBonus(
+								cell.getData(5));
 					}
 				}
 			}
 		}
-		
-		for(int i = 0 ; i < boardDimension.x ; i++){
-			for(int j = 0 ; j < boardDimension.y ; j++){
-				if(board[i][j] == null){
+
+		protectionWalls();
+		putFloor();
+
+		if (board[playerPosition.x][playerPosition.y].getClass() != Floor.class) {
+			throw new CorruptedFileException();
+		}
+
+	}
+
+	private void putFloor() {
+		for (int i = 1; i < boardDimension.x + 1; i++) {
+			for (int j = 1; j < boardDimension.y + 1; j++) {
+				if (board[i][j] == null) {
 					board[i][j] = new Floor();
 				}
 			}
 		}
-		
-		if( board[playerPosition.x][playerPosition.y].getClass() != Floor.class ){
-			throw new CorruptedFileException();
+	}
+
+	private void protectionWalls() {
+		for (int i = 0; i < boardDimension.x + 2; i++) {
+			board[i][0] = new Wall();
+			board[0][i] = new Wall();
+			board[i][boardDimension.y + 1] = new Wall();
+			board[boardDimension.x + 1][i] = new Wall();
 		}
+
 	}
 
 	public Point getBoardDimension() {
@@ -120,8 +142,8 @@ public class BoardParser {
 	public int getBoardRows() {
 		return boardDimension.x;
 	}
-	
-	public int getBoardColums(){
+
+	public int getBoardColums() {
 		return boardDimension.y;
 	}
 
