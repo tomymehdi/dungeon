@@ -12,7 +12,7 @@ public abstract class Bonus implements Putable {
 	@Override
 	public void standOver(Game game) {
 		giveBonus(game.getPlayer());
-		game.getBoardParser().getBoard()[game.getPlayer().getPosition().x][game
+		game.getBoard()[game.getPlayer().getPosition().x][game
 				.getPlayer().getPosition().y] = new Floor();
 		// TODO
 		// game.getGameListener().executeWhenBonusGrabed();

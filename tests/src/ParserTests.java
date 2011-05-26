@@ -2,6 +2,8 @@ package src;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,22 +22,22 @@ public class ParserTests {
 
 	@Before
 	public void setup() {
-		boardParser = new BoardParser("./testBoard/boardForTest1");
+		boardParser = new BoardParser(new File("./testBoard/boardForTest1"));
 	}
 	
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAMonsterTest() {
-		new BoardParser("./testBoard/boardForTest2");
+		new BoardParser(new File("./testBoard/boardForTest2"));
 	}
 	
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAWallTest() {
-		new BoardParser("./testBoard/boardForTest3");
+		new BoardParser(new File("./testBoard/boardForTest3"));
 	}
 	
 	@Test
 	public void mapWithoutSurroundingWalls() {
-		BoardParser boardParser = new BoardParser("./testBoard/boardForTest4");
+		BoardParser boardParser = new BoardParser(new File("./testBoard/boardForTest4"));
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,0)).getClass());
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,0)).getClass());
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,11)).getClass());
@@ -44,7 +46,7 @@ public class ParserTests {
 
 	@Test(expected = CorruptedFileException.class)
 	public void badPathPassedTest() {
-		new BoardParser("./noExist");
+		new BoardParser(new File("./noExist"));
 	}
 
 	@Test

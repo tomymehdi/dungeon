@@ -1,6 +1,7 @@
 package parser;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -26,10 +27,10 @@ public class BoardParser {
 
 	// 7
 
-	public BoardParser(String path) {
+	public BoardParser(File file) {
 
 		try {
-			inputBoard = new BufferedReader(new FileReader(path));
+			inputBoard = new BufferedReader(new FileReader(file));
 			fileParser();
 		} catch (IOException e) {
 			// TODO NO OLVIDAR AGARRARLA DSPS
@@ -37,7 +38,7 @@ public class BoardParser {
 		}
 	}
 
-	private void fileParser() throws IOException {
+	public void fileParser() throws IOException {
 
 		boolean dimensionFlag = false;
 		boolean nameFlag = false;
@@ -51,15 +52,10 @@ public class BoardParser {
 
 			if (!line.isEmpty()) {
 				if (!dimensionFlag) {
-					BoardDimensionLine boardDimensionLine = new BoardDimensionLine(
-							line);
-					this.boardDimension = boardDimensionLine
-							.getBoardDimension().add(new Point(2, 2));
-					board = new Putable[this.boardDimension.x][this.boardDimension.y];
+					parseDimension(line);
 					dimensionFlag = true;
 				} else if (!nameFlag) {
-					BoardNameLine boardNameLine = new BoardNameLine(line);
-					this.boardName = boardNameLine.getName();
+					parseBoardName(line);
 					nameFlag = true;
 				} else {
 					BoardLine cell = new BoardLine(line, boardDimension);
@@ -72,7 +68,7 @@ public class BoardParser {
 							.add(new Point(1, 1));
 
 					if (cell.isPlayerLine()) {
-						playerPosition = point;
+						parsePlayer(cell,point);
 						playerFlag = true;
 
 						// TODO PREGUNTAR POR MANERA DE TENER UNA LISTA DE
@@ -80,16 +76,14 @@ public class BoardParser {
 						// CLASES DE
 						// ESA LISTA
 					} else if (cell.isWallLine()) {
-						board[point.x][point.y] = new Wall();
+						parseWall(point);
 					} else if (cell.isMonsterLine()) {
-						Monster monster = new Monster(point, cell.getData(3),
-								cell.getData(4));
-						board[point.x][point.y] = monster;
+						parseMonster(point, cell);
 					} else if (cell.isLifeBonusLine()) {
-						board[point.x][point.y] = new LifeBonus(cell.getData(5));
+						parseLifeBonus(point, cell);
 					} else {
-						board[point.x][point.y] = new StrengthBonus(cell
-								.getData(5));
+						parseStrengthBonus(point, cell);
+
 					}
 				}
 			}
@@ -104,7 +98,43 @@ public class BoardParser {
 
 	}
 
-	private void putFloor() {
+	public void parsePlayer(BoardLine cell, Point point) {
+		playerPosition = point;
+	}
+
+	public void parseStrengthBonus(Point point, BoardLine cell) {
+		board[point.x][point.y] = new StrengthBonus(cell.getData(5));
+	}
+
+	public void parseLifeBonus(Point point, BoardLine cell) {
+		board[point.x][point.y] = new LifeBonus(cell.getData(5));
+	}
+
+	private void parseMonster(Point point, BoardLine cell) {
+		Monster monster = new Monster(point, cell.getData(3), cell.getData(4));
+		board[point.x][point.y] = monster;
+
+	}
+
+	public void parseWall(Point point) {
+		board[point.x][point.y] = new Wall();
+
+	}
+
+	public void parseBoardName(String line) {
+		BoardNameLine boardNameLine = new BoardNameLine(line);
+		this.boardName = boardNameLine.getName();
+	}
+
+	public void parseDimension(String line) {
+		BoardDimensionLine boardDimensionLine = new BoardDimensionLine(line);
+		boardDimension = boardDimensionLine.getBoardDimension().add(
+				new Point(2, 2));
+		board = new Putable[boardDimension.x][boardDimension.y];
+
+	}
+
+	public void putFloor() {
 		for (int i = 1; i < boardDimension.x - 1; i++) {
 			for (int j = 1; j < boardDimension.y - 1; j++) {
 				if (board[i][j] == null) {
@@ -114,7 +144,7 @@ public class BoardParser {
 		}
 	}
 
-	private void protectionWalls() {
+	public void protectionWalls() {
 		for (int i = 0; i < boardDimension.x; i++) {
 			board[i][0] = new Wall();
 			board[0][i] = new Wall();

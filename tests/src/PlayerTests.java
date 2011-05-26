@@ -2,6 +2,8 @@ package src;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class PlayerTests {
 
 	@Before
 	public void setup() {
-		boardParser = new BoardParser("./testBoard/boardForTest1");
+		boardParser = new BoardParser(new File("./testBoard/boardForTest1"));
 		player = new Player("Tomas",boardParser.getPlayerPosition(), 10, 5);
 	}
 

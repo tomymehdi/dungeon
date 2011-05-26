@@ -1,6 +1,9 @@
 package back;
 
+import java.io.File;
+
 import loadAndSave.LoadGame;
+import loadAndSave.SaveGame;
 import parser.BoardParser;
 
 public class Game {
@@ -9,22 +12,29 @@ public class Game {
 	static Integer LIFE = 10;
 	static Integer STRENGTH = 5;
 
-	private Player player;
 	private String boardPath;
-	private BoardParser boardParser;
+	private String boardName;
+	private Player player;
+	private Point startingPlayerPosition;
+	private Point boardDimension;
+	private Putable[][] board;
 	private GameListener gameListener;
-	//private NameListener nameListener;
+	// private NameListener nameListener;
 
 	public Game(String boardPath) {
 		this.boardPath = boardPath;
-		boardParser = new BoardParser(boardPath);
-		//TODO
-		player = new Player("Tomas"/*nameListener.nameRequest()*/,
+		BoardParser boardParser = new BoardParser(new File(boardPath));
+		boardName = boardParser.getBoardName();
+		startingPlayerPosition = boardParser.getPlayerPosition();
+		boardDimension = boardParser.getBoardDimension();
+		board = boardParser.getBoard();
+		// TODO
+		player = new Player("Tomas"/* nameListener.nameRequest() */,
 				boardParser.getPlayerPosition(), LIFE, STRENGTH);
 	}
-	
-	public Game(LoadGame loadgame){
-		//TODO HACER
+
+	public Game(LoadGame loadgame) {
+		// TODO HACER
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -32,14 +42,17 @@ public class Game {
 	}
 
 	public void movePlayer(MoveTypes moveType) {
-		
-		Point nextPlayerPosition = player.getPosition().add(moveType.getDirection());
-		
-		if (boardParser.getBoardElem(nextPlayerPosition).allowMovement(this)) {
+
+		Point nextPlayerPosition = player.getPosition().add(
+				moveType.getDirection());
+
+		if (board[nextPlayerPosition.x][nextPlayerPosition.y]
+				.allowMovement(this)) {
 			player.move(moveType);
-			//TODO
-			//gameListener.executeWhenPlayerMoves();
-			boardParser.getBoardElem(player.getPosition()).standOver(this);
+			// TODO
+			// gameListener.executeWhenPlayerMoves();
+			board[player.getPosition().x][player.getPosition().y]
+					.standOver(this);
 		}
 	}
 
@@ -54,39 +67,65 @@ public class Game {
 	public GameListener getGameListener() {
 		return gameListener;
 	}
-	
-	public void resetGame(){
-		boardParser = new BoardParser(boardPath);
-		player = new Player( player.getName(), boardParser.getPlayerPosition(), LIFE, STRENGTH);
+
+	public void resetGame() {
+		BoardParser boardParser = new BoardParser(new File(boardPath));
+		board = boardParser.getBoard();
+		player = new Player(player.getName(), boardParser.getPlayerPosition(),
+				LIFE, STRENGTH);
 	}
-	
-	public BoardParser getBoardParser() {
-		return boardParser;
+
+	public void saveGame() {
+		new SaveGame(this);
+	}
+
+	public void saveGame(File placeToSave) {
+		new SaveGame(this, placeToSave);
+	}
+
+	public void loadGame(File placeToLoad) {
+		new LoadGame(placeToLoad);
 	}
 
 	public void winned() {
-		//TODO
-		//gameListener.executeWhenGameWinned();
+		// TODO
+		// gameListener.executeWhenGameWinned();
 	}
-	
+
 	public void loosed() {
-		//TODO
-		//gameListener.executeWhenGameLoosed();
+		// TODO
+		// gameListener.executeWhenGameLoosed();
 	}
 
 	public void fightEnd(Monster monster) {
-		if(monster.isDead()){
-			boardParser.getBoard()[monster.getPosition().x][monster.getPosition().y] = new BloodyFloor();
+		if (monster.isDead()) {
+			board[monster.getPosition().x][monster.getPosition().y] = new BloodyFloor();
 			// TODO
 			// gameListener.executeWhenCharacterDie();
 		}
-		if(player.isDead()){
-			boardParser.getBoard()[player.getPosition().x][player.getPosition().y] = new BloodyFloor();
+		if (player.isDead()) {
+			board[player.getPosition().x][player.getPosition().y] = new BloodyFloor();
 			// TODO
 			// gameListener.executeWhenCharacterDie();
 			loosed();
 		}
-		
+
+	}
+
+	public Point getStartingPlayerPosition() {
+		return startingPlayerPosition;
+	}
+
+	public Putable[][] getBoard() {
+		return board;
+	}
+
+	public Point getBoardDimension() {
+		return boardDimension;
+	}
+
+	public String getBoardName() {
+		return boardName;
 	}
 
 }
