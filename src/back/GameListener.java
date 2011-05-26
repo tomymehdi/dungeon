@@ -4,12 +4,12 @@ public interface GameListener {
 	
 	public void executeWhenPlayerMoves();
 
-	public void executeAtAFightEnd();
-
 	public void executeWhenBonusGrabed();
 	
-	public void executeWhenPlayerDie();
-
+	public void executeWhenCharacterDie();
+	
+	public void executeWhenGameLoosed();
+	
 	public void executeWhenGameWinned();
-
+	
 }

@@ -23,7 +23,8 @@ public class BoardParser {
 	private String boardName;
 	private Point playerPosition;
 	private Putable[][] board; // si tengo un elemento en 1,7 es fila 1 columna
-								// 7
+
+	// 7
 
 	public BoardParser(String path) {
 
@@ -53,8 +54,8 @@ public class BoardParser {
 					BoardDimensionLine boardDimensionLine = new BoardDimensionLine(
 							line);
 					this.boardDimension = boardDimensionLine
-							.getBoardDimension();
-					board = new Putable[this.boardDimension.x + 2][this.boardDimension.y + 2];
+							.getBoardDimension().add(new Point(2, 2));
+					board = new Putable[this.boardDimension.x][this.boardDimension.y];
 					dimensionFlag = true;
 				} else if (!nameFlag) {
 					BoardNameLine boardNameLine = new BoardNameLine(line);
@@ -87,8 +88,8 @@ public class BoardParser {
 					} else if (cell.isLifeBonusLine()) {
 						board[point.x][point.y] = new LifeBonus(cell.getData(5));
 					} else {
-						board[point.x][point.y] = new StrengthBonus(
-								cell.getData(5));
+						board[point.x][point.y] = new StrengthBonus(cell
+								.getData(5));
 					}
 				}
 			}
@@ -104,8 +105,8 @@ public class BoardParser {
 	}
 
 	private void putFloor() {
-		for (int i = 1; i < boardDimension.x + 1; i++) {
-			for (int j = 1; j < boardDimension.y + 1; j++) {
+		for (int i = 1; i < boardDimension.x - 1; i++) {
+			for (int j = 1; j < boardDimension.y - 1; j++) {
 				if (board[i][j] == null) {
 					board[i][j] = new Floor();
 				}
@@ -114,11 +115,11 @@ public class BoardParser {
 	}
 
 	private void protectionWalls() {
-		for (int i = 0; i < boardDimension.x + 2; i++) {
+		for (int i = 0; i < boardDimension.x; i++) {
 			board[i][0] = new Wall();
 			board[0][i] = new Wall();
-			board[i][boardDimension.y + 1] = new Wall();
-			board[boardDimension.x + 1][i] = new Wall();
+			board[i][boardDimension.y - 1] = new Wall();
+			board[boardDimension.x - 1][i] = new Wall();
 		}
 
 	}

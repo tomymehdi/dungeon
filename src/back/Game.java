@@ -1,7 +1,6 @@
 package back;
 
 import loadAndSave.LoadGame;
-import loadAndSave.SaveGame;
 import parser.BoardParser;
 
 public class Game {
@@ -25,7 +24,7 @@ public class Game {
 	}
 	
 	public Game(LoadGame loadgame){
-		
+		//TODO HACER
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -61,10 +60,6 @@ public class Game {
 		player = new Player( player.getName(), boardParser.getPlayerPosition(), LIFE, STRENGTH);
 	}
 	
-	public void saveGame(){
-		new SaveGame(this);
-	}
-	
 	public BoardParser getBoardParser() {
 		return boardParser;
 	}
@@ -73,4 +68,25 @@ public class Game {
 		//TODO
 		//gameListener.executeWhenGameWinned();
 	}
+	
+	public void loosed() {
+		//TODO
+		//gameListener.executeWhenGameLoosed();
+	}
+
+	public void fightEnd(Monster monster) {
+		if(monster.isDead()){
+			boardParser.getBoard()[monster.getPosition().x][monster.getPosition().y] = new BloodyFloor();
+			// TODO
+			// gameListener.executeWhenCharacterDie();
+		}
+		if(player.isDead()){
+			boardParser.getBoard()[player.getPosition().x][player.getPosition().y] = new BloodyFloor();
+			// TODO
+			// gameListener.executeWhenCharacterDie();
+			loosed();
+		}
+		
+	}
+
 }

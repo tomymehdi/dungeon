@@ -1,10 +1,12 @@
 package src;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import back.BloodyFloor;
 import back.Bonus;
 import back.Game;
 import back.LifeBonus;
@@ -58,9 +60,10 @@ public class GameTests {
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(4,6));
 		game.movePlayer(MoveTypes.UP);
-		assertTrue(((Monster)(game.getBoardParser().getBoard()[3][6])).isDead());
+		assertEquals(BloodyFloor.class, ((game.getBoardParser().getBoard()[3][6])).getClass());
 		game.resetGame();
-		assertFalse(((Monster)(game.getBoardParser().getBoard()[3][6])).isDead());
+		assertEquals(Monster.class, ((game.getBoardParser().getBoard()[3][6])).getClass());
+		assertFalse(((Monster)((game.getBoardParser().getBoard()[3][6]))).isDead());
 		assertEquals(new Point(4,4), game.getPlayer().getPosition());
 	}
 }

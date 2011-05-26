@@ -49,7 +49,7 @@ public class ParserTests {
 
 	@Test
 	public void goodParseOfBoardDimensionTest() {
-		assertEquals(new Point(10, 10), boardParser.getBoardDimension());
+		assertEquals(new Point(12, 12), boardParser.getBoardDimension());
 	}
 
 	@Test
@@ -96,8 +96,8 @@ public class ParserTests {
 	@Test
 	public void boardWatchTest(){
 		String resp = "";
-		for (int i = 0; i < boardParser.getBoardRows()+2; i++) {
-			for (int j = 0; j < boardParser.getBoardColums()+2; j++) {
+		for (int i = 0; i < boardParser.getBoardRows(); i++) {
+			for (int j = 0; j < boardParser.getBoardColums(); j++) {
 				resp += boardParser.getBoard()[i][j] + " ";
 			}
 			resp += "\n";

@@ -31,25 +31,18 @@ public class Monster extends Character implements Putable {
 
 	@Override
 	public boolean allowMovement(Game game) {
-		if (!this.isDead()) {
-			game.getPlayer().fightAnotherCharacter(this);
-			if (this.isDead()) {
-				// TODO
-				// game.getGameListener().executeAtAFightEnd();
-				if (this.getLevel() == Game.LEVEL) {
-					game.winned();
-				}
+		game.getPlayer().fightAnotherCharacter(this);
+		game.fightEnd(this);
+		if (this.isDead()) {
+			if (this.getLevel() == Game.LEVEL) {
+				game.winned();
 			}
-			return false;
-		} else {
-			return true;
 		}
+		return false;
 	}
 
 	@Override
 	public void standOver(Game game) {
-		game.getBoardParser().getBoard()[game.getPlayer().getPosition().x][game
-				.getPlayer().getPosition().y] = new Floor();
 	}
 
 }
