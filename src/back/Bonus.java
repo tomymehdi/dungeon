@@ -9,8 +9,8 @@ public abstract class Bonus implements Putable {
 		giveBonus(game.getPlayer());
 		game.getBoard()[game.getPlayer().getPosition().x][game
 				.getPlayer().getPosition().y] = new Floor();
-		// TODO
-		// game.getGameListener().executeWhenBonusGrabed();
+
+		game.getGameListener().executeWhenBonusGrabed();
 		return true;
 	}
 

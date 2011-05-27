@@ -32,8 +32,7 @@ public class DungeonGameListenerImp implements DungeonGameListener {
 
 	@Override
 	public void executeWhenPlayerMoves() {
-		// TODO Auto-generated method stub
-
+		//TODO 
 	}
 
 	@Override

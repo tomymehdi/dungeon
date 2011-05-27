@@ -3,6 +3,8 @@ package front;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,9 +18,10 @@ import loadAndSave.SaveGame;
 import loadAndSave.SavingCorruptedException;
 import parser.CorruptedFileException;
 import back.BloodyFloor;
-import back.Floor;
 import back.DungeonGame;
+import back.Floor;
 import back.LifeBonus;
+import back.MoveTypes;
 import back.Putable;
 import back.StrengthBonus;
 import back.Wall;
@@ -212,30 +215,64 @@ public class DungeonGameFrame extends GameFrame {
 		});
 
 	}
-	
+
 	private void drawDataPanel() {
 		dataPanel = new DataPanel(game);
 		add(dataPanel);
-		
-		
+
 	}
-	
+
 	private void drawDungeonPanel() {
 		dungeonPanel = new DungeonPanel(this);
 		add(dungeonPanel);
 	}
-	
+
 	public Image getPlayerImage() {
 		return playerImage;
 	}
-	
+
 	public Map<String, Image> getMonsterImagesByName() {
 		return monsterImagesByName;
 	}
-	
+
 	public Map<Class<? extends Putable>, Image> getBoardImagesByClass() {
 		return boardImagesByClass;
 	}
 
+	@Override
+	public void addKeyListener() {
 
+		addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_LEFT:
+					game.receibeStroke(MoveTypes.LEFT);
+
+					break;
+				case KeyEvent.VK_UP:
+					game.receibeStroke(MoveTypes.UP);
+
+					break;
+				case KeyEvent.VK_RIGHT:
+					game.receibeStroke(MoveTypes.RIGHT);
+
+					break;
+				case KeyEvent.VK_DOWN:
+					game.receibeStroke(MoveTypes.DOWN);
+
+					break;
+				}
+			}
+		});
+	}
+	
+	public DungeonPanel getDungeonPanel() {
+		return dungeonPanel;
+	}
+	
+	public DataPanel getDataPanel() {
+		return dataPanel;
+	}
 }

@@ -83,6 +83,8 @@ public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 	public void setExitGameItemAction(ActionListener a) {
 		exitGameItem.addActionListener(a);
 	}
+	
+	public abstract void addKeyListener();
 
 	public abstract void createDefaultJMenuActionListeners();
 

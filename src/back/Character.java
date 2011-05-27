@@ -15,7 +15,7 @@ public abstract class Character {
 		this.position = position;
 	}
 
-	public abstract void winFight(Character character);
+	public void winFight(Character character){}
 
 	public void fightAnotherCharacter(Character character) {
 		this.hited(character.getStrength());

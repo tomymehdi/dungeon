@@ -27,7 +27,6 @@ public class DungeonGame {
 		startingPlayerPosition = boardParser.getPlayerPosition();
 		boardDimension = boardParser.getBoardDimension();
 		board = boardParser.getBoard();
-		// TODO
 		player = new Player(gameListener.playerNameRequest(), boardParser
 				.getPlayerPosition(), LIFE, STRENGTH);
 	}
@@ -37,7 +36,6 @@ public class DungeonGame {
 		startingPlayerPosition = loadGame.getPlayerPosition();
 		boardDimension = loadGame.getBoardDimension();
 		board = loadGame.getBoard();
-		// TODO
 		player = new Player(gameListener.playerNameRequest(), loadGame
 				.getPlayerLoadedPosition(), LIFE, STRENGTH);
 		player.setExperience(loadGame.getPlayerLoadedExperience());
@@ -59,8 +57,7 @@ public class DungeonGame {
 		if (board[nextPlayerPosition.x][nextPlayerPosition.y]
 				.allowMovement(this)) {
 			player.move(moveType);
-			// TODO
-			// gameListener.executeWhenPlayerMoves();
+			gameListener.executeWhenPlayerMoves();
 		}
 	}
 
@@ -84,25 +81,22 @@ public class DungeonGame {
 	}
 
 	public void winned() {
-		// TODO
-		// gameListener.executeWhenGameWinned();
+		gameListener.executeWhenGameWinned();
 	}
 
 	public void loosed() {
-		// TODO
-		// gameListener.executeWhenGameLoosed();
+
+		gameListener.executeWhenGameLoosed();
 	}
 
 	public void fightEnd(Monster monster) {
 		if (monster.isDead()) {
 			board[monster.getPosition().x][monster.getPosition().y] = new BloodyFloor();
-			// TODO
-			// gameListener.executeWhenCharacterDie();
+			gameListener.executeWhenCharacterDie();
 		}
 		if (player.isDead()) {
 			board[player.getPosition().x][player.getPosition().y] = new BloodyFloor();
-			// TODO
-			// gameListener.executeWhenCharacterDie();
+			gameListener.executeWhenCharacterDie();
 			loosed();
 		}
 

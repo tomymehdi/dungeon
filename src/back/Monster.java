@@ -18,13 +18,6 @@ public class Monster extends Character implements Putable {
 	}
 
 	@Override
-	public void winFight(Character character) {
-		// TODO
-		// game.getGameListener().executeWhenPlayerDie();
-
-	}
-
-	@Override
 	public String toString() {
 		return monsterType.getName();
 	}
