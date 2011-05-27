@@ -84,7 +84,20 @@ public class Game {
 	}
 
 	public void loadGame(File placeToLoad) {
-		new LoadGame(placeToLoad);
+		LoadGame loadGame = new LoadGame(placeToLoad);
+		boardName = loadGame.getBoardName();
+		startingPlayerPosition = loadGame.getPlayerPosition();
+		boardDimension = loadGame.getBoardDimension();
+		board = loadGame.getBoard();
+		// TODO
+		player = new Player("Tomas"/* nameListener.nameRequest() */,
+				loadGame.getPlayerLoadedPosition(), LIFE, STRENGTH);
+		player.setExperience(loadGame.getPlayerLoadedExperience());
+		player.setHealth(loadGame.getPlayerLoadedHealth());
+		player.setMaxHealth(loadGame.setPlayerLoadedMaxHealth());
+		player.setStrength(loadGame.getPlayerLoadedStrength());
+		player.setSteps(loadGame.getPlayerLoadedSteps());
+		
 	}
 
 	public void winned() {

@@ -40,8 +40,8 @@ public class SaveGame {
 	public SaveGame(Game gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
-		FilterFileList filterFileList = new FilterArrayFileList(placeToSave
-				.getParentFile());
+		FilterFileList filterFileList = new FilterArrayFileList(
+				placeToSave.getParentFile());
 		filterFileList = filterFileList.filter(placeToSave.getName());
 		int number = filterFileList.size();
 		if (number > 0) {
@@ -70,14 +70,13 @@ public class SaveGame {
 		out.newLine();
 		out.write(gameToSave.getBoardName());
 		out.newLine();
-		out
-				.write("#Player starting position, current position, "
-						+ "current exp, current health, maxHealth, current strength, steps");
+		out.write("#Player starting position, current position, "
+				+ "current exp, current health, maxHealth, current strength, steps");
 		out.newLine();
 		out.write(1 + "," + (gameToSave.getStartingPlayerPosition().x - 1)
 				+ "," + (gameToSave.getStartingPlayerPosition().y - 1) + ","
 				+ (gameToSave.getPlayer().getPosition().x - 1) + ","
-				+ (gameToSave.getPlayer().getPosition().y) + ","
+				+ (gameToSave.getPlayer().getPosition().y - 1) + ","
 				+ gameToSave.getPlayer().getExperience() + ","
 				+ gameToSave.getPlayer().getHealth() + ","
 				+ gameToSave.getPlayer().getMaxHealth() + ","
@@ -105,8 +104,8 @@ public class SaveGame {
 							+ ","
 							+ (j - 1)
 							+ ","
-							+ ((Monster) gameToSave.getBoard()[i][j])
-									.getMonsterType()
+							+ (((Monster) gameToSave.getBoard()[i][j])
+									.getMonsterType().ordinal() + 1)
 							+ ","
 							+ ((Monster) gameToSave.getBoard()[i][j])
 									.getLevel() + "," + 0);

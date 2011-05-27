@@ -19,8 +19,8 @@ public class Player extends Character {
 		setHealth(getMaxHealth());
 	}
 
-	public void move(MoveTypes moveType){
-		setPosition( getPosition().add(moveType.getDirection()) );
+	public void move(MoveTypes moveType) {
+		setPosition(getPosition().add(moveType.getDirection()));
 		steps++;
 	}
 
@@ -58,6 +58,15 @@ public class Player extends Character {
 
 	public Integer getSteps() {
 		return steps;
+	}
+
+	public void setExperience(Integer playerLoadedExperience) {
+		experience = playerLoadedExperience;
+	}
+
+	public void setSteps(Integer playerLoadedSteps) {
+		steps = playerLoadedSteps;
+		
 	}
 
 }

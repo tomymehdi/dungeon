@@ -35,6 +35,7 @@ public class ParserTests {
 		new BoardParser(new File("./testBoard/boardForTest3"));
 	}
 	
+	
 	@Test
 	public void mapWithoutSurroundingWalls() {
 		BoardParser boardParser = new BoardParser(new File("./testBoard/boardForTest4"));
@@ -44,6 +45,11 @@ public class ParserTests {
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,11)).getClass());
 	}
 
+	@Test(expected = CorruptedFileException.class)
+	public void positionOutOfBoardDimensionsTest() {
+		new BoardParser(new File("./testBoard/boardForTest5"));
+	}
+	
 	@Test(expected = CorruptedFileException.class)
 	public void badPathPassedTest() {
 		new BoardParser(new File("./noExist"));

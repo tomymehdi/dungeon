@@ -3,7 +3,7 @@ package parser;
 public abstract class Lines {
 
 	protected int[] data;
-	private int elemsCuantity; // final quantity for each Line
+	private final int elemsCuantity;
 	private String line;
 
 	public Lines(int elemsCuantity, String line) {

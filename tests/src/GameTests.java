@@ -24,6 +24,7 @@ import back.StrengthBonus;
 public class GameTests {
 
 	Game game;
+	FilterFileList filesCreated = new FilterArrayFileList();
 
 	@Before
 	public void setup() {
@@ -81,10 +82,14 @@ public class GameTests {
 		filterFileList = filterFileList.filter("savedGame");
 		int number = filterFileList.size();
 		if (number > 1) {
-			assertTrue(new File("./savedGames/savedGame" + "(" + (number - 1)
-					+ ")").exists());
+			File f = new File("./savedGames/savedGame" + "(" + (number - 1)
+					+ ")");
+			assertTrue(f.exists());
+			filesCreated.add(f);
 		} else {
-			assertTrue(new File("./savedGames/savedGame").exists());
+			File f = new File("./savedGames/savedGame");
+			assertTrue(f.exists());
+			filesCreated.add(f);
 		}
 	}
 
@@ -92,15 +97,36 @@ public class GameTests {
 	public void forWatchTheGameSavedWithPathTest() {
 		File file = new File("./savedGames/testWithPath");
 		game.saveGame(file);
-		FilterFileList filterFileList = new FilterArrayFileList(file
-				.getParentFile());
+		FilterFileList filterFileList = new FilterArrayFileList(
+				file.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());
 		int number = filterFileList.size();
 		if (number > 1) {
-			assertTrue(new File(file.getPath() + "(" + (number - 1) + ")")
-					.exists());
+			File f = new File(file.getPath() + "(" + (number - 1) + ")");
+			assertTrue(f.exists());
+			filesCreated.add(f);
 		} else {
-			assertTrue(new File(file.getName()).exists());
+			File f = new File(file.getPath());
+			assertTrue(f.exists());
+			filesCreated.add(f);
 		}
 	}
+
+	@Test
+	public void goodLoadGameFunctionamientTest() {
+		File file = new File("./savedGames/testWithPath");
+		game.loadGame(file);
+		assertEquals(new Integer(0), game.getPlayer().getExperience());
+		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
+	}
+
+	@Test
+	public void deleteAllFilesUsedForTestings() {
+		for (int i = 0; i < filesCreated.size(); i++) {
+			filesCreated.get(i).delete();
+		}
+	}
+
+	// TODO AYUDA PARA Q NO SE PIERDA LA REFERENCIA DE LOS FILES Q GUARDO EN FILESCREATED
+
 }

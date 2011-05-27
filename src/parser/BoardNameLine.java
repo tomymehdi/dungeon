@@ -2,7 +2,7 @@ package parser;
 
 public class BoardNameLine extends Lines {
 
-	private static int elemsCuantity = 1;
+	private static final int elemsCuantity = 1;
 	private String name;
 
 	public BoardNameLine(String line) {

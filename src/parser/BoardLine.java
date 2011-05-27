@@ -4,7 +4,7 @@ import back.Point;
 
 public class BoardLine extends Lines {
 
-	private static int elemsCuantity = 6;
+	private static final int elemsCuantity = 6;
 	private Point boardDimension;
 
 	public BoardLine(String line, Point boardDimension) {
@@ -25,8 +25,8 @@ public class BoardLine extends Lines {
 
 		case 1:
 			// Player
-			if (data[1] < 0 || data[1] >= boardDimension.y || data[2] < 0
-					|| data[2] >= boardDimension.x || data[3] != 0
+			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+					|| data[2] >= boardDimension.y || data[3] != 0
 					|| data[4] != 0 || data[5] != 0) {
 				throw new CorruptedFileException();
 			}
@@ -34,8 +34,8 @@ public class BoardLine extends Lines {
 
 		case 2:
 			// Wall
-			if (data[1] < 0 || data[1] >= boardDimension.y || data[2] < 0
-					|| data[2] >= boardDimension.x || data[3] != 0
+			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+					|| data[2] >= boardDimension.y || data[3] != 0
 					|| data[4] != 0 || data[5] != 0) {
 				throw new CorruptedFileException();
 			}
@@ -43,8 +43,8 @@ public class BoardLine extends Lines {
 
 		case 3:
 			// Monster
-			if (data[1] < 0 || data[1] >= boardDimension.y || data[2] < 0
-					|| data[2] >= boardDimension.x || data[3] <= 0 || data[3] > 3
+			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+					|| data[2] >= boardDimension.y || data[3] <= 0 || data[3] > 3
 					|| data[4] <= 0 || data[4] > 3 || data[5] != 0) {
 				throw new CorruptedFileException();
 			}
@@ -52,8 +52,8 @@ public class BoardLine extends Lines {
 
 		case 4:
 			// Life Bonus
-			if (data[1] < 0 || data[1] >= boardDimension.y || data[2] < 0
-					|| data[2] >= boardDimension.x || data[3] != 0
+			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+					|| data[2] >= boardDimension.y || data[3] != 0
 					|| data[4] != 0 || data[5] == 0) {
 				throw new CorruptedFileException();
 			}
@@ -61,8 +61,8 @@ public class BoardLine extends Lines {
 
 		case 5:
 			// Strength Bonus
-			if (data[1] < 0 || data[1] >= boardDimension.y || data[2] < 0
-					|| data[2] >= boardDimension.x || data[3] != 0
+			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+					|| data[2] >= boardDimension.y || data[3] != 0
 					|| data[4] != 0 || data[5] == 0) {
 				throw new CorruptedFileException();
 			}

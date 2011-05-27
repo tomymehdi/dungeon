@@ -19,13 +19,11 @@ import back.Wall;
  */
 public class BoardParser {
 
-	private BufferedReader inputBoard;
-	private Point boardDimension; // cantidad de filas x cantidad de columnas
-	private String boardName;
-	private Point playerPosition;
-	private Putable[][] board; // si tengo un elemento en 1,7 es fila 1 columna
-
-	// 7
+	protected BufferedReader inputBoard;
+	protected Point boardDimension;
+	protected String boardName;
+	protected Point playerPosition;
+	protected Putable[][] board;
 
 	public BoardParser(File file) {
 
@@ -58,35 +56,34 @@ public class BoardParser {
 					parseBoardName(line);
 					nameFlag = true;
 				} else {
-					BoardLine cell = new BoardLine(line, boardDimension);
-
-					if (cell.isPlayerLine() && playerFlag == true) {
-						throw new CorruptedFileException();
-					}
-
-					Point point = (new Point(cell.getData(1), cell.getData(2)))
-							.add(new Point(1, 1));
-
-					if (cell.isPlayerLine()) {
-						parsePlayer(cell,point);
+					if (line.startsWith("1")) {
+						if (playerFlag == true) {
+							throw new CorruptedFileException();
+						}
+						parsePlayer(line);
 						playerFlag = true;
-
-						// TODO PREGUNTAR POR MANERA DE TENER UNA LISTA DE
-						// CLASES Y PODER CREAR UNA INSTANCIA DE UNA DE LAS
-						// CLASES DE
-						// ESA LISTA
-					} else if (cell.isWallLine()) {
-						parseWall(point);
-					} else if (cell.isMonsterLine()) {
-						parseMonster(point, cell);
-					} else if (cell.isLifeBonusLine()) {
-						parseLifeBonus(point, cell);
 					} else {
-						parseStrengthBonus(point, cell);
 
+						BoardLine cell = new BoardLine(line, boardDimension);
+						Point point = (new Point(cell.getData(1),
+								cell.getData(2))).add(new Point(1, 1));
+
+						if (cell.isWallLine()) {
+							parseWall(point);
+						} else if (cell.isMonsterLine()) {
+							parseMonster(point, cell);
+						} else if (cell.isLifeBonusLine()) {
+							parseLifeBonus(point, cell);
+						} else {
+							parseStrengthBonus(point, cell);
+						}
 					}
 				}
 			}
+		}
+
+		if (!nameFlag || !playerFlag || !dimensionFlag) {
+			throw new CorruptedFileException();
 		}
 
 		protectionWalls();
@@ -98,7 +95,10 @@ public class BoardParser {
 
 	}
 
-	public void parsePlayer(BoardLine cell, Point point) {
+	public void parsePlayer(String line) {
+		BoardLine cell = new BoardLine(line, boardDimension);
+		Point point = (new Point(cell.getData(1), cell.getData(2)))
+				.add(new Point(1, 1));
 		playerPosition = point;
 	}
 

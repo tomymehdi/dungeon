@@ -1,42 +1,63 @@
 package loadAndSave;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 import parser.BoardParser;
-import parser.CorruptedFileException;
+import parser.SavedBoardPlayerLine;
+import back.Point;
 
 public class LoadGame extends BoardParser {
 	
-	BufferedReader inputBoard;
+	protected Point playerLoadedPosition;
+	protected Integer playerLoadedExperience;
+	protected Integer playerLoadedHealth;
+	protected Integer playerLoadedMaxHealth;
+	protected Integer playerLoadedStrength;
+	protected Integer playerLoadedSteps;
 	
 	public LoadGame(File placeToLoad) {
 		super(placeToLoad);
-		try {
-			inputBoard = new BufferedReader(new FileReader(placeToLoad));
-			fileParser();
-		} catch (IOException e) {
-			// TODO NO OLVIDAR AGARRARLA DSPS
-			throw new CorruptedFileException();
-		}
+	}
+	
+	@Override
+	public void parsePlayer(String line) {
+		SavedBoardPlayerLine playerData = new SavedBoardPlayerLine(line, boardDimension);
+		Point point = (new Point(playerData.getData(1), playerData.getData(2)))
+				.add(new Point(1, 1));
+		playerPosition = point;
+		point = (new Point(playerData.getData(3), playerData.getData(4)))
+		.add(new Point(1, 1));
+		playerLoadedPosition = point;
+		playerLoadedExperience = playerData.getData(5);
+		playerLoadedHealth = playerData.getData(6);
+		playerLoadedMaxHealth = playerData.getData(7);
+		playerLoadedStrength = playerData.getData(8);
+		playerLoadedSteps = playerData.getData(9);
+		
 	}
 
-	private void load() throws IOException {
-		boolean dimensionFlag = false;
-		boolean nameFlag = false;
-		boolean playerFlag = false;
-		String line;
-		
-		while ((line = inputBoard.readLine()) != null) {
-			
-			line = line.replace(" ", "").replace("\t", "").replace("\n", "")
-			.split("#")[0];
-			
-			
-		}
-		
+	public Point getPlayerLoadedPosition() {
+		return playerLoadedPosition;
+	}
+
+	public Integer getPlayerLoadedHealth() {
+		return playerLoadedHealth;
+	}
+
+	public Integer setPlayerLoadedMaxHealth() {
+		return playerLoadedMaxHealth;
+	}
+
+	public Integer getPlayerLoadedExperience() {
+		return playerLoadedExperience;
+	}
+
+	public Integer getPlayerLoadedStrength() {
+		return playerLoadedStrength;
+	}
+	
+	public Integer getPlayerLoadedSteps(){
+		return playerLoadedSteps;
 	}
 
 }
