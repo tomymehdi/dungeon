@@ -36,7 +36,7 @@ public class Player extends Character {
 		increaseLevel();
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
-		setMaxHealth(getLevel() * Game.LIFE);
+		setMaxHealth(getLevel() * DungeonGame.LIFE);
 	}
 
 	public Integer getExperience() {

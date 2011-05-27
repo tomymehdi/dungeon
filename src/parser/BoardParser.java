@@ -31,7 +31,6 @@ public class BoardParser {
 			inputBoard = new BufferedReader(new FileReader(file));
 			fileParser();
 		} catch (IOException e) {
-			// TODO NO OLVIDAR AGARRARLA DSPS
 			throw new CorruptedFileException();
 		}
 	}

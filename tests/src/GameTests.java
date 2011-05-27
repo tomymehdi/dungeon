@@ -8,13 +8,17 @@ import java.io.File;
 
 import loadAndSave.FilterArrayFileList;
 import loadAndSave.FilterFileList;
+import loadAndSave.LoadGame;
+import loadAndSave.SaveGame;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import front.DungeonGameListenerImp;
+
 import back.BloodyFloor;
 import back.Bonus;
-import back.Game;
+import back.DungeonGame;
 import back.LifeBonus;
 import back.Monster;
 import back.MoveTypes;
@@ -23,12 +27,12 @@ import back.StrengthBonus;
 
 public class GameTests {
 
-	Game game;
-	FilterFileList filesCreated = new FilterArrayFileList();
+	private DungeonGame game;
+	
 
 	@Before
 	public void setup() {
-		game = new Game("./testBoard/boardForTest1");
+		game = new DungeonGame(new DungeonGameListenerImp(), "./testBoard/boardForTest1");
 	}
 
 	@Test
@@ -68,7 +72,7 @@ public class GameTests {
 		game.getPlayer().setPosition(new Point(4, 6));
 		game.movePlayer(MoveTypes.UP);
 		assertEquals(BloodyFloor.class, ((game.getBoard()[3][6])).getClass());
-		game.resetGame();
+		game.restartGame();
 		assertEquals(Monster.class, ((game.getBoard()[3][6])).getClass());
 		assertFalse(((Monster) ((game.getBoard()[3][6]))).isDead());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
@@ -76,7 +80,7 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedTest() {
-		game.saveGame();
+		new SaveGame(game);
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
 		filterFileList = filterFileList.filter("savedGame");
@@ -85,18 +89,29 @@ public class GameTests {
 			File f = new File("./savedGames/savedGame" + "(" + (number - 1)
 					+ ")");
 			assertTrue(f.exists());
-			filesCreated.add(f);
+			f.delete();
 		} else {
 			File f = new File("./savedGames/savedGame");
 			assertTrue(f.exists());
-			filesCreated.add(f);
+			f.delete();
 		}
 	}
 
 	@Test
+	public void loadGameTest() {
+		File file = new File("./savedGames/testWithPath");
+		new SaveGame(game,file);
+		LoadGame loadGame = new LoadGame(file);
+		DungeonGame game = loadGame.getGame();
+		assertEquals(new Integer(0), game.getPlayer().getExperience());
+		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
+		file.delete();
+	}
+	
+	@Test
 	public void forWatchTheGameSavedWithPathTest() {
 		File file = new File("./savedGames/testWithPath");
-		game.saveGame(file);
+		new SaveGame(game,file);
 		FilterFileList filterFileList = new FilterArrayFileList(
 				file.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());
@@ -104,29 +119,12 @@ public class GameTests {
 		if (number > 1) {
 			File f = new File(file.getPath() + "(" + (number - 1) + ")");
 			assertTrue(f.exists());
-			filesCreated.add(f);
+			f.delete();
 		} else {
 			File f = new File(file.getPath());
 			assertTrue(f.exists());
-			filesCreated.add(f);
+			f.delete();
 		}
 	}
-
-	@Test
-	public void goodLoadGameFunctionamientTest() {
-		File file = new File("./savedGames/testWithPath");
-		game.loadGame(file);
-		assertEquals(new Integer(0), game.getPlayer().getExperience());
-		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
-	}
-
-	@Test
-	public void deleteAllFilesUsedForTestings() {
-		for (int i = 0; i < filesCreated.size(); i++) {
-			filesCreated.get(i).delete();
-		}
-	}
-
-	// TODO AYUDA PARA Q NO SE PIERDA LA REFERENCIA DE LOS FILES Q GUARDO EN FILESCREATED
 
 }

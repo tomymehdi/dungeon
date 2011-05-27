@@ -2,38 +2,42 @@ package loadAndSave;
 
 import java.io.File;
 
+import front.DungeonGameListenerImp;
+
 import parser.BoardParser;
 import parser.SavedBoardPlayerLine;
+import back.DungeonGame;
 import back.Point;
 
 public class LoadGame extends BoardParser {
-	
-	protected Point playerLoadedPosition;
-	protected Integer playerLoadedExperience;
-	protected Integer playerLoadedHealth;
-	protected Integer playerLoadedMaxHealth;
-	protected Integer playerLoadedStrength;
-	protected Integer playerLoadedSteps;
-	
+
+	private Point playerLoadedPosition;
+	private Integer playerLoadedExperience;
+	private Integer playerLoadedHealth;
+	private Integer playerLoadedMaxHealth;
+	private Integer playerLoadedStrength;
+	private Integer playerLoadedSteps;
+
 	public LoadGame(File placeToLoad) {
 		super(placeToLoad);
 	}
-	
+
 	@Override
 	public void parsePlayer(String line) {
-		SavedBoardPlayerLine playerData = new SavedBoardPlayerLine(line, boardDimension);
+		SavedBoardPlayerLine playerData = new SavedBoardPlayerLine(line,
+				boardDimension);
 		Point point = (new Point(playerData.getData(1), playerData.getData(2)))
 				.add(new Point(1, 1));
 		playerPosition = point;
 		point = (new Point(playerData.getData(3), playerData.getData(4)))
-		.add(new Point(1, 1));
+				.add(new Point(1, 1));
 		playerLoadedPosition = point;
 		playerLoadedExperience = playerData.getData(5);
 		playerLoadedHealth = playerData.getData(6);
 		playerLoadedMaxHealth = playerData.getData(7);
 		playerLoadedStrength = playerData.getData(8);
 		playerLoadedSteps = playerData.getData(9);
-		
+
 	}
 
 	public Point getPlayerLoadedPosition() {
@@ -55,9 +59,13 @@ public class LoadGame extends BoardParser {
 	public Integer getPlayerLoadedStrength() {
 		return playerLoadedStrength;
 	}
-	
-	public Integer getPlayerLoadedSteps(){
+
+	public Integer getPlayerLoadedSteps() {
 		return playerLoadedSteps;
+	}
+
+	public DungeonGame getGame() {
+		return new DungeonGame(new DungeonGameListenerImp(), this);
 	}
 
 }

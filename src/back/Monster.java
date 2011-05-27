@@ -30,11 +30,11 @@ public class Monster extends Character implements Putable {
 	}
 
 	@Override
-	public boolean allowMovement(Game game) {
+	public boolean allowMovement(DungeonGame game) {
 		game.getPlayer().fightAnotherCharacter(this);
 		game.fightEnd(this);
 		if (this.isDead()) {
-			if (this.getLevel() == Game.LEVEL) {
+			if (this.getLevel() == DungeonGame.LEVEL) {
 				game.winned();
 			}
 		}

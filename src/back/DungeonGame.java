@@ -3,10 +3,9 @@ package back;
 import java.io.File;
 
 import loadAndSave.LoadGame;
-import loadAndSave.SaveGame;
 import parser.BoardParser;
 
-public class Game {
+public class DungeonGame {
 
 	public static Integer LEVEL = 3;
 	static Integer LIFE = 10;
@@ -18,23 +17,34 @@ public class Game {
 	private Point startingPlayerPosition;
 	private Point boardDimension;
 	private Putable[][] board;
-	private GameListener gameListener;
-	private NameListener nameListener;
+	private DungeonGameListener gameListener;
 
-	public Game(String boardPath) {
+	public DungeonGame(DungeonGameListener gameListener, String boardPath) {
 		this.boardPath = boardPath;
+		this.gameListener = gameListener;
 		BoardParser boardParser = new BoardParser(new File(boardPath));
 		boardName = boardParser.getBoardName();
 		startingPlayerPosition = boardParser.getPlayerPosition();
 		boardDimension = boardParser.getBoardDimension();
 		board = boardParser.getBoard();
 		// TODO
-		player = new Player("Tomas"/* nameListener.nameRequest() */,
-				boardParser.getPlayerPosition(), LIFE, STRENGTH);
+		player = new Player(gameListener.playerNameRequest(), boardParser
+				.getPlayerPosition(), LIFE, STRENGTH);
 	}
 
-	public Game(File placeToLoad) {
-		this.loadGame(placeToLoad);
+	public DungeonGame(DungeonGameListener gameListener, LoadGame loadGame) {
+		boardName = loadGame.getBoardName();
+		startingPlayerPosition = loadGame.getPlayerPosition();
+		boardDimension = loadGame.getBoardDimension();
+		board = loadGame.getBoard();
+		// TODO
+		player = new Player(gameListener.playerNameRequest(), loadGame
+				.getPlayerLoadedPosition(), LIFE, STRENGTH);
+		player.setExperience(loadGame.getPlayerLoadedExperience());
+		player.setHealth(loadGame.getPlayerLoadedHealth());
+		player.setMaxHealth(loadGame.setPlayerLoadedMaxHealth());
+		player.setStrength(loadGame.getPlayerLoadedStrength());
+		player.setSteps(loadGame.getPlayerLoadedSteps());
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -54,7 +64,7 @@ public class Game {
 		}
 	}
 
-	public void addListener(GameListener gameListener) {
+	public void addListener(DungeonGameListener gameListener) {
 		this.gameListener = gameListener;
 	}
 
@@ -62,40 +72,15 @@ public class Game {
 		return player;
 	}
 
-	public GameListener getGameListener() {
+	public DungeonGameListener getGameListener() {
 		return gameListener;
 	}
 
-	public void resetGame() {
+	public void restartGame() {
 		BoardParser boardParser = new BoardParser(new File(boardPath));
 		board = boardParser.getBoard();
 		player = new Player(player.getName(), boardParser.getPlayerPosition(),
 				LIFE, STRENGTH);
-	}
-
-	public void saveGame() {
-		new SaveGame(this);
-	}
-
-	public void saveGame(File placeToSave) {
-		new SaveGame(this, placeToSave);
-	}
-
-	public void loadGame(File placeToLoad) {
-		LoadGame loadGame = new LoadGame(placeToLoad);
-		boardName = loadGame.getBoardName();
-		startingPlayerPosition = loadGame.getPlayerPosition();
-		boardDimension = loadGame.getBoardDimension();
-		board = loadGame.getBoard();
-		// TODO
-		player = new Player("Tomas"/* nameListener.nameRequest() */,
-				loadGame.getPlayerLoadedPosition(), LIFE, STRENGTH);
-		player.setExperience(loadGame.getPlayerLoadedExperience());
-		player.setHealth(loadGame.getPlayerLoadedHealth());
-		player.setMaxHealth(loadGame.setPlayerLoadedMaxHealth());
-		player.setStrength(loadGame.getPlayerLoadedStrength());
-		player.setSteps(loadGame.getPlayerLoadedSteps());
-		
 	}
 
 	public void winned() {
@@ -137,6 +122,10 @@ public class Game {
 
 	public String getBoardName() {
 		return boardName;
+	}
+
+	public void addGameListener(DungeonGameListener d) {
+		gameListener = d;
 	}
 
 }

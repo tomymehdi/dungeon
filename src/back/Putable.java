@@ -1,5 +1,5 @@
 package back;
 
 public interface Putable {
-	public boolean allowMovement(Game game);
+	public boolean allowMovement(DungeonGame game);
 }

@@ -1,6 +1,6 @@
 package back;
 
-public interface GameListener {
+public interface DungeonGameListener {
 	
 	public void executeWhenPlayerMoves();
 
@@ -11,5 +11,7 @@ public interface GameListener {
 	public void executeWhenGameLoosed();
 	
 	public void executeWhenGameWinned();
+	
+	public String playerNameRequest();
 	
 }

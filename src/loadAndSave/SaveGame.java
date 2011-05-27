@@ -6,7 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import back.BloodyFloor;
-import back.Game;
+import back.DungeonGame;
 import back.LifeBonus;
 import back.Monster;
 import back.StrengthBonus;
@@ -14,10 +14,10 @@ import back.Wall;
 
 public class SaveGame {
 
-	private Game gameToSave;
+	private DungeonGame gameToSave;
 	private File placeToSave;
 
-	public SaveGame(Game gameToSave) {
+	public SaveGame(DungeonGame gameToSave) {
 		this.gameToSave = gameToSave;
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
@@ -32,12 +32,11 @@ public class SaveGame {
 		try {
 			save();
 		} catch (IOException e) {
-			// TODO NO OLVIDAR AGARRARLA DSPS
 			throw new SavingCorruptedException();
 		}
 	}
 
-	public SaveGame(Game gameToSave, File placeToSave) {
+	public SaveGame(DungeonGame gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
 		FilterFileList filterFileList = new FilterArrayFileList(
@@ -53,7 +52,6 @@ public class SaveGame {
 		try {
 			save();
 		} catch (IOException e) {
-			// TODO NO OLVIDAR AGARRARLA DSPS
 			throw new SavingCorruptedException();
 		}
 	}
