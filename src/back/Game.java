@@ -19,7 +19,7 @@ public class Game {
 	private Point boardDimension;
 	private Putable[][] board;
 	private GameListener gameListener;
-	// private NameListener nameListener;
+	private NameListener nameListener;
 
 	public Game(String boardPath) {
 		this.boardPath = boardPath;
@@ -33,8 +33,8 @@ public class Game {
 				boardParser.getPlayerPosition(), LIFE, STRENGTH);
 	}
 
-	public Game(LoadGame loadgame) {
-		// TODO HACER
+	public Game(File placeToLoad) {
+		this.loadGame(placeToLoad);
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -51,8 +51,6 @@ public class Game {
 			player.move(moveType);
 			// TODO
 			// gameListener.executeWhenPlayerMoves();
-			board[player.getPosition().x][player.getPosition().y]
-					.standOver(this);
 		}
 	}
 

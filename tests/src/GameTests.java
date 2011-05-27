@@ -39,12 +39,12 @@ public class GameTests {
 		assertEquals(new Integer(1), game.getPlayer().getExperience());
 		game.movePlayer(MoveTypes.LEFT);
 		assertEquals(new Point(4, 3), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(4, 2), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(4, 2), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.LEFT);
-		assertEquals(new Point(4, 2), game.getPlayer().getPosition());
+		game.movePlayer(MoveTypes.RIGHT);
+		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
+		game.movePlayer(MoveTypes.DOWN);
+		assertEquals(new Point(5, 4), game.getPlayer().getPosition());
+		game.movePlayer(MoveTypes.UP);
+		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
 	}
 
 	@Test

@@ -1,7 +1,5 @@
 package back;
 
 public interface Putable {
-	public abstract boolean allowMovement(Game game);
-	
-	public abstract void standOver(Game game);
+	public boolean allowMovement(Game game);
 }
