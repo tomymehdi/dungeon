@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 import back.DungeonGame;
 
-public class DataPanel extends GamePanel{
+public class DataPanel extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	

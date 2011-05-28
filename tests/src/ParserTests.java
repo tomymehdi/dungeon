@@ -7,8 +7,9 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import parser.BoardParser;
+import parser.BoardParserFromFile;
 import parser.CorruptedFileException;
+import back.BoardObtainer;
 import back.LifeBonus;
 import back.Monster;
 import back.MonsterTypes;
@@ -18,41 +19,46 @@ import back.Wall;
 
 public class ParserTests {
 
-	BoardParser boardParser;
+	BoardObtainer boardParser;
 
 	@Before
 	public void setup() {
-		boardParser = new BoardParser(new File("./testBoard/boardForTest1"));
+		boardParser = new BoardParserFromFile(new File(
+				"./testBoard/boardForTest1"));
 	}
-	
+
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAMonsterTest() {
-		new BoardParser(new File("./testBoard/boardForTest2"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest2"));
 	}
-	
+
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAWallTest() {
-		new BoardParser(new File("./testBoard/boardForTest3"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest3"));
 	}
-	
-	
+
 	@Test
 	public void mapWithoutSurroundingWalls() {
-		BoardParser boardParser = new BoardParser(new File("./testBoard/boardForTest4"));
-		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,0)).getClass());
-		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,0)).getClass());
-		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0,11)).getClass());
-		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11,11)).getClass());
+		BoardObtainer boardParser = new BoardParserFromFile(new File(
+				"./testBoard/boardForTest4"));
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0, 0))
+				.getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11, 0))
+				.getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0, 11))
+				.getClass());
+		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11, 11))
+				.getClass());
 	}
 
 	@Test(expected = CorruptedFileException.class)
 	public void positionOutOfBoardDimensionsTest() {
-		new BoardParser(new File("./testBoard/boardForTest5"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest5"));
 	}
-	
+
 	@Test(expected = CorruptedFileException.class)
 	public void badPathPassedTest() {
-		new BoardParser(new File("./noExist"));
+		new BoardParserFromFile(new File("./noExist"));
 	}
 
 	@Test
@@ -100,9 +106,9 @@ public class ParserTests {
 				((StrengthBonus) boardParser.getBoard()[2][8])
 						.getStrengthBonus());
 	}
-	
+
 	@Test
-	public void boardWatchTest(){
+	public void boardWatchTest() {
 		String resp = "";
 		for (int i = 0; i < boardParser.getBoardRows(); i++) {
 			for (int j = 0; j < boardParser.getBoardColums(); j++) {

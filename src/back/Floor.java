@@ -12,6 +12,6 @@ public class Floor extends Cell implements Putable {
 	}
 
 	@Override
-	public void standOver(DungeonGame dungeonGame) {}
+	public void standOver(DungeonGame game) {}
 
 }

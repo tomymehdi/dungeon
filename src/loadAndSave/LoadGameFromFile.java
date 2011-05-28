@@ -2,12 +2,14 @@ package loadAndSave;
 
 import java.io.File;
 
-import parser.BoardParser;
+import parser.BoardParserFromFile;
 import parser.SavedBoardPlayerLine;
+import back.BoardObtainer;
 import back.DungeonGame;
+import back.LoadGame;
 import back.Point;
 
-public class LoadGame extends BoardParser {
+public class LoadGameFromFile extends BoardParserFromFile implements BoardObtainer,LoadGame {
 
 	private Point playerLoadedPosition;
 	private Integer playerLoadedExperience;
@@ -17,7 +19,7 @@ public class LoadGame extends BoardParser {
 	private Integer playerLoadedSteps;
 	private String playerName;
 
-	public LoadGame(File placeToLoad) {
+	public LoadGameFromFile(File placeToLoad) {
 		super(placeToLoad);
 	}
 
@@ -71,5 +73,8 @@ public class LoadGame extends BoardParser {
 	public String getPlayerName() {
 		return playerName;
 	}
+
+	@Override
+	public void obtainBoard() {}
 
 }

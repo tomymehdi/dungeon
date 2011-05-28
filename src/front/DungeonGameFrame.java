@@ -13,15 +13,15 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import loadAndSave.LoadGame;
-import loadAndSave.SaveGame;
+import loadAndSave.LoadGameFromFile;
+import loadAndSave.SaveGameOnFile;
 import loadAndSave.SavingCorruptedException;
 import parser.CorruptedFileException;
 import back.BloodyFloor;
-import back.DungeonGame;
 import back.DungeonGameListener;
 import back.Floor;
 import back.LifeBonus;
+import back.LoadGame;
 import back.MoveTypes;
 import back.Point;
 import back.Putable;
@@ -95,6 +95,7 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					JOptionPane.showOptionDialog(this, Select level, Levels, NORMAL, NORMAL, icon, options, initialValue)
 					game = new DungeonGame("./testBoard/boardForTest1");
 					game.addGameListener(new DungeonGameListenerImp());
 					drawDataPanel();
@@ -136,7 +137,7 @@ public class DungeonGameFrame extends GameFrame {
 						directory.mkdir();
 					}
 					try {
-						new SaveGame(game);
+						new SaveGameOnFile(game);
 					} catch (SavingCorruptedException e1) {
 						JOptionPane.showMessageDialog(null,
 								"Files saving error occours. Try again later.",
@@ -164,7 +165,7 @@ public class DungeonGameFrame extends GameFrame {
 								"You didn't select any file.");
 					} else {
 						try {
-							new SaveGame(game, file);
+							new SaveGameOnFile(game, file);
 						} catch (SavingCorruptedException e1) {
 							JOptionPane.showMessageDialog(null,
 									"The file is corrupt", "Error",
@@ -190,7 +191,7 @@ public class DungeonGameFrame extends GameFrame {
 							"You didn't select any file.");
 				} else {
 					try {
-						LoadGame loadGame = new LoadGame(file);
+						LoadGame loadGame = new LoadGameFromFile(file);
 						game = loadGame.getGame();
 						game.addGameListener(new DungeonGameListenerImp());
 
@@ -298,22 +299,22 @@ public class DungeonGameFrame extends GameFrame {
 
 		@Override
 		public void executeWhenGameLoosed() {
-//			JOptionPane.showMessageDialog(this, "You loose the level.",
-//					"Message");
+			JOptionPane.showMessageDialog(this, "You loose the level.",
+					"Message");
 			dungeonPanel.setVisible(false);
 			dataPanel.setVisible(false);
-//			dungeonPanel.dispose();
-//			dataPanel.dispose();
+			dungeonPanel.dispose();
+			dataPanel.dispose();
 		}
 
 		@Override
 		public void executeWhenGameWinned() {
-//			JOptionPane.showMessageDialog(this, "You win the level with "
-//					+ game.getPlayer().getSteps() + "steps.", "Message");
+			JOptionPane.showMessageDialog(this, "You win the level with "
+					+ game.getPlayer().getSteps() + "steps.", "Message");
 			dungeonPanel.setVisible(false);
 			dataPanel.setVisible(false);
-//			dungeonPanel.dispose();
-//			dataPanel.dispose();
+			dungeonPanel.dispose();
+			dataPanel.dispose();
 		}
 
 		@Override

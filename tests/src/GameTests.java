@@ -10,17 +10,19 @@ import javax.swing.JOptionPane;
 
 import loadAndSave.FilterArrayFileList;
 import loadAndSave.FilterFileList;
-import loadAndSave.LoadGame;
-import loadAndSave.SaveGame;
+import loadAndSave.LoadGameFromFile;
+import loadAndSave.SaveGameOnFile;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import parser.BoardParserFromFile;
 import back.BloodyFloor;
 import back.Bonus;
 import back.DungeonGame;
 import back.DungeonGameListener;
 import back.LifeBonus;
+import back.LoadGame;
 import back.Monster;
 import back.MoveTypes;
 import back.Point;
@@ -29,13 +31,13 @@ import back.StrengthBonus;
 public class GameTests {
 
 	private DungeonGame game;
-	
 
 	@Before
 	public void setup() {
-		game = new DungeonGame("./testBoard/boardForTest1");
+		game = new DungeonGame(new BoardParserFromFile(new File(
+				"./testBoard/boardForTest1")));
 		game.addGameListener(new DungeonGameListener() {
-			
+
 			@Override
 			public String playerNameRequest() {
 				String name = null;
@@ -44,16 +46,26 @@ public class GameTests {
 				}
 				return name;
 			}
+
 			@Override
-			public void executeWhenPlayerMoves(MoveTypes moveType) {}
+			public void executeWhenPlayerMoves(MoveTypes moveType) {
+			}
+
 			@Override
-			public void executeWhenGameWinned() {}
+			public void executeWhenGameWinned() {
+			}
+
 			@Override
-			public void executeWhenGameLoosed() {}
+			public void executeWhenGameLoosed() {
+			}
+
 			@Override
-			public void executeWhenCharacterDie(Point p) {}
+			public void executeWhenCharacterDie(Point p) {
+			}
+
 			@Override
-			public void executeWhenBonusGrabed(Point p) {}
+			public void executeWhenBonusGrabed(Point p) {
+			}
 		});
 	}
 
@@ -102,7 +114,7 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedTest() {
-		new SaveGame(game);
+		new SaveGameOnFile(game);
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
 		filterFileList = filterFileList.filter("savedGame");
@@ -122,18 +134,18 @@ public class GameTests {
 	@Test
 	public void loadGameTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGame(game,file);
-		LoadGame loadGame = new LoadGame(file);
+		new SaveGameOnFile(game, file);
+		LoadGame loadGame = new LoadGameFromFile(file);
 		DungeonGame game = loadGame.getGame();
 		assertEquals(new Integer(0), game.getPlayer().getExperience());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
 		file.delete();
 	}
-	
+
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGame(game,file);
+		new SaveGameOnFile(game, file);
 		FilterFileList filterFileList = new FilterArrayFileList(
 				file.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());

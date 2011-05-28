@@ -1,5 +1,5 @@
 package back;
 
-public abstract class Cell implements Putable{
+public abstract class Cell {
 	
 }

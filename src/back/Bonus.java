@@ -1,6 +1,6 @@
 package back;
 
-public abstract class Bonus implements Putable {
+public abstract class Bonus implements Putable{
 
 	public abstract void giveBonus(Character character);
 

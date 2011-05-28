@@ -9,15 +9,16 @@ import back.BloodyFloor;
 import back.DungeonGame;
 import back.LifeBonus;
 import back.Monster;
+import back.SaveGame;
 import back.StrengthBonus;
 import back.Wall;
 
-public class SaveGame {
+public class SaveGameOnFile implements SaveGame{
 
 	private DungeonGame gameToSave;
 	private File placeToSave;
 
-	public SaveGame(DungeonGame gameToSave) {
+	public SaveGameOnFile(DungeonGame gameToSave) {
 		this.gameToSave = gameToSave;
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
@@ -36,7 +37,7 @@ public class SaveGame {
 		}
 	}
 
-	public SaveGame(DungeonGame gameToSave, File placeToSave) {
+	public SaveGameOnFile(DungeonGame gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
 		FilterFileList filterFileList = new FilterArrayFileList(
@@ -56,7 +57,7 @@ public class SaveGame {
 		}
 	}
 
-	private void save() throws IOException {
+	public void save() throws IOException {
 		placeToSave.createNewFile();
 		BufferedWriter out = new BufferedWriter(new FileWriter(placeToSave));
 		out.write("#Board dimensions");

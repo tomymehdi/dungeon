@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import back.BoardObtainer;
 import back.Floor;
 import back.LifeBonus;
 import back.Monster;
@@ -17,7 +18,7 @@ import back.Wall;
  * @author tomas Class full dedicated to read a file and transform it to a
  *         board.
  */
-public class BoardParser {
+public class BoardParserFromFile implements BoardObtainer {
 
 	protected BufferedReader inputBoard;
 	protected Point boardDimension;
@@ -25,17 +26,17 @@ public class BoardParser {
 	protected Point playerPosition;
 	protected Putable[][] board;
 
-	public BoardParser(File file) {
+	public BoardParserFromFile(File file) {
 
 		try {
 			inputBoard = new BufferedReader(new FileReader(file));
-			fileParser();
+			obtainBoard();
 		} catch (IOException e) {
 			throw new CorruptedFileException();
 		}
 	}
 
-	public void fileParser() throws IOException {
+	public void obtainBoard() throws IOException {
 
 		boolean dimensionFlag = false;
 		boolean nameFlag = false;
@@ -180,4 +181,5 @@ public class BoardParser {
 	public Putable getBoardElem(Point position) {
 		return board[position.x][position.y];
 	}
+
 }

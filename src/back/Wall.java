@@ -1,7 +1,6 @@
 package back;
 
-
-public class Wall extends Cell implements Putable{
+public class Wall extends Cell implements Putable {
 
 	@Override
 	public String toString() {
@@ -14,6 +13,6 @@ public class Wall extends Cell implements Putable{
 	}
 
 	@Override
-	public void standOver(DungeonGame dungeonGame) {}
+	public void standOver(DungeonGame game) {}
 
 }

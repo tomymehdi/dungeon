@@ -7,7 +7,8 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import parser.BoardParser;
+import parser.BoardParserFromFile;
+import back.BoardObtainer;
 import back.Bonus;
 import back.Monster;
 import back.MoveTypes;
@@ -15,12 +16,12 @@ import back.Player;
 import back.Point;
 
 public class PlayerTests {
-	BoardParser boardParser;
+	BoardObtainer boardParser;
 	Player player;
 
 	@Before
 	public void setup() {
-		boardParser = new BoardParser(new File("./testBoard/boardForTest1"));
+		boardParser = new BoardParserFromFile(new File("./testBoard/boardForTest1"));
 		player = new Player("Tomas",boardParser.getPlayerPosition(), 10, 5);
 	}
 

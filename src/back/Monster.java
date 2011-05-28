@@ -35,6 +35,6 @@ public class Monster extends Character implements Putable {
 	}
 
 	@Override
-	public void standOver(DungeonGame dungeonGame) {}
+	public void standOver(DungeonGame game) {}
 
 }

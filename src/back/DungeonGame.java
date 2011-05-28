@@ -1,9 +1,6 @@
 package back;
 
-import java.io.File;
-
-import loadAndSave.LoadGame;
-import parser.BoardParser;
+import parser.CorruptedFileException;
 
 public class DungeonGame {
 
@@ -11,35 +8,20 @@ public class DungeonGame {
 	static Integer LIFE = 10;
 	static Integer STRENGTH = 5;
 
-	private String boardPath;
 	private String boardName;
 	private Player player;
 	private Point boardDimension;
 	private Putable[][] board;
 	private DungeonGameListener gameListener;
+	private BoardObtainer boardObtainer;
 
-	public DungeonGame(String boardPath) {
-		this.boardPath = boardPath;
-		BoardParser boardParser = new BoardParser(new File(boardPath));
-		boardName = boardParser.getBoardName();
-		boardDimension = boardParser.getBoardDimension();
-		board = boardParser.getBoard();
+	public DungeonGame(BoardObtainer boardObtainer) {
+		this.boardObtainer = boardObtainer;
+		boardName = boardObtainer.getBoardName();
+		boardDimension = boardObtainer.getBoardDimension();
+		board = boardObtainer.getBoard();
 		player = new Player(gameListener.playerNameRequest(),
-				boardParser.getPlayerPosition(), LIFE, STRENGTH);
-	}
-
-	public DungeonGame(LoadGame loadGame) {
-		boardName = loadGame.getBoardName();
-		boardDimension = loadGame.getBoardDimension();
-		board = loadGame.getBoard();
-		player = new Player(loadGame.getPlayerName(),
-				loadGame.getPlayerLoadedPosition(), LIFE, STRENGTH);
-		player.setExperience(loadGame.getPlayerLoadedExperience());
-		player.setHealth(loadGame.getPlayerLoadedHealth());
-		player.setMaxHealth(loadGame.setPlayerLoadedMaxHealth());
-		player.setStrength(loadGame.getPlayerLoadedStrength());
-		player.setSteps(loadGame.getPlayerLoadedSteps());
-		player.setName(loadGame.getPlayerName());
+				boardObtainer.getPlayerPosition(), LIFE, STRENGTH);
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -63,9 +45,13 @@ public class DungeonGame {
 	}
 
 	public void restartGame() {
-		BoardParser boardParser = new BoardParser(new File(boardPath));
-		board = boardParser.getBoard();
-		player = new Player(player.getName(), boardParser.getPlayerPosition(),
+		try {
+			boardObtainer.obtainBoard();
+		} catch (Exception e) {
+			throw new CorruptedFileException();
+		}
+		board = boardObtainer.getBoard();
+		player = new Player(player.getName(), boardObtainer.getPlayerPosition(),
 				LIFE, STRENGTH);
 	}
 
@@ -86,7 +72,8 @@ public class DungeonGame {
 			gameListener.executeWhenCharacterDie(point);
 		}
 		if (player.isDead()) {
-			Point point = new Point(player.getPosition().x,player.getPosition().y);
+			Point point = new Point(player.getPosition().x,
+					player.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
 			loosed();
