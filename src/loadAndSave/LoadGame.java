@@ -2,8 +2,6 @@ package loadAndSave;
 
 import java.io.File;
 
-import front.DungeonGameListenerImp;
-
 import parser.BoardParser;
 import parser.SavedBoardPlayerLine;
 import back.DungeonGame;
@@ -17,6 +15,7 @@ public class LoadGame extends BoardParser {
 	private Integer playerLoadedMaxHealth;
 	private Integer playerLoadedStrength;
 	private Integer playerLoadedSteps;
+	private String playerName;
 
 	public LoadGame(File placeToLoad) {
 		super(placeToLoad);
@@ -37,6 +36,7 @@ public class LoadGame extends BoardParser {
 		playerLoadedMaxHealth = playerData.getData(7);
 		playerLoadedStrength = playerData.getData(8);
 		playerLoadedSteps = playerData.getData(9);
+		playerName = playerData.getPlayerName();
 
 	}
 
@@ -65,7 +65,11 @@ public class LoadGame extends BoardParser {
 	}
 
 	public DungeonGame getGame() {
-		return new DungeonGame(new DungeonGameListenerImp(), this);
+		return new DungeonGame(this);
+	}
+
+	public String getPlayerName() {
+		return playerName;
 	}
 
 }

@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import loadAndSave.FilterArrayFileList;
 import loadAndSave.FilterFileList;
 import loadAndSave.LoadGame;
@@ -14,11 +16,10 @@ import loadAndSave.SaveGame;
 import org.junit.Before;
 import org.junit.Test;
 
-import front.DungeonGameListenerImp;
-
 import back.BloodyFloor;
 import back.Bonus;
 import back.DungeonGame;
+import back.DungeonGameListener;
 import back.LifeBonus;
 import back.Monster;
 import back.MoveTypes;
@@ -32,7 +33,28 @@ public class GameTests {
 
 	@Before
 	public void setup() {
-		game = new DungeonGame(new DungeonGameListenerImp(), "./testBoard/boardForTest1");
+		game = new DungeonGame("./testBoard/boardForTest1");
+		game.addGameListener(new DungeonGameListener() {
+			
+			@Override
+			public String playerNameRequest() {
+				String name = null;
+				while (name == null || name.isEmpty()) {
+					name = JOptionPane.showInputDialog("Player name");
+				}
+				return name;
+			}
+			@Override
+			public void executeWhenPlayerMoves(MoveTypes moveType) {}
+			@Override
+			public void executeWhenGameWinned() {}
+			@Override
+			public void executeWhenGameLoosed() {}
+			@Override
+			public void executeWhenCharacterDie(Point p) {}
+			@Override
+			public void executeWhenBonusGrabed(Point p) {}
+		});
 	}
 
 	@Test

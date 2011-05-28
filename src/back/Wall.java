@@ -13,4 +13,7 @@ public class Wall extends Cell implements Putable{
 		return false;
 	}
 
+	@Override
+	public void standOver(DungeonGame dungeonGame) {}
+
 }

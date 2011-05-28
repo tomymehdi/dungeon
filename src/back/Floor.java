@@ -11,4 +11,7 @@ public class Floor extends Cell implements Putable {
 		return true;
 	}
 
+	@Override
+	public void standOver(DungeonGame dungeonGame) {}
+
 }

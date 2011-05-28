@@ -44,6 +44,5 @@ public abstract class Lines {
 		return line;
 	}
 
-	protected void lineCheck() {
-	}
+	protected void lineCheck(){}
 }

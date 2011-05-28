@@ -61,8 +61,8 @@ public class DungeonPanel extends GamePanel {
 				}
 			}
 		}
-		image = ImageUtils.overlap(floorImage, dungeonGameFrame
-				.getPlayerImage());
+		image = ImageUtils.overlap(floorImage,
+				dungeonGameFrame.getPlayerImage());
 		put(image, dungeonGameFrame.game.getPlayer().getPosition().x - 1,
 				dungeonGameFrame.game.getPlayer().getPosition().y - 1);
 	}

@@ -34,4 +34,7 @@ public class Monster extends Character implements Putable {
 		return false;
 	}
 
+	@Override
+	public void standOver(DungeonGame dungeonGame) {}
+
 }

@@ -14,35 +14,32 @@ public class DungeonGame {
 	private String boardPath;
 	private String boardName;
 	private Player player;
-	private Point startingPlayerPosition;
 	private Point boardDimension;
 	private Putable[][] board;
 	private DungeonGameListener gameListener;
 
-	public DungeonGame(DungeonGameListener gameListener, String boardPath) {
+	public DungeonGame(String boardPath) {
 		this.boardPath = boardPath;
-		this.gameListener = gameListener;
 		BoardParser boardParser = new BoardParser(new File(boardPath));
 		boardName = boardParser.getBoardName();
-		startingPlayerPosition = boardParser.getPlayerPosition();
 		boardDimension = boardParser.getBoardDimension();
 		board = boardParser.getBoard();
-		player = new Player(gameListener.playerNameRequest(), boardParser
-				.getPlayerPosition(), LIFE, STRENGTH);
+		player = new Player(gameListener.playerNameRequest(),
+				boardParser.getPlayerPosition(), LIFE, STRENGTH);
 	}
 
-	public DungeonGame(DungeonGameListener gameListener, LoadGame loadGame) {
+	public DungeonGame(LoadGame loadGame) {
 		boardName = loadGame.getBoardName();
-		startingPlayerPosition = loadGame.getPlayerPosition();
 		boardDimension = loadGame.getBoardDimension();
 		board = loadGame.getBoard();
-		player = new Player(gameListener.playerNameRequest(), loadGame
-				.getPlayerLoadedPosition(), LIFE, STRENGTH);
+		player = new Player(loadGame.getPlayerName(),
+				loadGame.getPlayerLoadedPosition(), LIFE, STRENGTH);
 		player.setExperience(loadGame.getPlayerLoadedExperience());
 		player.setHealth(loadGame.getPlayerLoadedHealth());
 		player.setMaxHealth(loadGame.setPlayerLoadedMaxHealth());
 		player.setStrength(loadGame.getPlayerLoadedStrength());
 		player.setSteps(loadGame.getPlayerLoadedSteps());
+		player.setName(loadGame.getPlayerName());
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -56,21 +53,13 @@ public class DungeonGame {
 
 		if (board[nextPlayerPosition.x][nextPlayerPosition.y]
 				.allowMovement(this)) {
-			player.move(moveType);
-			gameListener.executeWhenPlayerMoves();
+			board[nextPlayerPosition.x][nextPlayerPosition.y].standOver(this);
+			gameListener.executeWhenPlayerMoves(player.move(moveType));
 		}
-	}
-
-	public void addListener(DungeonGameListener gameListener) {
-		this.gameListener = gameListener;
 	}
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public DungeonGameListener getGameListener() {
-		return gameListener;
 	}
 
 	public void restartGame() {
@@ -91,19 +80,18 @@ public class DungeonGame {
 
 	public void fightEnd(Monster monster) {
 		if (monster.isDead()) {
-			board[monster.getPosition().x][monster.getPosition().y] = new BloodyFloor();
-			gameListener.executeWhenCharacterDie();
+			Point point = new Point(monster.getPosition().x,
+					monster.getPosition().y);
+			board[point.x][point.y] = new BloodyFloor();
+			gameListener.executeWhenCharacterDie(point);
 		}
 		if (player.isDead()) {
-			board[player.getPosition().x][player.getPosition().y] = new BloodyFloor();
-			gameListener.executeWhenCharacterDie();
+			Point point = new Point(player.getPosition().x,player.getPosition().y);
+			board[point.x][point.y] = new BloodyFloor();
+			gameListener.executeWhenCharacterDie(point);
 			loosed();
 		}
 
-	}
-
-	public Point getStartingPlayerPosition() {
-		return startingPlayerPosition;
 	}
 
 	public Putable[][] getBoard() {
@@ -116,6 +104,10 @@ public class DungeonGame {
 
 	public String getBoardName() {
 		return boardName;
+	}
+
+	public DungeonGameListener getGameListener() {
+		return gameListener;
 	}
 
 	public void addGameListener(DungeonGameListener d) {

@@ -19,9 +19,11 @@ import loadAndSave.SavingCorruptedException;
 import parser.CorruptedFileException;
 import back.BloodyFloor;
 import back.DungeonGame;
+import back.DungeonGameListener;
 import back.Floor;
 import back.LifeBonus;
 import back.MoveTypes;
+import back.Point;
 import back.Putable;
 import back.StrengthBonus;
 import back.Wall;
@@ -37,7 +39,7 @@ public class DungeonGameFrame extends GameFrame {
 	private DungeonPanel dungeonPanel;
 
 	public DungeonGameFrame() {
-		super();
+		super("Dungeon game");
 		playerImage();
 		boardImagesByClass();
 		monstersImagesInitialize();
@@ -56,16 +58,16 @@ public class DungeonGameFrame extends GameFrame {
 	private void boardImagesByClass() {
 		try {
 
-			boardImagesByClass.put(StrengthBonus.class, ImageUtils
-					.loadImage("./resources/images/attackBoost.png"));
-			boardImagesByClass.put(Wall.class, ImageUtils
-					.loadImage("./resources/images/wall.png"));
-			boardImagesByClass.put(Floor.class, ImageUtils
-					.loadImage("./resources/images/background.png"));
-			boardImagesByClass.put(BloodyFloor.class, ImageUtils
-					.loadImage("./resources/images/blood.png"));
-			boardImagesByClass.put(LifeBonus.class, ImageUtils
-					.loadImage("./resources/images/healthBoost.png"));
+			boardImagesByClass.put(StrengthBonus.class,
+					ImageUtils.loadImage("./resources/images/attackBoost.png"));
+			boardImagesByClass.put(Wall.class,
+					ImageUtils.loadImage("./resources/images/wall.png"));
+			boardImagesByClass.put(Floor.class,
+					ImageUtils.loadImage("./resources/images/background.png"));
+			boardImagesByClass.put(BloodyFloor.class,
+					ImageUtils.loadImage("./resources/images/blood.png"));
+			boardImagesByClass.put(LifeBonus.class,
+					ImageUtils.loadImage("./resources/images/healthBoost.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -74,12 +76,12 @@ public class DungeonGameFrame extends GameFrame {
 
 	private void monstersImagesInitialize() {
 		try {
-			monsterImagesByName.put("GOLEM", ImageUtils
-					.loadImage("./resources/images/golem.png"));
-			monsterImagesByName.put("DRAGON", ImageUtils
-					.loadImage("./resources/images/dragon.png"));
-			monsterImagesByName.put("SNAKE", ImageUtils
-					.loadImage("./resources/images/serpent.png"));
+			monsterImagesByName.put("GOLEM",
+					ImageUtils.loadImage("./resources/images/golem.png"));
+			monsterImagesByName.put("DRAGON",
+					ImageUtils.loadImage("./resources/images/dragon.png"));
+			monsterImagesByName.put("SNAKE",
+					ImageUtils.loadImage("./resources/images/serpent.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -93,8 +95,8 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					game = new DungeonGame(new DungeonGameListenerImp(),
-							"./testBoard/boardForTest1");
+					game = new DungeonGame("./testBoard/boardForTest1");
+					game.addGameListener(new DungeonGameListenerImp());
 					drawDataPanel();
 					drawDungeonPanel();
 					repaint();
@@ -190,7 +192,7 @@ public class DungeonGameFrame extends GameFrame {
 					try {
 						LoadGame loadGame = new LoadGame(file);
 						game = loadGame.getGame();
-						game.addListener(new DungeonGameListenerImp());
+						game.addGameListener(new DungeonGameListenerImp());
 
 					} catch (CorruptedFileException e2) {
 						JOptionPane.showMessageDialog(null,
@@ -267,12 +269,71 @@ public class DungeonGameFrame extends GameFrame {
 			}
 		});
 	}
-	
+
 	public DungeonPanel getDungeonPanel() {
 		return dungeonPanel;
 	}
-	
+
 	public DataPanel getDataPanel() {
 		return dataPanel;
+	}
+
+	private class DungeonGameListenerImp implements DungeonGameListener {
+
+		@Override
+		public void executeWhenBonusGrabed(Point p) {
+			Image imagFloor = getBoardImagesByClass().get(Floor.class);
+			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
+					p.x, p.y);
+		}
+
+		@Override
+		public void executeWhenCharacterDie(Point p) {
+			Image imagFloor = getBoardImagesByClass().get(Floor.class);
+			Image imagBloodFloor = getBoardImagesByClass().get(
+					BloodyFloor.class);
+			dungeonPanel.put(ImageUtils.overlap(imagFloor, imagBloodFloor),
+					p.x, p.y);
+		}
+
+		@Override
+		public void executeWhenGameLoosed() {
+//			JOptionPane.showMessageDialog(this, "You loose the level.",
+//					"Message");
+			dungeonPanel.setVisible(false);
+			dataPanel.setVisible(false);
+//			dungeonPanel.dispose();
+//			dataPanel.dispose();
+		}
+
+		@Override
+		public void executeWhenGameWinned() {
+//			JOptionPane.showMessageDialog(this, "You win the level with "
+//					+ game.getPlayer().getSteps() + "steps.", "Message");
+			dungeonPanel.setVisible(false);
+			dataPanel.setVisible(false);
+//			dungeonPanel.dispose();
+//			dataPanel.dispose();
+		}
+
+		@Override
+		public void executeWhenPlayerMoves(MoveTypes moveType) {
+			Image imagFloor = getBoardImagesByClass().get(Floor.class);
+			Point afterMove = new Point(game.getPlayer().getPosition().x, game
+					.getPlayer().getPosition().y);
+			Point beforeMove = afterMove.sub(moveType.getDirection());
+			dungeonPanel.put(imagFloor, beforeMove.x, beforeMove.y);
+			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
+					afterMove.x, afterMove.y);
+		}
+
+		@Override
+		public String playerNameRequest() {
+			String name = null;
+			while (name == null || name.isEmpty()) {
+				name = JOptionPane.showInputDialog("Player name");
+			}
+			return name;
+		}
 	}
 }

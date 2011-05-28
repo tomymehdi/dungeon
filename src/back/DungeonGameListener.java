@@ -2,11 +2,11 @@ package back;
 
 public interface DungeonGameListener {
 	
-	public void executeWhenPlayerMoves();
+	public void executeWhenPlayerMoves(MoveTypes moveType);
 
-	public void executeWhenBonusGrabed();
+	public void executeWhenBonusGrabed(Point pos);
 	
-	public void executeWhenCharacterDie();
+	public void executeWhenCharacterDie(Point pos);
 	
 	public void executeWhenGameLoosed();
 	

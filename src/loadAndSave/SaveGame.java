@@ -68,18 +68,17 @@ public class SaveGame {
 		out.newLine();
 		out.write(gameToSave.getBoardName());
 		out.newLine();
-		out.write("#Player starting position, current position, "
-				+ "current exp, current health, maxHealth, current strength, steps");
+		out.write("#Player current position, "
+				+ "current exp, current health, maxHealth, current strength, steps, name");
 		out.newLine();
-		out.write(1 + "," + (gameToSave.getStartingPlayerPosition().x - 1)
-				+ "," + (gameToSave.getStartingPlayerPosition().y - 1) + ","
-				+ (gameToSave.getPlayer().getPosition().x - 1) + ","
+		out.write(1 + "," + (gameToSave.getPlayer().getPosition().x - 1) + ","
 				+ (gameToSave.getPlayer().getPosition().y - 1) + ","
 				+ gameToSave.getPlayer().getExperience() + ","
 				+ gameToSave.getPlayer().getHealth() + ","
 				+ gameToSave.getPlayer().getMaxHealth() + ","
 				+ gameToSave.getPlayer().getStrength() + ","
-				+ gameToSave.getPlayer().getSteps());
+				+ gameToSave.getPlayer().getSteps() + ","
+				+ gameToSave.getPlayer().getName());
 		out.newLine();
 		out.write("#Dungeon map");
 		out.newLine();

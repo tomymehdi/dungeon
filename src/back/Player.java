@@ -19,9 +19,10 @@ public class Player extends Character {
 		setHealth(getMaxHealth());
 	}
 
-	public void move(MoveTypes moveType) {
+	public MoveTypes move(MoveTypes moveType) {
 		setPosition(getPosition().add(moveType.getDirection()));
 		steps++;
+		return moveType;
 	}
 
 	public void winExperience(Integer experience) {
