@@ -9,13 +9,13 @@ public class Player extends Character {
 	private Integer steps;
 
 	public Player(String name, Point position, int maxHealth,
-			int startingStength) {
+			int startingStrength) {
 		super(name, 1, position);
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
 		this.steps = 0;
 		setMaxHealth(maxHealth);
-		setStrength(startingStength);
+		setStrength(startingStrength);
 		setHealth(getMaxHealth());
 	}
 

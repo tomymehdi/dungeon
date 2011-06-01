@@ -86,11 +86,7 @@ public class BoardLine extends Lines {
 		return data[0] == 3;
 	}
 
-	public boolean isLifeBonusLine() {
-		return data[0] == 4;
-	}
-
-	public boolean isStengthBonusLine() {
-		return data[0] == 5;
+	public boolean isBonusLine() {
+		return data[0] >= 4;
 	}
 }

@@ -1,5 +1,7 @@
 package back;
 
+import java.io.File;
+
 public interface BoardObtainer {
 
 	public void obtainBoard() throws Exception;
@@ -12,10 +14,12 @@ public interface BoardObtainer {
 
 	public String getBoardName();
 
-	public Object getBoardElem(Point point);
+	public Putable getBoardElem(Point point);
 
 	public int getBoardRows();
 
 	public int getBoardColums();
+
+	public File getFile();
 
 }

@@ -13,19 +13,20 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import loadAndSave.LoadGameFromFile;
-import loadAndSave.SaveGameOnFile;
-import loadAndSave.SavingCorruptedException;
+import parser.BoardParserFromFile;
 import parser.CorruptedFileException;
+import saveLoadImplementation.LoadGameFromFile;
+import saveLoadImplementation.SaveGameOnFile;
+import saveLoadImplementation.SavingCorruptedException;
 import back.BloodyFloor;
+import back.BoardObtainer;
+import back.DungeonGame;
 import back.DungeonGameListener;
 import back.Floor;
-import back.LifeBonus;
 import back.LoadGame;
 import back.MoveTypes;
 import back.Point;
 import back.Putable;
-import back.StrengthBonus;
 import back.Wall;
 
 public class DungeonGameFrame extends GameFrame {
@@ -35,6 +36,7 @@ public class DungeonGameFrame extends GameFrame {
 	private Image playerImage;
 	private Map<Class<? extends Putable>, Image> boardImagesByClass = new HashMap<Class<? extends Putable>, Image>();
 	private Map<String, Image> monsterImagesByName = new HashMap<String, Image>();
+	private Map<String, Image> bonusImagesByName = new HashMap<String,Image>();
 	private DataPanel dataPanel;
 	private DungeonPanel dungeonPanel;
 
@@ -43,7 +45,7 @@ public class DungeonGameFrame extends GameFrame {
 		playerImage();
 		boardImagesByClass();
 		monstersImagesInitialize();
-
+		bonusImagesInitialize();
 	}
 
 	private void playerImage() {
@@ -57,23 +59,31 @@ public class DungeonGameFrame extends GameFrame {
 
 	private void boardImagesByClass() {
 		try {
-
-			boardImagesByClass.put(StrengthBonus.class,
-					ImageUtils.loadImage("./resources/images/attackBoost.png"));
 			boardImagesByClass.put(Wall.class,
 					ImageUtils.loadImage("./resources/images/wall.png"));
 			boardImagesByClass.put(Floor.class,
 					ImageUtils.loadImage("./resources/images/background.png"));
 			boardImagesByClass.put(BloodyFloor.class,
 					ImageUtils.loadImage("./resources/images/blood.png"));
-			boardImagesByClass.put(LifeBonus.class,
-					ImageUtils.loadImage("./resources/images/healthBoost.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
+	private void bonusImagesInitialize() {
+		try {
+			bonusImagesByName.put("LIFE",
+					ImageUtils.loadImage("./resources/images/healthBoost.png"));
+			bonusImagesByName.put("STRENGTH",
+					ImageUtils.loadImage("./resources/images/attackBoost.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	
 	private void monstersImagesInitialize() {
 		try {
 			monsterImagesByName.put("GOLEM",
@@ -95,9 +105,9 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					JOptionPane.showOptionDialog(this, Select level, Levels, NORMAL, NORMAL, icon, options, initialValue)
-					game = new DungeonGame("./testBoard/boardForTest1");
-					game.addGameListener(new DungeonGameListenerImp());
+					BoardObtainer boardObtainer = new BoardParserFromFile(new File(
+					"./testBoard/boardForTest1"));
+					game = new DungeonGame(boardObtainer, new DungeonGameListenerImp());
 					drawDataPanel();
 					drawDungeonPanel();
 					repaint();
@@ -118,7 +128,7 @@ public class DungeonGameFrame extends GameFrame {
 						JOptionPane.showMessageDialog(null,
 								"You are not playing a level.");
 					} else {
-						game.restartGame();
+						game.restart();
 					}
 				} catch (CorruptedFileException e1) {
 					JOptionPane.showMessageDialog(null, "The file is corrupt",
@@ -137,7 +147,7 @@ public class DungeonGameFrame extends GameFrame {
 						directory.mkdir();
 					}
 					try {
-						new SaveGameOnFile(game);
+						new SaveGameOnFile<DungeonGame>(game);
 					} catch (SavingCorruptedException e1) {
 						JOptionPane.showMessageDialog(null,
 								"Files saving error occours. Try again later.",
@@ -165,7 +175,7 @@ public class DungeonGameFrame extends GameFrame {
 								"You didn't select any file.");
 					} else {
 						try {
-							new SaveGameOnFile(game, file);
+							new SaveGameOnFile<DungeonGame>(game, file);
 						} catch (SavingCorruptedException e1) {
 							JOptionPane.showMessageDialog(null,
 									"The file is corrupt", "Error",
@@ -191,10 +201,8 @@ public class DungeonGameFrame extends GameFrame {
 							"You didn't select any file.");
 				} else {
 					try {
-						LoadGame loadGame = new LoadGameFromFile(file);
-						game = loadGame.getGame();
-						game.addGameListener(new DungeonGameListenerImp());
-
+						LoadGame<DungeonGame> loadGame = new LoadGameFromFile<DungeonGame>(file);
+						game = loadGame.getGame(DungeonGame.class, new DungeonGameListenerImp());
 					} catch (CorruptedFileException e2) {
 						JOptionPane.showMessageDialog(null,
 								"The file does not exist", "Error",
@@ -238,6 +246,10 @@ public class DungeonGameFrame extends GameFrame {
 		return monsterImagesByName;
 	}
 
+	public Map<String, Image> getBonusImagesByName() {
+		return bonusImagesByName;
+	}
+	
 	public Map<Class<? extends Putable>, Image> getBoardImagesByClass() {
 		return boardImagesByClass;
 	}
@@ -299,22 +311,17 @@ public class DungeonGameFrame extends GameFrame {
 
 		@Override
 		public void executeWhenGameLoosed() {
-			JOptionPane.showMessageDialog(this, "You loose the level.",
-					"Message");
-			dungeonPanel.setVisible(false);
-			dataPanel.setVisible(false);
-			dungeonPanel.dispose();
-			dataPanel.dispose();
+			JOptionPane.showMessageDialog(DungeonGameFrame.this, "You loose the level.");
+			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDungeonPanel());
+			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDataPanel());
 		}
 
 		@Override
 		public void executeWhenGameWinned() {
-			JOptionPane.showMessageDialog(this, "You win the level with "
-					+ game.getPlayer().getSteps() + "steps.", "Message");
-			dungeonPanel.setVisible(false);
-			dataPanel.setVisible(false);
-			dungeonPanel.dispose();
-			dataPanel.dispose();
+			JOptionPane.showMessageDialog(DungeonGameFrame.this, "You win the level with "
+					+ game.getPlayer().getSteps() + "steps.");
+			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDungeonPanel());
+			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDataPanel());
 		}
 
 		@Override

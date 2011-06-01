@@ -1,4 +1,4 @@
-package loadAndSave;
+package saveLoadImplementation;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,19 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import back.BloodyFloor;
-import back.DungeonGame;
-import back.LifeBonus;
+import back.Bonus;
+import back.Game;
 import back.Monster;
 import back.SaveGame;
-import back.StrengthBonus;
 import back.Wall;
 
-public class SaveGameOnFile implements SaveGame{
+public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
 
-	private DungeonGame gameToSave;
+	private T gameToSave;
 	private File placeToSave;
 
-	public SaveGameOnFile(DungeonGame gameToSave) {
+	public SaveGameOnFile(T gameToSave) {
 		this.gameToSave = gameToSave;
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
@@ -37,7 +36,7 @@ public class SaveGameOnFile implements SaveGame{
 		}
 	}
 
-	public SaveGameOnFile(DungeonGame gameToSave, File placeToSave) {
+	public SaveGameOnFile(T gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
 		FilterFileList filterFileList = new FilterArrayFileList(
@@ -81,7 +80,7 @@ public class SaveGameOnFile implements SaveGame{
 				+ gameToSave.getPlayer().getSteps() + ","
 				+ gameToSave.getPlayer().getName());
 		out.newLine();
-		out.write("#Dungeon map");
+		out.write("#Map");
 		out.newLine();
 		for (int i = 1; i < gameToSave.getBoardDimension().x - 1; i++) {
 			for (int j = 1; j < gameToSave.getBoardDimension().y - 1; j++) {
@@ -108,9 +107,10 @@ public class SaveGameOnFile implements SaveGame{
 							+ ((Monster) gameToSave.getBoard()[i][j])
 									.getLevel() + "," + 0);
 					out.newLine();
-				} else if (LifeBonus.class.equals((gameToSave.getBoard()[i][j])
+				} else if (Bonus.class.equals((gameToSave.getBoard()[i][j])
 						.getClass())) {
-					out.write(4
+					out.write((((Bonus) gameToSave.getBoard()[i][j])
+							.getBonusType().ordinal() + 4)
 							+ ","
 							+ (i - 1)
 							+ ","
@@ -120,26 +120,10 @@ public class SaveGameOnFile implements SaveGame{
 							+ ","
 							+ 0
 							+ ","
-							+ ((LifeBonus) gameToSave.getBoard()[i][j])
-									.getLifeBonus());
+							+ ((Bonus) gameToSave.getBoard()[i][j])
+									.getAmountBonus());
 					out.newLine();
-				} else if (StrengthBonus.class
-						.equals((gameToSave.getBoard()[i][j]).getClass())) {
-					out.write(5
-							+ ","
-							+ (i - 1)
-							+ ","
-							+ (j - 1)
-							+ ","
-							+ 0
-							+ ","
-							+ 0
-							+ ","
-							+ ((StrengthBonus) gameToSave.getBoard()[i][j])
-									.getStrengthBonus());
-					out.newLine();
-				}
-
+				} 
 			}
 		}
 

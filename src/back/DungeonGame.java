@@ -1,8 +1,7 @@
 package back;
 
-import parser.CorruptedFileException;
 
-public class DungeonGame {
+public class DungeonGame implements Game {
 
 	public static Integer LEVEL = 3;
 	static Integer LIFE = 10;
@@ -12,16 +11,21 @@ public class DungeonGame {
 	private Player player;
 	private Point boardDimension;
 	private Putable[][] board;
-	private DungeonGameListener gameListener;
+	private GameListener gameListener;
 	private BoardObtainer boardObtainer;
 
-	public DungeonGame(BoardObtainer boardObtainer) {
+	public DungeonGame(BoardObtainer boardObtainer, GameListener gameListener, String playerName) {
 		this.boardObtainer = boardObtainer;
+		this.gameListener = gameListener;
 		boardName = boardObtainer.getBoardName();
 		boardDimension = boardObtainer.getBoardDimension();
 		board = boardObtainer.getBoard();
-		player = new Player(gameListener.playerNameRequest(),
+		player = new Player(playerName,
 				boardObtainer.getPlayerPosition(), LIFE, STRENGTH);
+	}
+	
+	public DungeonGame(BoardObtainer boardObtainer, GameListener gameListener) {
+		this(boardObtainer,gameListener,gameListener.playerNameRequest());
 	}
 
 	public void receibeStroke(MoveTypes keyPressed) {
@@ -42,17 +46,6 @@ public class DungeonGame {
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public void restartGame() {
-		try {
-			boardObtainer.obtainBoard();
-		} catch (Exception e) {
-			throw new CorruptedFileException();
-		}
-		board = boardObtainer.getBoard();
-		player = new Player(player.getName(), boardObtainer.getPlayerPosition(),
-				LIFE, STRENGTH);
 	}
 
 	public void winned() {
@@ -93,12 +86,23 @@ public class DungeonGame {
 		return boardName;
 	}
 
-	public DungeonGameListener getGameListener() {
+	public GameListener getGameListener() {
 		return gameListener;
 	}
 
-	public void addGameListener(DungeonGameListener d) {
+	public void addGameListener(GameListener d) {
 		gameListener = d;
+	}
+
+	@Override
+	public BoardObtainer getBoardObtainer() {
+		return boardObtainer;
+	}
+
+	public void restart() {
+		board = boardObtainer.getBoard();
+		player = new Player(player.getName(),
+				boardObtainer.getPlayerPosition(), LIFE, STRENGTH);
 	}
 
 }

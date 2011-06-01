@@ -3,11 +3,10 @@ package front;
 import java.awt.Color;
 import java.awt.Image;
 
+import back.Bonus;
 import back.Floor;
-import back.LifeBonus;
 import back.Monster;
 import back.Putable;
-import back.StrengthBonus;
 import back.Wall;
 
 public class DungeonPanel extends GamePanel {
@@ -46,14 +45,21 @@ public class DungeonPanel extends GamePanel {
 							((Monster) cell).getMonsterType().toString());
 					image = ImageUtils.overlap(floorImage, image);
 					put(image, i - 1, j - 1);
+				} else if (cell.getClass().equals(Bonus.class)) {
+					image = dungeonGameFrame.getBonusImagesByName().get(
+							((Bonus) cell).getBonusType().toString());
+					image = ImageUtils.overlap(floorImage, image);
+					put(image, i - 1, j - 1);
 				} else {
 					image = dungeonGameFrame.getBoardImagesByClass().get(
 							cell.getClass());
 					if (cell.getClass().equals(Wall.class)) {
 						put(image, i - 1, j - 1);
-					} else if (cell.getClass().equals(LifeBonus.class)
-							|| cell.getClass().equals(StrengthBonus.class)) {
+					} else if (cell.getClass().equals(Bonus.class)) {
 						image = ImageUtils.overlap(floorImage, image);
+						image = ImageUtils.drawString(image, (((Bonus) cell)
+								.getBonusType().getBonusAmount()).toString(),
+								Color.RED);
 						put(image, i - 1, j - 1);
 					} else {
 						put(floorImage, i - 1, j - 1);
@@ -61,15 +67,9 @@ public class DungeonPanel extends GamePanel {
 				}
 			}
 		}
-		image = ImageUtils.overlap(floorImage,
-				dungeonGameFrame.getPlayerImage());
+		image = ImageUtils.overlap(floorImage, dungeonGameFrame
+				.getPlayerImage());
 		put(image, dungeonGameFrame.game.getPlayer().getPosition().x - 1,
 				dungeonGameFrame.game.getPlayer().getPosition().y - 1);
 	}
-
-	@Override
-	public void put(Image image, int row, int colum) {
-		super.put(image, colum, row);
-	}
-
 }

@@ -1,32 +1,27 @@
 package src;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import loadAndSave.FilterArrayFileList;
-import loadAndSave.FilterFileList;
-import loadAndSave.LoadGameFromFile;
-import loadAndSave.SaveGameOnFile;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import parser.BoardParserFromFile;
+import saveLoadImplementation.FilterArrayFileList;
+import saveLoadImplementation.FilterFileList;
+import saveLoadImplementation.LoadGameFromFile;
+import saveLoadImplementation.SaveGameOnFile;
 import back.BloodyFloor;
 import back.Bonus;
 import back.DungeonGame;
 import back.DungeonGameListener;
-import back.LifeBonus;
 import back.LoadGame;
-import back.Monster;
 import back.MoveTypes;
 import back.Point;
-import back.StrengthBonus;
 
 public class GameTests {
 
@@ -35,8 +30,7 @@ public class GameTests {
 	@Before
 	public void setup() {
 		game = new DungeonGame(new BoardParserFromFile(new File(
-				"./testBoard/boardForTest1")));
-		game.addGameListener(new DungeonGameListener() {
+				"./testBoard/boardForTest1")),new DungeonGameListener() {
 
 			@Override
 			public String playerNameRequest() {
@@ -87,9 +81,9 @@ public class GameTests {
 
 	@Test
 	public void goodFunctionamientOfWiningWhenKillMonsterLevel3Test() {
-		game.getPlayer().setMaxHealth(50);
-		Bonus bonus = new LifeBonus(50);
-		Bonus bonus2 = new StrengthBonus(50);
+		game.getPlayer().grabLifeBonus(40);
+		Bonus bonus = new Bonus(new Point(7,7),4,50);
+		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(8, 2));
@@ -98,23 +92,22 @@ public class GameTests {
 
 	@Test
 	public void goodFunctionamientOfResetGameTest() {
-		game.getPlayer().setMaxHealth(50);
-		Bonus bonus = new LifeBonus(50);
-		Bonus bonus2 = new StrengthBonus(50);
+		game.getPlayer().grabLifeBonus(40);
+		Bonus bonus = new Bonus(new Point(7,7),4,50);
+		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(4, 6));
 		game.movePlayer(MoveTypes.UP);
 		assertEquals(BloodyFloor.class, ((game.getBoard()[3][6])).getClass());
-		game.restartGame();
-		assertEquals(Monster.class, ((game.getBoard()[3][6])).getClass());
-		assertFalse(((Monster) ((game.getBoard()[3][6]))).isDead());
+		game.restart();
+		assertEquals(BloodyFloor.class, ((game.getBoard()[3][6])).getClass());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
 	}
 
 	@Test
 	public void forWatchTheGameSavedTest() {
-		new SaveGameOnFile(game);
+		new SaveGameOnFile<DungeonGame>(game);
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
 		filterFileList = filterFileList.filter("savedGame");
@@ -134,10 +127,42 @@ public class GameTests {
 	@Test
 	public void loadGameTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGameOnFile(game, file);
-		LoadGame loadGame = new LoadGameFromFile(file);
-		DungeonGame game = loadGame.getGame();
+		new SaveGameOnFile<DungeonGame>(game, file);
+		LoadGame<DungeonGame> loadGame = new LoadGameFromFile<DungeonGame>(file);
+		DungeonGame game = loadGame.getGame(DungeonGame.class, new DungeonGameListener() {
+
+			@Override
+			public String playerNameRequest() {
+				String name = null;
+				while (name == null || name.isEmpty()) {
+					name = JOptionPane.showInputDialog("Player name");
+				}
+				return name;
+			}
+
+			@Override
+			public void executeWhenPlayerMoves(MoveTypes moveType) {
+			}
+
+			@Override
+			public void executeWhenGameWinned() {
+			}
+
+			@Override
+			public void executeWhenGameLoosed() {
+			}
+
+			@Override
+			public void executeWhenCharacterDie(Point p) {
+			}
+
+			@Override
+			public void executeWhenBonusGrabed(Point p) {
+			}
+		});
+		System.out.println(game.getPlayer());
 		assertEquals(new Integer(0), game.getPlayer().getExperience());
+		System.out.println(game.getPlayer().getPosition());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
 		file.delete();
 	}
@@ -145,7 +170,7 @@ public class GameTests {
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGameOnFile(game, file);
+		new SaveGameOnFile<DungeonGame>(game, file);
 		FilterFileList filterFileList = new FilterArrayFileList(
 				file.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());

@@ -1,5 +1,5 @@
 package back;
 
-public interface SaveGame {
+public interface SaveGame<T extends Game> {
 	public void save() throws Exception;
 }

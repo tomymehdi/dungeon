@@ -1,8 +1,17 @@
 package back;
 
-public abstract class Bonus implements Putable{
+public class Bonus implements Putable {
 
-	public abstract void giveBonus(Character character);
+	private BonusTypes bonusType;
+
+	public Bonus(Point position, int numberBonusType, int bonusAmount) {
+		bonusType = BonusTypes.getBonusType(numberBonusType);
+		bonusType.setBonusAmount(bonusAmount);
+	}
+
+	public void giveBonus(Character character) {
+		bonusType.giveBonus(character);
+	}
 
 	@Override
 	public boolean allowMovement(DungeonGame game) {
@@ -19,6 +28,14 @@ public abstract class Bonus implements Putable{
 
 		game.getGameListener().executeWhenBonusGrabed(
 				new Point(point.x, point.y));
+	}
+
+	public BonusTypes getBonusType() {
+		return bonusType;
+	}
+
+	public int getAmountBonus() {
+		return bonusType.getBonusAmount();
 	}
 
 }

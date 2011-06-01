@@ -6,12 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import back.BoardObtainer;
+import back.Bonus;
 import back.Floor;
-import back.LifeBonus;
 import back.Monster;
 import back.Point;
 import back.Putable;
-import back.StrengthBonus;
 import back.Wall;
 
 /**
@@ -20,15 +19,16 @@ import back.Wall;
  */
 public class BoardParserFromFile implements BoardObtainer {
 
-	protected BufferedReader inputBoard;
-	protected Point boardDimension;
-	protected String boardName;
-	protected Point playerPosition;
-	protected Putable[][] board;
+	private BufferedReader inputBoard;
+	private Point boardDimension;
+	private String boardName;
+	private Point playerPosition;
+	private Putable[][] board;
+	private File inputFile;
 
 	public BoardParserFromFile(File file) {
-
 		try {
+			inputFile = file;
 			inputBoard = new BufferedReader(new FileReader(file));
 			obtainBoard();
 		} catch (IOException e) {
@@ -72,11 +72,9 @@ public class BoardParserFromFile implements BoardObtainer {
 							parseWall(point);
 						} else if (cell.isMonsterLine()) {
 							parseMonster(point, cell);
-						} else if (cell.isLifeBonusLine()) {
-							parseLifeBonus(point, cell);
-						} else {
-							parseStrengthBonus(point, cell);
-						}
+						} else if (cell.isBonusLine()) {
+							parseBonus(point, cell);
+						} 
 					}
 				}
 			}
@@ -88,11 +86,15 @@ public class BoardParserFromFile implements BoardObtainer {
 
 		protectionWalls();
 		putFloor();
-
-		if (board[playerPosition.x][playerPosition.y].getClass() != Floor.class) {
+		if (board[getPlayerPosition().x][getPlayerPosition().y].getClass() != Floor.class) {
 			throw new CorruptedFileException();
 		}
 
+	}
+
+	private void parseBonus(Point point, BoardLine cell) {
+		Bonus bonus = new Bonus(point,cell.getData(0), cell.getData(5));
+		board[point.x][point.y] = bonus;
 	}
 
 	public void parsePlayer(String line) {
@@ -100,14 +102,6 @@ public class BoardParserFromFile implements BoardObtainer {
 		Point point = (new Point(cell.getData(1), cell.getData(2)))
 				.add(new Point(1, 1));
 		playerPosition = point;
-	}
-
-	public void parseStrengthBonus(Point point, BoardLine cell) {
-		board[point.x][point.y] = new StrengthBonus(cell.getData(5));
-	}
-
-	public void parseLifeBonus(Point point, BoardLine cell) {
-		board[point.x][point.y] = new LifeBonus(cell.getData(5));
 	}
 
 	private void parseMonster(Point point, BoardLine cell) {
@@ -180,6 +174,11 @@ public class BoardParserFromFile implements BoardObtainer {
 
 	public Putable getBoardElem(Point position) {
 		return board[position.x][position.y];
+	}
+
+	@Override
+	public File getFile() {
+		return inputFile;
 	}
 
 }

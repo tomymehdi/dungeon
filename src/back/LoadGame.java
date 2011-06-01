@@ -1,7 +1,7 @@
 package back;
 
-public interface LoadGame {
+public interface LoadGame<T extends Game> {
 
-	public DungeonGame getGame();
+	public T getGame(Class<T> gameImpClass, GameListener listener);
 
 }

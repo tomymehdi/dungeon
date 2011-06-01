@@ -48,7 +48,7 @@ public class PlayerTests {
 	
 	@Test
 	public void goodFunctionamientPlayerEarningBonusTest(){
-		player.setHealth(1);
+		player.hited(9);
 		((Bonus)boardParser.getBoard()[8][2]).giveBonus(player);
 		((Bonus)boardParser.getBoard()[2][8]).giveBonus(player);
 		assertEquals(new Integer(6), player.getHealth());

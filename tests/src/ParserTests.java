@@ -10,11 +10,10 @@ import org.junit.Test;
 import parser.BoardParserFromFile;
 import parser.CorruptedFileException;
 import back.BoardObtainer;
-import back.LifeBonus;
+import back.Bonus;
 import back.Monster;
 import back.MonsterTypes;
 import back.Point;
-import back.StrengthBonus;
 import back.Wall;
 
 public class ParserTests {
@@ -82,9 +81,9 @@ public class ParserTests {
 		assertEquals(Wall.class, boardParser.getBoard()[10][1].getClass());
 		assertEquals(Wall.class, boardParser.getBoard()[1][10].getClass());
 		assertEquals(Wall.class, boardParser.getBoard()[10][10].getClass());
-		assertEquals(StrengthBonus.class,
+		assertEquals(Bonus.class,
 				boardParser.getBoard()[2][8].getClass());
-		assertEquals(LifeBonus.class, boardParser.getBoard()[8][2].getClass());
+		assertEquals(Bonus.class, boardParser.getBoard()[8][2].getClass());
 		assertEquals(Monster.class, boardParser.getBoard()[5][7].getClass());
 		assertEquals(Monster.class, boardParser.getBoard()[3][6].getClass());
 		assertEquals(Monster.class, boardParser.getBoard()[2][4].getClass());
@@ -101,10 +100,10 @@ public class ParserTests {
 	@Test
 	public void goodParseOfBonusTest() {
 		assertEquals(new Integer(5),
-				((LifeBonus) boardParser.getBoard()[8][2]).getLifeBonus());
+				((Bonus) boardParser.getBoard()[8][2]).getAmountBonus());
 		assertEquals(new Integer(3),
-				((StrengthBonus) boardParser.getBoard()[2][8])
-						.getStrengthBonus());
+				((Bonus) boardParser.getBoard()[2][8])
+						.getAmountBonus());
 	}
 
 	@Test

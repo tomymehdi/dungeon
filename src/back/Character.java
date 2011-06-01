@@ -9,7 +9,7 @@ public abstract class Character {
 	private Integer strength;
 	private Point position;
 
-	Character(String name, Integer level, Point position) {
+	public Character(String name, Integer level, Point position) {
 		this.name = name;
 		this.level = level;
 		this.position = position;
@@ -30,8 +30,8 @@ public abstract class Character {
 
 	}
 
-	private void hited(Integer strength) {
-		setHealth(health - strength);
+	public void hited(Integer strength) {
+		health -= strength;
 	}
 
 	public String getName() {
@@ -40,10 +40,6 @@ public abstract class Character {
 
 	public boolean isDead() {
 		return health <= 0;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public Integer getLevel() {
@@ -57,37 +53,17 @@ public abstract class Character {
 	public Integer getMaxHealth() {
 		return maxHealth;
 	}
-
-	public void setMaxHealth(Integer maxHealth) {
-		this.maxHealth = maxHealth;
-	}
-
+	
 	public Integer getHealth() {
 		return health;
-	}
-
-	public void setHealth(Integer health) {
-		if (health > maxHealth) {
-			this.health = maxHealth;
-		} else {
-			this.health = health;
-		}
 	}
 
 	public Integer getStrength() {
 		return strength;
 	}
 
-	public void setStrength(Integer strength) {
-		this.strength = strength;
-	}
-
 	public Point getPosition() {
 		return position;
-	}
-
-	public void setPosition(Point position) {
-		this.position = position;
 	}
 
 	@Override
@@ -100,5 +76,34 @@ public abstract class Character {
 		resp += "Strength=" + getStrength();
 		resp += "Position=" + getPosition();
 		return resp;
+	}
+
+	public void grabLifeBonus(Integer bonusAmount) {
+		if(health + bonusAmount > maxHealth){
+			health = maxHealth;
+		} else {
+			health += bonusAmount;
+		}
+	}
+
+	public void grabStrengthBonus(Integer bonusAmount) {
+		strength += bonusAmount;
+	}
+	
+	//TODO sacarlo dsps, es solo para los tests
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+	
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+	
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+	
+	public void setHealth(Integer health) {
+		this.health = health;
 	}
 }

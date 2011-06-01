@@ -14,7 +14,6 @@ import javax.swing.JPanel;
  */
 public class GamePanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	private int rows, columns;
 	private int cellSize;
 	private Color color;
@@ -86,7 +85,7 @@ public class GamePanel extends JPanel {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				if (images[i][j] != null) {
-					g.drawImage(images[i][j], i * cellSize, j * cellSize, null);
+					g.drawImage(images[i][j], j * cellSize, i * cellSize, null);
 				}
 			}
 		}

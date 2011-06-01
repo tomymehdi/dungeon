@@ -1,4 +1,4 @@
-package loadAndSave;
+package saveLoadImplementation;
 
 public class SavingCorruptedException extends RuntimeException {
 

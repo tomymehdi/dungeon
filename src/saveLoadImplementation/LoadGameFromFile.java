@@ -1,15 +1,17 @@
-package loadAndSave;
+package saveLoadImplementation;
 
 import java.io.File;
 
 import parser.BoardParserFromFile;
+import parser.CorruptedFileException;
 import parser.SavedBoardPlayerLine;
 import back.BoardObtainer;
-import back.DungeonGame;
+import back.Game;
+import back.GameListener;
 import back.LoadGame;
 import back.Point;
 
-public class LoadGameFromFile extends BoardParserFromFile implements BoardObtainer,LoadGame {
+public class LoadGameFromFile<T extends Game> extends BoardParserFromFile implements BoardObtainer,LoadGame<T> {
 
 	private Point playerLoadedPosition;
 	private Integer playerLoadedExperience;
@@ -26,23 +28,21 @@ public class LoadGameFromFile extends BoardParserFromFile implements BoardObtain
 	@Override
 	public void parsePlayer(String line) {
 		SavedBoardPlayerLine playerData = new SavedBoardPlayerLine(line,
-				boardDimension);
+				getBoardDimension());
 		Point point = (new Point(playerData.getData(1), playerData.getData(2)))
 				.add(new Point(1, 1));
-		playerPosition = point;
-		point = (new Point(playerData.getData(3), playerData.getData(4)))
-				.add(new Point(1, 1));
 		playerLoadedPosition = point;
-		playerLoadedExperience = playerData.getData(5);
-		playerLoadedHealth = playerData.getData(6);
-		playerLoadedMaxHealth = playerData.getData(7);
-		playerLoadedStrength = playerData.getData(8);
-		playerLoadedSteps = playerData.getData(9);
+		playerLoadedExperience = playerData.getData(3);
+		playerLoadedHealth = playerData.getData(4);
+		playerLoadedMaxHealth = playerData.getData(5);
+		playerLoadedStrength = playerData.getData(6);
+		playerLoadedSteps = playerData.getData(7);
 		playerName = playerData.getPlayerName();
 
 	}
 
-	public Point getPlayerLoadedPosition() {
+	@Override
+	public Point getPlayerPosition() {
 		return playerLoadedPosition;
 	}
 
@@ -66,15 +66,19 @@ public class LoadGameFromFile extends BoardParserFromFile implements BoardObtain
 		return playerLoadedSteps;
 	}
 
-	public DungeonGame getGame() {
-		return new DungeonGame(this);
+	public T getGame(Class<T> gameImpClass, GameListener listener) {
+		T game;
+		try {
+			game = gameImpClass.getConstructor(BoardObtainer.class,
+					GameListener.class,String.class).newInstance(this, listener, playerName);
+		} catch (Exception e) {
+			throw new CorruptedFileException();
+		}
+		return game;
 	}
 
 	public String getPlayerName() {
 		return playerName;
 	}
-
-	@Override
-	public void obtainBoard() {}
 
 }
