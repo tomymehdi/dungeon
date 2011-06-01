@@ -3,7 +3,6 @@ package front;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -49,6 +48,7 @@ public class DungeonGameFrame extends GameFrame {
 		boardImagesByClass();
 		monstersImagesInitialize();
 		bonusImagesInitialize();
+		addKeyListener();
 	}
 
 	private void playerImage() {
@@ -257,6 +257,14 @@ public class DungeonGameFrame extends GameFrame {
 		return boardImagesByClass;
 	}
 
+	public DungeonPanel getDungeonPanel() {
+		return dungeonPanel;
+	}
+
+	public DataPanel getDataPanel() {
+		return dataPanel;
+	}
+	
 	@Override
 	public void addKeyListener() {
 
@@ -266,32 +274,24 @@ public class DungeonGameFrame extends GameFrame {
 			public void keyPressed(final KeyEvent e) {
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
-					game.receibeStroke(MoveTypes.LEFT);
+					game.receiveStroke(MoveTypes.LEFT);
 
 					break;
 				case KeyEvent.VK_UP:
-					game.receibeStroke(MoveTypes.UP);
+					game.receiveStroke(MoveTypes.UP);
 
 					break;
 				case KeyEvent.VK_RIGHT:
-					game.receibeStroke(MoveTypes.RIGHT);
+					game.receiveStroke(MoveTypes.RIGHT);
 
 					break;
 				case KeyEvent.VK_DOWN:
-					game.receibeStroke(MoveTypes.DOWN);
+					game.receiveStroke(MoveTypes.DOWN);
 
 					break;
 				}
 			}
 		});
-	}
-
-	public DungeonPanel getDungeonPanel() {
-		return dungeonPanel;
-	}
-
-	public DataPanel getDataPanel() {
-		return dataPanel;
 	}
 
 	private class DungeonGameListenerImp implements DungeonGameListener {
@@ -337,6 +337,7 @@ public class DungeonGameFrame extends GameFrame {
 			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
 					afterMove.x, afterMove.y);
 			dungeonPanel.repaint();
+			repaint();
 		}
 
 		@Override

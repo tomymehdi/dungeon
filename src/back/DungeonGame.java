@@ -28,7 +28,7 @@ public class DungeonGame implements Game {
 		this(boardObtainer,gameListener,gameListener.playerNameRequest());
 	}
 
-	public void receibeStroke(MoveTypes keyPressed) {
+	public void receiveStroke(MoveTypes keyPressed) {
 		movePlayer(keyPressed);
 	}
 
