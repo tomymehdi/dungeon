@@ -63,12 +63,14 @@ public class DungeonGame implements Game {
 					monster.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
+			
 		}
 		if (player.isDead()) {
 			Point point = new Point(player.getPosition().x,
 					player.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
+			
 			loosed();
 		}
 

@@ -139,11 +139,13 @@ public class BoardParserFromFile implements BoardObtainer {
 	}
 
 	public void protectionWalls() {
+		for (int i = 0; i < boardDimension.y; i++) {
+			board[0][i] = new Wall();
+			board[boardDimension.x - 1][i] = new Wall();
+		}
 		for (int i = 0; i < boardDimension.x; i++) {
 			board[i][0] = new Wall();
-			board[0][i] = new Wall();
 			board[i][boardDimension.y - 1] = new Wall();
-			board[boardDimension.x - 1][i] = new Wall();
 		}
 
 	}

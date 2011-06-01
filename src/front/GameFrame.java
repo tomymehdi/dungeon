@@ -27,7 +27,7 @@ public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 
 	public GameFrame(String name) {
 		super(name);
-		setSize(15 * CELL_SIZE + 17, 15 * CELL_SIZE + 60);
+		setSize(17 * CELL_SIZE + 17, 17 * CELL_SIZE + 60);
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu("File");
 		newGameItem = fileMenu.add("New game");

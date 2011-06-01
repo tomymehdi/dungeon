@@ -3,6 +3,7 @@ package front;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -111,11 +112,16 @@ public class DungeonGameFrame extends GameFrame {
 					BoardObtainer boardObtainer = new BoardParserFromFile(new File(
 					"./testBoard/boardForTest6"));
 					game = new DungeonGame(boardObtainer, new DungeonGameListenerImp());
-					drawDataPanel();
 					drawDungeonPanel();
+					drawDataPanel();
 					repaint();
+					for(int i = 0 ; i < 12 ; i++){
+						for(int j = 0; j< 14 ; j++){
+							System.out.print(game.getBoard()[i][j] + " ");
+						}
+						System.out.println();
+					}
 				} catch (Exception e1) {
-					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,
 							"Level file is corrupt", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -238,9 +244,9 @@ public class DungeonGameFrame extends GameFrame {
 
 	private void drawDungeonPanel() {
 		dungeonPanel = new DungeonPanel(this);
-		add(dungeonPanel, BorderLayout.WEST);
+		add(dungeonPanel,BorderLayout.CENTER);
 	}
-
+	
 	public Image getPlayerImage() {
 		return playerImage;
 	}
@@ -301,6 +307,7 @@ public class DungeonGameFrame extends GameFrame {
 			Image imagFloor = getBoardImagesByClass().get(Floor.class);
 			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
 					p.x, p.y);
+			dungeonPanel.repaint();
 		}
 
 		@Override
@@ -309,7 +316,9 @@ public class DungeonGameFrame extends GameFrame {
 			Image imagBloodFloor = getBoardImagesByClass().get(
 					BloodyFloor.class);
 			dungeonPanel.put(ImageUtils.overlap(imagFloor, imagBloodFloor),
-					p.x, p.y);
+					p.x-1, p.y-1);
+			dungeonPanel.repaint();
+			
 		}
 
 		@Override
@@ -317,6 +326,7 @@ public class DungeonGameFrame extends GameFrame {
 			JOptionPane.showMessageDialog(DungeonGameFrame.this, "You loose the level.");
 			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDungeonPanel());
 			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDataPanel());
+			repaint();
 		}
 
 		@Override
@@ -325,19 +335,33 @@ public class DungeonGameFrame extends GameFrame {
 					+ game.getPlayer().getSteps() + "steps.");
 			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDungeonPanel());
 			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDataPanel());
+			repaint();
 		}
 
 		@Override
 		public void executeWhenPlayerMoves(MoveTypes moveType) {
-			Image imagFloor = getBoardImagesByClass().get(Floor.class);
+			Image image;
 			Point afterMove = new Point(game.getPlayer().getPosition().x, game
 					.getPlayer().getPosition().y);
 			Point beforeMove = afterMove.sub(moveType.getDirection());
-			dungeonPanel.put(imagFloor, beforeMove.x, beforeMove.y);
-			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
-					afterMove.x, afterMove.y);
+			image = getBoardImagesByClass().get(Floor.class);
+	
+			 if (game.getBoard()[afterMove.x][afterMove.y].getClass().equals(BloodyFloor.class)) 
+			 {
+				Image image2 = getBoardImagesByClass().get(BloodyFloor.class);
+				Image image3= ImageUtils.overlap(image, image2);
+			    dungeonPanel.put(ImageUtils.overlap(image3,getPlayerImage()),
+							afterMove.x -1 , afterMove.y -1);
+				dungeonPanel.repaint();
+			 }else
+			 {
+			 dungeonPanel.put(ImageUtils.overlap(image, getPlayerImage()),
+					afterMove.x -1 , afterMove.y -1);
+			 }
 			dungeonPanel.repaint();
-			repaint();
+			dungeonPanel.put(image, beforeMove.x -1, beforeMove.y -1);
+	
+			//repaint();
 		}
 
 		@Override
