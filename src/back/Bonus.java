@@ -37,5 +37,10 @@ public class Bonus implements Putable {
 	public int getAmountBonus() {
 		return bonusType.getBonusAmount();
 	}
+	
+	@Override
+	public String toString() {
+		return "Bonus";
+	}
 
 }

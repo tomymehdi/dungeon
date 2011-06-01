@@ -15,8 +15,8 @@ public class DungeonPanel extends GamePanel {
 	private static final int CELL_SIZE = 30;
 
 	public DungeonPanel(DungeonGameFrame dungeonGameFrame) {
-		super(dungeonGameFrame.game.getBoardDimension().y - 2,
-				dungeonGameFrame.game.getBoardDimension().x - 2, CELL_SIZE,
+		super(dungeonGameFrame.game.getBoardDimension().x - 2,
+				dungeonGameFrame.game.getBoardDimension().y - 2, CELL_SIZE,
 				new GamePanelListener() {
 
 					@Override
@@ -25,7 +25,6 @@ public class DungeonPanel extends GamePanel {
 								+ column + ")");
 					}
 				}, Color.BLUE);
-
 		drawDungeon(dungeonGameFrame);
 		this.setVisible(true);
 	}
@@ -37,8 +36,9 @@ public class DungeonPanel extends GamePanel {
 		int row = dungeonGameFrame.game.getBoardDimension().x - 2;
 		int col = dungeonGameFrame.game.getBoardDimension().y - 2;
 
-		for (int i = 1; i < row + 1; i++) {
-			for (int j = 1; j < col + 1; j++) {
+		for (int i = 1; i <= row ; i++) {
+			System.out.println();
+			for (int j = 1; j <= col ; j++) {
 				Putable cell = dungeonGameFrame.game.getBoard()[i][j];
 				if (cell.getClass().equals(Monster.class)) {
 					image = dungeonGameFrame.getMonsterImagesByName().get(

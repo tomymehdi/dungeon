@@ -60,6 +60,12 @@ public class GameTests {
 			@Override
 			public void executeWhenBonusGrabed(Point p) {
 			}
+
+			@Override
+			public void executeWhenFight() {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 
@@ -158,6 +164,12 @@ public class GameTests {
 
 			@Override
 			public void executeWhenBonusGrabed(Point p) {
+			}
+
+			@Override
+			public void executeWhenFight() {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 		System.out.println(game.getPlayer());

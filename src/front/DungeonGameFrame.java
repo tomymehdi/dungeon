@@ -1,6 +1,9 @@
 package front;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -106,7 +109,7 @@ public class DungeonGameFrame extends GameFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					BoardObtainer boardObtainer = new BoardParserFromFile(new File(
-					"./testBoard/boardForTest1"));
+					"./testBoard/boardForTest6"));
 					game = new DungeonGame(boardObtainer, new DungeonGameListenerImp());
 					drawDataPanel();
 					drawDungeonPanel();
@@ -228,14 +231,14 @@ public class DungeonGameFrame extends GameFrame {
 	}
 
 	private void drawDataPanel() {
-		dataPanel = new DataPanel(game);
-		add(dataPanel);
+		dataPanel = new DataPanel(game, Color.GRAY);
+		add(dataPanel,BorderLayout.EAST);
 
 	}
 
 	private void drawDungeonPanel() {
 		dungeonPanel = new DungeonPanel(this);
-		add(dungeonPanel);
+		add(dungeonPanel, BorderLayout.WEST);
 	}
 
 	public Image getPlayerImage() {
@@ -333,6 +336,7 @@ public class DungeonGameFrame extends GameFrame {
 			dungeonPanel.put(imagFloor, beforeMove.x, beforeMove.y);
 			dungeonPanel.put(ImageUtils.overlap(imagFloor, getPlayerImage()),
 					afterMove.x, afterMove.y);
+			dungeonPanel.repaint();
 		}
 
 		@Override
@@ -342,6 +346,12 @@ public class DungeonGameFrame extends GameFrame {
 				name = JOptionPane.showInputDialog("Player name");
 			}
 			return name;
+		}
+
+		@Override
+		public void executeWhenFight() {
+			dataPanel.repaint();
+			
 		}
 	}
 }
