@@ -90,7 +90,9 @@ public abstract class Character {
 		strength += bonusAmount;
 	}
 	
-	//TODO sacarlo dsps, es solo para los tests
+	/** Method just for tests
+	 * @param position
+	 */
 	public void setPosition(Point position) {
 		this.position = position;
 	}

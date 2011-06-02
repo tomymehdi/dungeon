@@ -36,7 +36,7 @@ public class BoardLine extends Lines {
 			// Wall
 			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
 					|| data[2] >= boardDimension.y || data[3] != 0
-					|| data[4] != 0 || data[5] != 0) {
+					|| data[4] != 0) {
 				throw new CorruptedFileException();
 			}
 			break;

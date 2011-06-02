@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import back.DungeonGame;
+import back.Game;
 import back.Monster;
 import back.Player;
 import back.Point;
@@ -22,6 +23,8 @@ public class DataPanel extends JPanel {
 
 	public DataPanel(Player player, Color color) {
 		addCharacter(player);
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	}
 
 	public void addCharacter(Player character) {
@@ -55,7 +58,7 @@ public class DataPanel extends JPanel {
 		add(aux);
 	}
 
-	public void refresh(DungeonGame game) {
+	public void refresh(Game game) {
 		Point p = game.getPlayer().getPosition();
 		Putable[] posibleMonsters = new Putable[4];
 		posibleMonsters[0] = game.getBoard()[p.x + 1][p.y];

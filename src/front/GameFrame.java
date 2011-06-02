@@ -9,13 +9,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import back.DungeonGame;
+import back.Game;
 
 public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 
 	private static final long serialVersionUID = 1L;
 	private static final int CELL_SIZE = 30;
-	public DungeonGame game;
+	public Game game;
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
 	private JMenuItem newGameItem;
@@ -57,7 +57,6 @@ public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 
 		menuBar.add(fileMenu);
 		setJMenuBar(menuBar);
-		//this.setLayout(new GridLayout(0, 2));
 		createDefaultJMenuActionListeners();
 	}
 

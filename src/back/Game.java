@@ -19,7 +19,9 @@ public interface Game {
 	public void addGameListener(GameListener d);
 
 	public BoardObtainer getBoardObtainer();
-	
-	
 
+	public void restart();
+
+	public void receiveStroke(Strokes strokes);
+	
 }

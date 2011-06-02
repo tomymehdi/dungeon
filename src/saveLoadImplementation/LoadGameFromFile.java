@@ -2,18 +2,22 @@ package saveLoadImplementation;
 
 import java.io.File;
 
+import parser.BoardLine;
 import parser.BoardParserFromFile;
 import parser.CorruptedFileException;
 import parser.SavedBoardPlayerLine;
+import back.BloodyFloor;
 import back.BoardObtainer;
 import back.Game;
 import back.GameListener;
 import back.LoadGame;
 import back.Point;
 
-public class LoadGameFromFile<T extends Game> extends BoardParserFromFile implements BoardObtainer,LoadGame<T> {
+public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
+		implements LoadGame<T> {
 
 	private Point playerLoadedPosition;
+	private Integer loadedLevel;
 	private Integer playerLoadedExperience;
 	private Integer playerLoadedHealth;
 	private Integer playerLoadedMaxHealth;
@@ -42,26 +46,41 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile implem
 	}
 
 	@Override
+	public void parseWall(Point point, BoardLine cell) {
+		if (cell.getData(5) == 1) {
+			putCell(point, new BloodyFloor());
+		} else {
+			super.parseWall(point, cell);
+		}
+
+	};
+
+	@Override
 	public Point getPlayerPosition() {
 		return playerLoadedPosition;
 	}
 
+	@Override
 	public Integer getPlayerLoadedHealth() {
 		return playerLoadedHealth;
 	}
 
-	public Integer setPlayerLoadedMaxHealth() {
+	@Override
+	public Integer getPlayerLoadedMaxHealth() {
 		return playerLoadedMaxHealth;
 	}
 
+	@Override
 	public Integer getPlayerLoadedExperience() {
 		return playerLoadedExperience;
 	}
 
+	@Override
 	public Integer getPlayerLoadedStrength() {
 		return playerLoadedStrength;
 	}
 
+	@Override
 	public Integer getPlayerLoadedSteps() {
 		return playerLoadedSteps;
 	}
@@ -70,15 +89,22 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile implem
 		T game;
 		try {
 			game = gameImpClass.getConstructor(BoardObtainer.class,
-					GameListener.class,String.class).newInstance(this, listener, playerName);
+					GameListener.class, String.class).newInstance(this,
+					listener, playerName);
 		} catch (Exception e) {
 			throw new CorruptedFileException();
 		}
 		return game;
 	}
 
+	@Override
 	public String getPlayerName() {
 		return playerName;
+	}
+	
+	@Override
+	public int getPlayerLoadedLevel() {
+		return loadedLevel;
 	}
 
 }

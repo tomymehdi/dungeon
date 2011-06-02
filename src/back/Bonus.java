@@ -14,13 +14,12 @@ public class Bonus implements Putable {
 	}
 
 	@Override
-	public boolean allowMovement(DungeonGame game) {
-		giveBonus(game.getPlayer());
+	public boolean allowMovement(DungeonGameImp game) {
 		return true;
 	}
 
-	public void standOver(DungeonGame game) {
-
+	public void standOver(DungeonGameImp game) {
+		giveBonus(game.getPlayer());
 		Point point = new Point(game.getPlayer().getPosition().x, game
 				.getPlayer().getPosition().y);
 

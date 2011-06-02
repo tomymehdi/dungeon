@@ -17,7 +17,7 @@ import saveLoadImplementation.LoadGameFromFile;
 import saveLoadImplementation.SaveGameOnFile;
 import back.BloodyFloor;
 import back.Bonus;
-import back.DungeonGame;
+import back.DungeonGameImp;
 import back.DungeonGameListener;
 import back.LoadGame;
 import back.MoveTypes;
@@ -25,11 +25,11 @@ import back.Point;
 
 public class GameTests {
 
-	private DungeonGame game;
+	private DungeonGameImp game;
 
 	@Before
 	public void setup() {
-		game = new DungeonGame(new BoardParserFromFile(new File(
+		game = new DungeonGameImp(new BoardParserFromFile(new File(
 				"./testBoard/boardForTest1")),new DungeonGameListener() {
 
 			@Override
@@ -63,8 +63,6 @@ public class GameTests {
 
 			@Override
 			public void executeWhenFight() {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 	}
@@ -113,7 +111,7 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedTest() {
-		new SaveGameOnFile<DungeonGame>(game);
+		new SaveGameOnFile(game);
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
 		filterFileList = filterFileList.filter("savedGame");
@@ -133,9 +131,9 @@ public class GameTests {
 	@Test
 	public void loadGameTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGameOnFile<DungeonGame>(game, file);
-		LoadGame<DungeonGame> loadGame = new LoadGameFromFile<DungeonGame>(file);
-		DungeonGame game = loadGame.getGame(DungeonGame.class, new DungeonGameListener() {
+		new SaveGameOnFile(game, file);
+		LoadGame<DungeonGameImp> loadGame = new LoadGameFromFile<DungeonGameImp>(file);
+		DungeonGameImp game = loadGame.getGame(DungeonGameImp.class, new DungeonGameListener() {
 
 			@Override
 			public String playerNameRequest() {
@@ -168,8 +166,6 @@ public class GameTests {
 
 			@Override
 			public void executeWhenFight() {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		System.out.println(game.getPlayer());
@@ -182,7 +178,7 @@ public class GameTests {
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
 		File file = new File("./savedGames/testWithPath");
-		new SaveGameOnFile<DungeonGame>(game, file);
+		new SaveGameOnFile(game, file);
 		FilterFileList filterFileList = new FilterArrayFileList(
 				file.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());

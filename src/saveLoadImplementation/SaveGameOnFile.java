@@ -12,12 +12,12 @@ import back.Monster;
 import back.SaveGame;
 import back.Wall;
 
-public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
+public class SaveGameOnFile implements SaveGame {
 
-	private T gameToSave;
+	private Game gameToSave;
 	private File placeToSave;
 
-	public SaveGameOnFile(T gameToSave) {
+	public SaveGameOnFile(Game gameToSave) {
 		this.gameToSave = gameToSave;
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
@@ -36,11 +36,11 @@ public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
 		}
 	}
 
-	public SaveGameOnFile(T gameToSave, File placeToSave) {
+	public SaveGameOnFile(Game gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
-		FilterFileList filterFileList = new FilterArrayFileList(
-				placeToSave.getParentFile());
+		FilterFileList filterFileList = new FilterArrayFileList(placeToSave
+				.getParentFile());
 		filterFileList = filterFileList.filter(placeToSave.getName());
 		int number = filterFileList.size();
 		if (number > 0) {
@@ -61,15 +61,16 @@ public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
 		BufferedWriter out = new BufferedWriter(new FileWriter(placeToSave));
 		out.write("#Board dimensions");
 		out.newLine();
-		out.write(gameToSave.getBoardDimension().x + ","
-				+ gameToSave.getBoardDimension().y);
+		out.write((gameToSave.getBoardDimension().x - 2) + ","
+				+ (gameToSave.getBoardDimension().y - 2));
 		out.newLine();
 		out.write("#Board name");
 		out.newLine();
 		out.write(gameToSave.getBoardName());
 		out.newLine();
-		out.write("#Player current position, "
-				+ "current exp, current health, maxHealth, current strength, steps, name");
+		out
+				.write("#Player current position, "
+						+ "current exp, current health, maxHealth, current strength, steps, name");
 		out.newLine();
 		out.write(1 + "," + (gameToSave.getPlayer().getPosition().x - 1) + ","
 				+ (gameToSave.getPlayer().getPosition().y - 1) + ","
@@ -90,8 +91,8 @@ public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
 					out.newLine();
 				} else if (BloodyFloor.class
 						.equals((gameToSave.getBoard()[i][j]).getClass())) {
-					out.write(6 + "," + (i - 1) + "," + (j - 1) + "," + 0 + ","
-							+ 0 + "," + 0);
+					out.write(2 + "," + (i - 1) + "," + (j - 1) + "," + 0 + ","
+							+ 0 + "," + 1);
 					out.newLine();
 				} else if (Monster.class.equals((gameToSave.getBoard()[i][j])
 						.getClass())) {
@@ -123,7 +124,7 @@ public class SaveGameOnFile<T extends Game> implements SaveGame<T>{
 							+ ((Bonus) gameToSave.getBoard()[i][j])
 									.getAmountBonus());
 					out.newLine();
-				} 
+				}
 			}
 		}
 

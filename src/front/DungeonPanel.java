@@ -3,6 +3,7 @@ package front;
 import java.awt.Color;
 import java.awt.Image;
 
+import back.BloodyFloor;
 import back.Bonus;
 import back.Floor;
 import back.Monster;
@@ -33,6 +34,8 @@ public class DungeonPanel extends GamePanel {
 		Image image;
 		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
 				Floor.class);
+		Image bloodyFloorImage = ImageUtils.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass().get(
+				BloodyFloor.class));
 		int row = dungeonGameFrame.game.getBoardDimension().x - 2;
 		int col = dungeonGameFrame.game.getBoardDimension().y - 2;
 
@@ -58,6 +61,8 @@ public class DungeonPanel extends GamePanel {
 							cell.getClass());
 					if (cell.getClass().equals(Wall.class)) {
 						put(image, i - 1, j - 1);
+					} else if(cell.getClass().equals(BloodyFloor.class)){
+						put(bloodyFloorImage, i-1,j-1);
 					} else {
 						put(floorImage, i - 1, j - 1);
 					}
@@ -69,5 +74,4 @@ public class DungeonPanel extends GamePanel {
 		put(image, dungeonGameFrame.game.getPlayer().getPosition().x - 1,
 				dungeonGameFrame.game.getPlayer().getPosition().y - 1);
 	}
-	
 }

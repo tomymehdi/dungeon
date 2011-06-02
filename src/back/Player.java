@@ -8,15 +8,14 @@ public class Player extends Character {
 	private Integer experienceToLevelUp;
 	private Integer steps;
 
-	public Player(String name, Point position, int maxHealth,
-			int startingStrength) {
-		super(name, 1, position);
+	public Player(PlayerData playerData) {
+		super(playerData.getName(), 1, playerData.getPosition());
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
 		this.steps = 0;
-		setMaxHealth(maxHealth);
-		setStrength(startingStrength);
-		setHealth(getMaxHealth());
+		setMaxHealth(playerData.getMaxHealth());
+		setStrength(playerData.getStrength());
+		setHealth(playerData.getMaxHealth());
 	}
 
 	public MoveTypes move(MoveTypes moveType) {
@@ -37,7 +36,7 @@ public class Player extends Character {
 		increaseLevel();
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
-		setMaxHealth(getLevel() * DungeonGame.LIFE);
+		setMaxHealth(getLevel() * DungeonGameImp.LIFE);
 	}
 
 	public Integer getExperience() {

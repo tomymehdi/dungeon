@@ -7,11 +7,11 @@ public class Floor extends Cell implements Putable {
 	}
 
 	@Override
-	public boolean allowMovement(DungeonGame game) {
+	public boolean allowMovement(DungeonGameImp game) {
 		return true;
 	}
 
 	@Override
-	public void standOver(DungeonGame game) {}
+	public void standOver(DungeonGameImp game) {}
 
 }

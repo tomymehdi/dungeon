@@ -22,7 +22,7 @@ import saveLoadImplementation.SaveGameOnFile;
 import saveLoadImplementation.SavingCorruptedException;
 import back.BloodyFloor;
 import back.BoardObtainer;
-import back.DungeonGame;
+import back.DungeonGameImp;
 import back.DungeonGameListener;
 import back.Floor;
 import back.LoadGame;
@@ -109,7 +109,7 @@ public class DungeonGameFrame extends GameFrame {
 				try {
 					BoardObtainer boardObtainer = new BoardParserFromFile(
 							new File("./testBoard/boardForTest6"));
-					game = new DungeonGame(boardObtainer,
+					game = new DungeonGameImp(boardObtainer,
 							new DungeonGameListenerImp());
 					drawDungeonPanel();
 					drawDataPanel();
@@ -138,6 +138,10 @@ public class DungeonGameFrame extends GameFrame {
 								"You are not playing a level.");
 					} else {
 						game.restart();
+						drawDungeonPanel();
+						drawDataPanel();
+						dataPanel.updateUI();
+						dungeonPanel.updateUI();
 					}
 				} catch (CorruptedFileException e1) {
 					JOptionPane.showMessageDialog(null, "The file is corrupt",
@@ -156,7 +160,7 @@ public class DungeonGameFrame extends GameFrame {
 						directory.mkdir();
 					}
 					try {
-						new SaveGameOnFile<DungeonGame>(game);
+						new SaveGameOnFile(game);
 					} catch (SavingCorruptedException e1) {
 						JOptionPane.showMessageDialog(null,
 								"Files saving error occours. Try again later.",
@@ -184,7 +188,7 @@ public class DungeonGameFrame extends GameFrame {
 								"You didn't select any file.");
 					} else {
 						try {
-							new SaveGameOnFile<DungeonGame>(game, file);
+							new SaveGameOnFile(game, file);
 						} catch (SavingCorruptedException e1) {
 							JOptionPane.showMessageDialog(null,
 									"The file is corrupt", "Error",
@@ -210,10 +214,14 @@ public class DungeonGameFrame extends GameFrame {
 							"You didn't select any file.");
 				} else {
 					try {
-						LoadGame<DungeonGame> loadGame = new LoadGameFromFile<DungeonGame>(
+						LoadGame<DungeonGameImp> loadGame = new LoadGameFromFile<DungeonGameImp>(
 								file);
-						game = loadGame.getGame(DungeonGame.class,
+						game = loadGame.getGame(DungeonGameImp.class,
 								new DungeonGameListenerImp());
+						drawDungeonPanel();
+						drawDataPanel();
+						dataPanel.updateUI();
+						dungeonPanel.updateUI();
 					} catch (CorruptedFileException e2) {
 						e2.printStackTrace();
 						JOptionPane.showMessageDialog(null,

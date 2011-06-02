@@ -8,11 +8,11 @@ public class Wall extends Cell implements Putable {
 	}
 
 	@Override
-	public boolean allowMovement(DungeonGame game) {
+	public boolean allowMovement(DungeonGameImp game) {
 		return false;
 	}
 
 	@Override
-	public void standOver(DungeonGame game) {}
+	public void standOver(DungeonGameImp game) {}
 
 }

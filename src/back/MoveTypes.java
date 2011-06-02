@@ -1,6 +1,6 @@
 package back;
 
-public enum MoveTypes {
+public enum MoveTypes implements Strokes{
 	UP(new Point(-1, 0)), DOWN(new Point(1, 0)), LEFT(new Point(0, -1)), RIGHT(
 			new Point(0, 1));
 	

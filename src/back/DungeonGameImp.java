@@ -1,7 +1,6 @@
 package back;
 
-
-public class DungeonGame implements Game {
+public class DungeonGameImp implements Game {
 
 	public static Integer LEVEL = 3;
 	static Integer LIFE = 10;
@@ -14,22 +13,33 @@ public class DungeonGame implements Game {
 	private GameListener gameListener;
 	private BoardObtainer boardObtainer;
 
-	public DungeonGame(BoardObtainer boardObtainer, GameListener gameListener, String playerName) {
+	public DungeonGameImp(BoardObtainer boardObtainer,
+			GameListener gameListener, String playerName) {
 		this.boardObtainer = boardObtainer;
 		this.gameListener = gameListener;
 		boardName = boardObtainer.getBoardName();
 		boardDimension = boardObtainer.getBoardDimension();
 		board = boardObtainer.getBoard();
-		player = new Player(playerName,
-				boardObtainer.getPlayerPosition(), LIFE, STRENGTH);
-	}
-	
-	public DungeonGame(BoardObtainer boardObtainer, GameListener gameListener) {
-		this(boardObtainer,gameListener,gameListener.playerNameRequest());
+		PlayerData playerData = new PlayerData(boardObtainer.getPlayerName(),
+				0, 0, LIFE, LIFE, STRENGTH, boardObtainer.getPlayerPosition());
+		if (!(boardObtainer instanceof LoadGame)) {
+			player = new Player(playerData);
+		} else {
+			playerData.setHealth(boardObtainer.getPlayerLoadedHealth());
+			playerData.setMaxHealth(boardObtainer.getPlayerLoadedMaxHealth());
+			playerData.setStrength(boardObtainer.getPlayerLoadedStrength());
+			playerData.setExperience(0);
+			player = new Player(playerData);
+		}
 	}
 
-	public void receiveStroke(MoveTypes keyPressed) {
-		movePlayer(keyPressed);
+	public DungeonGameImp(BoardObtainer boardObtainer, GameListener gameListener) {
+		this(boardObtainer, gameListener, gameListener.playerNameRequest());
+	}
+
+	@Override
+	public void receiveStroke(Strokes keyPressed) {
+		movePlayer((MoveTypes) keyPressed);
 	}
 
 	public void movePlayer(MoveTypes moveType) {
@@ -39,35 +49,37 @@ public class DungeonGame implements Game {
 
 		if (board[nextPlayerPosition.x][nextPlayerPosition.y]
 				.allowMovement(this)) {
-			board[nextPlayerPosition.x][nextPlayerPosition.y].standOver(this);
 			gameListener.executeWhenPlayerMoves(player.move(moveType));
+			board[nextPlayerPosition.x][nextPlayerPosition.y].standOver(this);
 		}
 	}
 
+	@Override
 	public Player getPlayer() {
 		return player;
 	}
 
+	@Override
 	public void winned() {
 		gameListener.executeWhenGameWinned();
 	}
 
+	@Override
 	public void loosed() {
-
 		gameListener.executeWhenGameLoosed();
 	}
 
 	public void fightEnd(Monster monster) {
 		if (monster.isDead()) {
-			Point point = new Point(monster.getPosition().x,
-					monster.getPosition().y);
+			Point point = new Point(monster.getPosition().x, monster
+					.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
-			
+
 		}
 		if (player.isDead()) {
-			Point point = new Point(player.getPosition().x,
-					player.getPosition().y);
+			Point point = new Point(player.getPosition().x, player
+					.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
 			loosed();
@@ -76,22 +88,27 @@ public class DungeonGame implements Game {
 
 	}
 
+	@Override
 	public Putable[][] getBoard() {
 		return board;
 	}
 
+	@Override
 	public Point getBoardDimension() {
 		return boardDimension;
 	}
 
+	@Override
 	public String getBoardName() {
 		return boardName;
 	}
 
+	@Override
 	public GameListener getGameListener() {
 		return gameListener;
 	}
 
+	@Override
 	public void addGameListener(GameListener d) {
 		gameListener = d;
 	}
@@ -101,10 +118,12 @@ public class DungeonGame implements Game {
 		return boardObtainer;
 	}
 
+	@Override
 	public void restart() {
 		board = boardObtainer.getBoard();
-		player = new Player(player.getName(),
-				boardObtainer.getPlayerPosition(), LIFE, STRENGTH);
+		PlayerData playerData = new PlayerData(boardObtainer.getPlayerName(),
+				0, 0, LIFE, LIFE, STRENGTH, boardObtainer.getPlayerPosition());
+		player = new Player(playerData);
 	}
 
 }

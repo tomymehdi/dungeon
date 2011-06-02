@@ -65,16 +65,16 @@ public class BoardParserFromFile implements BoardObtainer {
 					} else {
 
 						BoardLine cell = new BoardLine(line, boardDimension);
-						Point point = (new Point(cell.getData(1),
-								cell.getData(2))).add(new Point(1, 1));
+						Point point = (new Point(cell.getData(1), cell
+								.getData(2))).add(new Point(1, 1));
 
 						if (cell.isWallLine()) {
-							parseWall(point);
+							parseWall(point, cell);
 						} else if (cell.isMonsterLine()) {
 							parseMonster(point, cell);
 						} else if (cell.isBonusLine()) {
 							parseBonus(point, cell);
-						} 
+						}
 					}
 				}
 			}
@@ -86,15 +86,15 @@ public class BoardParserFromFile implements BoardObtainer {
 
 		protectionWalls();
 		putFloor();
-		if (board[getPlayerPosition().x][getPlayerPosition().y].getClass() != Floor.class) {
+		if (!(board[getPlayerPosition().x][getPlayerPosition().y] instanceof Floor)) {
 			throw new CorruptedFileException();
 		}
 
 	}
 
 	private void parseBonus(Point point, BoardLine cell) {
-		Bonus bonus = new Bonus(point,cell.getData(0), cell.getData(5));
-		board[point.x][point.y] = bonus;
+		putCell(point.x, point.y, new Bonus(point, cell.getData(0), cell
+				.getData(5)));
 	}
 
 	public void parsePlayer(String line) {
@@ -105,14 +105,12 @@ public class BoardParserFromFile implements BoardObtainer {
 	}
 
 	private void parseMonster(Point point, BoardLine cell) {
-		Monster monster = new Monster(point, cell.getData(3), cell.getData(4));
-		board[point.x][point.y] = monster;
-
+		putCell(point.x, point.y, new Monster(point, cell.getData(3), cell
+				.getData(4)));
 	}
 
-	public void parseWall(Point point) {
-		board[point.x][point.y] = new Wall();
-
+	public void parseWall(Point point, BoardLine cell) {
+		putCell(point.x, point.y, new Wall());
 	}
 
 	public void parseBoardName(String line) {
@@ -131,8 +129,8 @@ public class BoardParserFromFile implements BoardObtainer {
 	public void putFloor() {
 		for (int i = 1; i < boardDimension.x - 1; i++) {
 			for (int j = 1; j < boardDimension.y - 1; j++) {
-				if (board[i][j] == null) {
-					board[i][j] = new Floor();
+				if (getBoardElem(i,j) == null) {
+					putCell(i, j, new Floor());
 				}
 			}
 		}
@@ -140,12 +138,12 @@ public class BoardParserFromFile implements BoardObtainer {
 
 	public void protectionWalls() {
 		for (int i = 0; i < boardDimension.y; i++) {
-			board[0][i] = new Wall();
-			board[boardDimension.x - 1][i] = new Wall();
+			putCell(0, i, new Wall());
+			putCell(boardDimension.x - 1, i, new Wall());
 		}
 		for (int i = 0; i < boardDimension.x; i++) {
-			board[i][0] = new Wall();
-			board[i][boardDimension.y - 1] = new Wall();
+			putCell(i, 0, new Wall());
+			putCell(i, boardDimension.y - 1, new Wall());
 		}
 
 	}
@@ -177,10 +175,64 @@ public class BoardParserFromFile implements BoardObtainer {
 	public Putable getBoardElem(Point position) {
 		return board[position.x][position.y];
 	}
+	
+	public Putable getBoardElem(int x, int y){
+		return board[x][y];
+	}
+
+	public void putCell(int i, int j, Putable cell) {
+		putCell(new Point(i, j), cell);
+	}
+
+	public void putCell(Point p, Putable cell) {
+		board[p.x][p.y] = cell;
+	}
 
 	@Override
 	public File getFile() {
 		return inputFile;
+	}
+
+	@Override
+	public Integer getPlayerLoadedHealth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getPlayerLoadedMaxHealth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getPlayerLoadedExperience() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getPlayerLoadedSteps() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getPlayerLoadedStrength() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getPlayerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPlayerLoadedLevel() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
