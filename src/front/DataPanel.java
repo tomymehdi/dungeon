@@ -1,5 +1,6 @@
 package front;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,14 +10,17 @@ import javax.swing.JPanel;
 import back.DungeonGame;
 import back.Monster;
 import back.Player;
+import back.Point;
+import back.Putable;
 
 public class DataPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private Map<Monster,JLabel> labels = new HashMap<Monster,JLabel>();
-	
-	public DataPanel(Player player) {
+	private JLabel playerLabel;
+	private Map<Monster, JLabel> monstersLabels = new HashMap<Monster, JLabel>();
+
+	public DataPanel(Player player, Color color) {
 		addCharacter(player);
 	}
 
@@ -32,9 +36,10 @@ public class DataPanel extends JPanel {
 		dataPanel += character.getLevel().toString();
 		dataPanel += "Experience:";
 		dataPanel += character.getExperience().toString();
-		add(new JLabel(dataPanel));
+		playerLabel = new JLabel(dataPanel);
+		add(playerLabel);
 	}
-	
+
 	public void addCharacter(Monster character) {
 		String dataPanel = new String("");
 		dataPanel += character.getName() + "\n";
@@ -46,11 +51,28 @@ public class DataPanel extends JPanel {
 		dataPanel += "Level:";
 		dataPanel += character.getLevel().toString();
 		JLabel aux = new JLabel(dataPanel);
-		labels.put(character, aux);
+		monstersLabels.put(character, aux);
 		add(aux);
 	}
-	
+
 	public void refresh(DungeonGame game) {
-		//TODO
+		Point p = game.getPlayer().getPosition();
+		Putable[] posibleMonsters = new Putable[4];
+		posibleMonsters[0] = game.getBoard()[p.x + 1][p.y];
+		posibleMonsters[1] = game.getBoard()[p.x - 1][p.y];
+		posibleMonsters[2] = game.getBoard()[p.x][p.y + 1];
+		posibleMonsters[3] = game.getBoard()[p.x][p.y - 1];
+		remove(playerLabel);
+		for(JLabel l: monstersLabels.values()){
+			remove(l);
+		}
+		
+		addCharacter(game.getPlayer());
+		for (Putable put : posibleMonsters) {
+			if (put.getClass().equals(Monster.class)) {
+				addCharacter((Monster) put);
+			}
+		}
 	}
+	
 }

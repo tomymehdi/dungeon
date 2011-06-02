@@ -70,9 +70,9 @@ public class DungeonGame implements Game {
 					player.getPosition().y);
 			board[point.x][point.y] = new BloodyFloor();
 			gameListener.executeWhenCharacterDie(point);
-			
 			loosed();
 		}
+		gameListener.executeWhenFight();
 
 	}
 

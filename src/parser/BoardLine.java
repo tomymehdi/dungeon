@@ -44,8 +44,9 @@ public class BoardLine extends Lines {
 		case 3:
 			// Monster
 			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] <= 0 || data[3] > 3
-					|| data[4] <= 0 || data[4] > 3 || data[5] != 0) {
+					|| data[2] >= boardDimension.y || data[3] <= 0
+					|| data[3] > 3 || data[4] <= 0 || data[4] > 3
+					|| data[5] != 0) {
 				throw new CorruptedFileException();
 			}
 			break;
@@ -69,6 +70,10 @@ public class BoardLine extends Lines {
 			break;
 
 		default:
+			//TODO
+			for (int i = 0; i < elemsCuantity; i++) {
+				System.out.print(data[i]);
+			}
 			throw new CorruptedFileException();
 		}
 	}
@@ -77,11 +82,10 @@ public class BoardLine extends Lines {
 		return data[0] == 1;
 	}
 
-
 	public boolean isWallLine() {
 		return data[0] == 2;
 	}
-	
+
 	public boolean isMonsterLine() {
 		return data[0] == 3;
 	}
