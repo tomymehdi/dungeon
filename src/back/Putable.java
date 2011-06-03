@@ -6,4 +6,10 @@ public interface Putable {
 
 	public void standOver(DungeonGameImp game);
 
+	public boolean isVisible();
+
+	public void setVisible();
+
+	public void setNotVisible();
+
 }

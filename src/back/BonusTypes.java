@@ -7,7 +7,7 @@ public enum BonusTypes {
 
 		@Override
 		public void grabBonus(Character character, Integer bonusAmount) {
-			character.grabLifeBonus(bonusAmount);
+			character.winLife(bonusAmount);
 		}
 		
 	}), STRENGTH("Strength", 0, new GrabBonus(){

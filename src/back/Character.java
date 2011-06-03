@@ -1,6 +1,6 @@
 package back;
 
-public abstract class Character {
+public abstract class Character extends Cell {
 
 	private String name;
 	private Integer level;
@@ -15,7 +15,8 @@ public abstract class Character {
 		this.position = position;
 	}
 
-	public void winFight(Character character){}
+	public void winFight(Character character) {
+	}
 
 	public void fightAnotherCharacter(Character character) {
 		this.hited(character.getStrength());
@@ -53,7 +54,7 @@ public abstract class Character {
 	public Integer getMaxHealth() {
 		return maxHealth;
 	}
-	
+
 	public Integer getHealth() {
 		return health;
 	}
@@ -78,8 +79,8 @@ public abstract class Character {
 		return resp;
 	}
 
-	public void grabLifeBonus(Integer bonusAmount) {
-		if(health + bonusAmount > maxHealth){
+	public void winLife(Integer bonusAmount) {
+		if (health + bonusAmount > maxHealth) {
 			health = maxHealth;
 		} else {
 			health += bonusAmount;
@@ -89,22 +90,24 @@ public abstract class Character {
 	public void grabStrengthBonus(Integer bonusAmount) {
 		strength += bonusAmount;
 	}
-	
-	/** Method just for tests
+
+	/**
+	 * Method just for tests
+	 * 
 	 * @param position
 	 */
 	public void setPosition(Point position) {
 		this.position = position;
 	}
-	
+
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 	}
-	
+
 	public void setStrength(int strength) {
 		this.strength = strength;
 	}
-	
+
 	public void setHealth(Integer health) {
 		this.health = health;
 	}
@@ -113,8 +116,15 @@ public abstract class Character {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((health == null) ? 0 : health.hashCode());
+		result = prime * result + ((level == null) ? 0 : level.hashCode());
+		result = prime * result
+				+ ((maxHealth == null) ? 0 : maxHealth.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
 				+ ((position == null) ? 0 : position.hashCode());
+		result = prime * result
+				+ ((strength == null) ? 0 : strength.hashCode());
 		return result;
 	}
 
@@ -127,13 +137,37 @@ public abstract class Character {
 		if (getClass() != obj.getClass())
 			return false;
 		Character other = (Character) obj;
+		if (health == null) {
+			if (other.health != null)
+				return false;
+		} else if (!health.equals(other.health))
+			return false;
+		if (level == null) {
+			if (other.level != null)
+				return false;
+		} else if (!level.equals(other.level))
+			return false;
+		if (maxHealth == null) {
+			if (other.maxHealth != null)
+				return false;
+		} else if (!maxHealth.equals(other.maxHealth))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (position == null) {
 			if (other.position != null)
 				return false;
 		} else if (!position.equals(other.position))
 			return false;
+		if (strength == null) {
+			if (other.strength != null)
+				return false;
+		} else if (!strength.equals(other.strength))
+			return false;
 		return true;
 	}
-	
-	
+
 }

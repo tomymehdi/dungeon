@@ -69,40 +69,40 @@ public class GameTests {
 
 	@Test
 	public void goodFunctionamientOfmovePlayerTest() {
-		game.movePlayer(MoveTypes.LEFT);
-		game.movePlayer(MoveTypes.LEFT);
+		game.receiveMoveStroke(MoveTypes.LEFT);
+		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Integer(4), game.getPlayer().getHealth());
 		assertEquals(new Integer(1), game.getPlayer().getExperience());
-		game.movePlayer(MoveTypes.LEFT);
+		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Point(4, 3), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.RIGHT);
+		game.receiveMoveStroke(MoveTypes.RIGHT);
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.DOWN);
+		game.receiveMoveStroke(MoveTypes.DOWN);
 		assertEquals(new Point(5, 4), game.getPlayer().getPosition());
-		game.movePlayer(MoveTypes.UP);
+		game.receiveMoveStroke(MoveTypes.UP);
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
 	}
 
 	@Test
 	public void goodFunctionamientOfWiningWhenKillMonsterLevel3Test() {
-		game.getPlayer().grabLifeBonus(40);
+		game.getPlayer().winLife(40);
 		Bonus bonus = new Bonus(new Point(7,7),4,50);
 		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(8, 2));
-		game.movePlayer(MoveTypes.LEFT);
+		game.receiveMoveStroke(MoveTypes.LEFT);
 	}
 
 	@Test
 	public void goodFunctionamientOfResetGameTest() {
-		game.getPlayer().grabLifeBonus(40);
+		game.getPlayer().winLife(40);
 		Bonus bonus = new Bonus(new Point(7,7),4,50);
 		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(4, 6));
-		game.movePlayer(MoveTypes.UP);
+		game.receiveMoveStroke(MoveTypes.UP);
 		assertEquals(BloodyFloor.class, ((game.getBoard()[3][6])).getClass());
 		game.restart();
 		assertEquals(BloodyFloor.class, ((game.getBoard()[3][6])).getClass());

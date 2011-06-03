@@ -31,6 +31,10 @@ import back.Point;
 import back.Putable;
 import back.Wall;
 
+/**
+ * @author tmehdi Class that extends GameFrame. It's used for the frame of the
+ *         game.
+ */
 public class DungeonGameFrame extends GameFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -45,61 +49,19 @@ public class DungeonGameFrame extends GameFrame {
 	public DungeonGameFrame() {
 		super("Dungeon game");
 		playerImage();
+		setIconImage(playerImage);
 		boardImagesByClass();
 		monstersImagesInitialize();
 		bonusImagesInitialize();
 		addKeyListener();
 	}
 
-	private void playerImage() {
-		try {
-			playerImage = ImageUtils.loadImage("./resources/images/hero.png");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private void boardImagesByClass() {
-		try {
-			boardImagesByClass.put(Wall.class, ImageUtils
-					.loadImage("./resources/images/wall.png"));
-			boardImagesByClass.put(Floor.class, ImageUtils
-					.loadImage("./resources/images/background.png"));
-			boardImagesByClass.put(BloodyFloor.class, ImageUtils
-					.loadImage("./resources/images/blood.png"));
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private void bonusImagesInitialize() {
-		try {
-			bonusImagesByName.put("LIFE", ImageUtils
-					.loadImage("./resources/images/healthBoost.png"));
-			bonusImagesByName.put("STRENGTH", ImageUtils
-					.loadImage("./resources/images/attackBoost.png"));
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private void monstersImagesInitialize() {
-		try {
-			monsterImagesByName.put("GOLEM", ImageUtils
-					.loadImage("./resources/images/golem.png"));
-			monsterImagesByName.put("DRAGON", ImageUtils
-					.loadImage("./resources/images/dragon.png"));
-			monsterImagesByName.put("SNAKE", ImageUtils
-					.loadImage("./resources/images/serpent.png"));
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
+	/**
+	 * DungeonGameFrame menu. It have 6 options: New game, Restart,Save game,
+	 * Save game as..., Load game and Exit
+	 * 
+	 * @see front.GameFrame#createDefaultJMenuActionListeners()
+	 **/
 	@Override
 	public void createDefaultJMenuActionListeners() {
 
@@ -107,21 +69,36 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					BoardObtainer boardObtainer = new BoardParserFromFile(
-							new File("./testBoard/boardForTest6"));
-					game = new DungeonGameImp(boardObtainer,
-							new DungeonGameListenerImp());
-					drawDungeonPanel();
-					drawDataPanel();
-					dataPanel.updateUI();
-					dungeonPanel.updateUI();
-					for (int i = 0; i < 12; i++) {
-						for (int j = 0; j < 14; j++) {
-							System.out.print(game.getBoard()[i][j] + " ");
-						}
-						System.out.println();
+					if (game != null) {
+						dataPanel.setVisible(false);
+						dungeonPanel.setVisible(false);
+						remove(dataPanel);
+						remove(dungeonPanel);
+						repaint();
+						game = null;
+					}
+					File file = null;
+					String[] listBoards;
+					File directory = new File("./boards");
+					listBoards = directory.list();
+					Object selection = JOptionPane.showInputDialog(
+							DungeonGameFrame.this, "Select level",
+							"Levels selector", JOptionPane.QUESTION_MESSAGE,
+							null, listBoards, listBoards[0]);
+					if (selection != null) {
+						file = new File("./boards/" + selection);
+						BoardObtainer boardObtainer = new BoardParserFromFile(
+								file);
+
+						game = new DungeonGameImp(boardObtainer,
+								new DungeonGameListenerImp());
+						drawDungeonPanel();
+						drawDataPanel();
+						dataPanel.updateUI();
+						dungeonPanel.updateUI();
 					}
 				} catch (Exception e1) {
+					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,
 							"Level file is corrupt", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -138,6 +115,8 @@ public class DungeonGameFrame extends GameFrame {
 								"You are not playing a level.");
 					} else {
 						game.restart();
+						dataPanel.setVisible(false);
+						dungeonPanel.setVisible(false);
 						drawDungeonPanel();
 						drawDataPanel();
 						dataPanel.updateUI();
@@ -191,8 +170,8 @@ public class DungeonGameFrame extends GameFrame {
 							new SaveGameOnFile(game, file);
 						} catch (SavingCorruptedException e1) {
 							JOptionPane.showMessageDialog(null,
-									"The file is corrupt", "Error",
-									JOptionPane.ERROR_MESSAGE);
+									"Files saving error occours. Try again later.",
+									"Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
@@ -225,8 +204,8 @@ public class DungeonGameFrame extends GameFrame {
 					} catch (CorruptedFileException e2) {
 						e2.printStackTrace();
 						JOptionPane.showMessageDialog(null,
-								"The file does not exist", "Error",
-								JOptionPane.ERROR_MESSAGE);
+								"Files loading error occours. Try again later.",
+								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -247,41 +226,82 @@ public class DungeonGameFrame extends GameFrame {
 
 	}
 
+	/**
+	 * Method to make apear the data panel.
+	 */
 	private void drawDataPanel() {
 		dataPanel = new DataPanel(game.getPlayer(), Color.GRAY);
 		add(dataPanel, BorderLayout.EAST);
 
 	}
 
+	/**
+	 * Method to make apear the dungeon panel.
+	 */
 	private void drawDungeonPanel() {
 		dungeonPanel = new DungeonPanel(this);
 		add(dungeonPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Geter of the player images.
+	 * 
+	 * @return
+	 */
 	public Image getPlayerImage() {
 		return playerImage;
 	}
 
+	/**
+	 * Geter of the bonus images
+	 * 
+	 * @return
+	 */
 	public Map<String, Image> getMonsterImagesByName() {
 		return monsterImagesByName;
 	}
 
+	/**
+	 * Geter of the bonus images.
+	 * 
+	 * @return
+	 */
 	public Map<String, Image> getBonusImagesByName() {
 		return bonusImagesByName;
 	}
 
+	/**
+	 * Geter of the board images.
+	 * 
+	 * @return
+	 */
 	public Map<Class<? extends Putable>, Image> getBoardImagesByClass() {
 		return boardImagesByClass;
 	}
 
+	/**
+	 * Geter of the dungeon panel.
+	 * 
+	 * @return
+	 */
 	public DungeonPanel getDungeonPanel() {
 		return dungeonPanel;
 	}
 
+	/**
+	 * Geter of the data panel.
+	 * 
+	 * @return
+	 */
 	public DataPanel getDataPanel() {
 		return dataPanel;
 	}
 
+	/**
+	 * Listener of the move keys, up down left right.
+	 * 
+	 * @see front.GameFrame#addKeyListener()
+	 **/
 	@Override
 	public void addKeyListener() {
 
@@ -291,19 +311,19 @@ public class DungeonGameFrame extends GameFrame {
 			public void keyPressed(final KeyEvent e) {
 				switch (e.getKeyCode()) {
 				case KeyEvent.VK_LEFT:
-					game.receiveStroke(MoveTypes.LEFT);
+					game.receiveMoveStroke(MoveTypes.LEFT);
 
 					break;
 				case KeyEvent.VK_UP:
-					game.receiveStroke(MoveTypes.UP);
+					game.receiveMoveStroke(MoveTypes.UP);
 
 					break;
 				case KeyEvent.VK_RIGHT:
-					game.receiveStroke(MoveTypes.RIGHT);
+					game.receiveMoveStroke(MoveTypes.RIGHT);
 
 					break;
 				case KeyEvent.VK_DOWN:
-					game.receiveStroke(MoveTypes.DOWN);
+					game.receiveMoveStroke(MoveTypes.DOWN);
 
 					break;
 				}
@@ -311,25 +331,80 @@ public class DungeonGameFrame extends GameFrame {
 		});
 	}
 
+	/**
+	 * Method to initialize player image.
+	 */
+	private void playerImage() {
+		try {
+			playerImage = ImageUtils.loadImage("./resources/images/hero.png");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize board images.
+	 */
+	private void boardImagesByClass() {
+		try {
+			boardImagesByClass.put(Wall.class, ImageUtils
+					.loadImage("./resources/images/wall.png"));
+			boardImagesByClass.put(Floor.class, ImageUtils
+					.loadImage("./resources/images/background.png"));
+			boardImagesByClass.put(BloodyFloor.class, ImageUtils
+					.loadImage("./resources/images/blood.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize bonus images.
+	 */
+	private void bonusImagesInitialize() {
+		try {
+			bonusImagesByName.put("LIFE", ImageUtils
+					.loadImage("./resources/images/healthBoost.png"));
+			bonusImagesByName.put("STRENGTH", ImageUtils
+					.loadImage("./resources/images/attackBoost.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize monsters images.
+	 */
+	private void monstersImagesInitialize() {
+		try {
+			monsterImagesByName.put("GOLEM", ImageUtils
+					.loadImage("./resources/images/golem.png"));
+			monsterImagesByName.put("DRAGON", ImageUtils
+					.loadImage("./resources/images/dragon.png"));
+			monsterImagesByName.put("SNAKE", ImageUtils
+					.loadImage("./resources/images/serpent.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * @author tmehdi Inner class for the listener of this game implementation.
+	 */
 	private class DungeonGameListenerImp implements DungeonGameListener {
 
 		@Override
 		public void executeWhenBonusGrabed(Point p) {
-			Image floor = getBoardImagesByClass().get(Floor.class);
-			dungeonPanel.put(ImageUtils.overlap(floor, getPlayerImage()),
-					p.x - 1, p.y - 1);
-			dungeonPanel.repaint();
+			dungeonPanel.drawGrabedBonus(DungeonGameFrame.this, p);
 		}
 
 		@Override
 		public void executeWhenCharacterDie(Point p) {
-			Image imagFloor = getBoardImagesByClass().get(Floor.class);
-			Image imagBloodFloor = getBoardImagesByClass().get(
-					BloodyFloor.class);
-			dungeonPanel.put(ImageUtils.overlap(imagFloor, imagBloodFloor),
-					p.x - 1, p.y - 1);
-			dungeonPanel.repaint();
-
+			dungeonPanel.drawDiedCharacter(DungeonGameFrame.this, p);
 		}
 
 		@Override
@@ -344,9 +419,9 @@ public class DungeonGameFrame extends GameFrame {
 
 		@Override
 		public void executeWhenGameWinned() {
-			JOptionPane.showMessageDialog(DungeonGameFrame.this,
-					"You win the level with " + game.getPlayer().getSteps()
-							+ "steps.");
+			JOptionPane.showMessageDialog(DungeonGameFrame.this, "WINNER!"
+					+ '\n' + "You win the level with "
+					+ game.getPlayer().getSteps() + " steps.");
 			DungeonGameFrame.this.remove(DungeonGameFrame.this
 					.getDungeonPanel());
 			DungeonGameFrame.this.remove(DungeonGameFrame.this.getDataPanel());
@@ -355,34 +430,8 @@ public class DungeonGameFrame extends GameFrame {
 
 		@Override
 		public void executeWhenPlayerMoves(MoveTypes moveType) {
-			Image bloodyFloor;
-			Image floor;
-			Point afterMove = new Point(game.getPlayer().getPosition().x, game
-					.getPlayer().getPosition().y);
-			Point beforeMove = afterMove.sub(moveType.getDirection());
-			floor = getBoardImagesByClass().get(Floor.class);
-			bloodyFloor = getBoardImagesByClass().get(BloodyFloor.class);
-			bloodyFloor = ImageUtils.overlap(floor, bloodyFloor);
-
-			if (game.getBoard()[beforeMove.x][beforeMove.y].getClass().equals(
-					BloodyFloor.class)) {
-				dungeonPanel.put(bloodyFloor, beforeMove.x - 1,
-						beforeMove.y - 1);
-			} else {
-				dungeonPanel.put(floor, beforeMove.x - 1, beforeMove.y - 1);
-			}
-
-			if (game.getBoard()[afterMove.x][afterMove.y].getClass().equals(
-					BloodyFloor.class)) {
-				dungeonPanel.put(ImageUtils.overlap(bloodyFloor,
-						getPlayerImage()), afterMove.x - 1, afterMove.y - 1);
-			} else {
-				dungeonPanel.put(ImageUtils.overlap(floor, getPlayerImage()),
-						afterMove.x - 1, afterMove.y - 1);
-			}
-			dataPanel.refresh(game);
-			dataPanel.updateUI();
-			dungeonPanel.updateUI();
+			dungeonPanel.drawPlayerMove(DungeonGameFrame.this, moveType);
+			dungeonPanel.drawDiscoveredCell(DungeonGameFrame.this, moveType);
 		}
 
 		@Override
@@ -396,8 +445,9 @@ public class DungeonGameFrame extends GameFrame {
 
 		@Override
 		public void executeWhenFight() {
-			dataPanel.refresh(game);
+			dataPanel.refresh(DungeonGameFrame.this);
 			dataPanel.updateUI();
 		}
 	}
+
 }

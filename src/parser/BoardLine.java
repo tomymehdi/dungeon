@@ -25,8 +25,8 @@ public class BoardLine extends Lines {
 
 		case 1:
 			// Player
-			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] != 0
+			if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+					|| data[2] >= boardDimension.y - 2 || data[3] != 0
 					|| data[4] != 0 || data[5] != 0) {
 				throw new CorruptedFileException();
 			}
@@ -34,46 +34,40 @@ public class BoardLine extends Lines {
 
 		case 2:
 			// Wall
-			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] != 0
-					|| data[4] != 0) {
+			if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+					|| data[2] >= boardDimension.y - 2 || data[4] != 0) {
 				throw new CorruptedFileException();
 			}
 			break;
 
 		case 3:
 			// Monster
-			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] <= 0
-					|| data[3] > 3 || data[4] <= 0 || data[4] > 3
-					|| data[5] != 0) {
+			if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+					|| data[2] >= boardDimension.y - 2 || data[3] <= 0
+					|| data[3] > 3 || data[4] <= 0 || data[4] > 3) {
 				throw new CorruptedFileException();
 			}
 			break;
 
 		case 4:
 			// Life Bonus
-			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] != 0
-					|| data[4] != 0 || data[5] == 0) {
+			if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+					|| data[2] >= boardDimension.y - 2 || data[3] != 0
+					|| data[5] == 0) {
 				throw new CorruptedFileException();
 			}
 			break;
 
 		case 5:
 			// Strength Bonus
-			if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
-					|| data[2] >= boardDimension.y || data[3] != 0
-					|| data[4] != 0 || data[5] == 0) {
+			if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+					|| data[2] >= boardDimension.y - 2 || data[3] != 0
+					|| data[5] == 0) {
 				throw new CorruptedFileException();
 			}
 			break;
 
 		default:
-			//TODO
-			for (int i = 0; i < elemsCuantity; i++) {
-				System.out.print(data[i]);
-			}
 			throw new CorruptedFileException();
 		}
 	}

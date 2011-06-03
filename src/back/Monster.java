@@ -2,6 +2,32 @@ package back;
 
 public class Monster extends Character implements Putable {
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((monsterType == null) ? 0 : monsterType.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Monster other = (Monster) obj;
+		if (monsterType == null) {
+			if (other.monsterType != null)
+				return false;
+		} else if (!monsterType.equals(other.monsterType))
+			return false;
+		return true;
+	}
+
 	private MonsterTypes monsterType;
 
 	public Monster(Point position, int numberMonsterType, int level) {

@@ -1,5 +1,3 @@
 package back;
 
-public interface DungeonGameListener extends GameListener{
-	
-}
+public interface DungeonGameListener extends GameListener{}

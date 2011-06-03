@@ -41,7 +41,7 @@ public class SavedBoardPlayerLine extends Lines {
 	protected void lineCheck() {
 
 		// TODO AGREGAR MAS VALIDACIONES
-		if (data[1] < 0 || data[1] >= boardDimension.x || data[2] < 0
+		if (data[1] < 0 || data[1] >= boardDimension.x-2 || data[2] < 0
 				|| data[2] >= boardDimension.y ) {
 			throw new CorruptedFileException();
 		}

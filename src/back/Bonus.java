@@ -1,6 +1,6 @@
 package back;
 
-public class Bonus implements Putable {
+public class Bonus extends Cell implements Putable {
 
 	private BonusTypes bonusType;
 

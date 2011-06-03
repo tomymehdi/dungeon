@@ -22,6 +22,6 @@ public interface Game {
 
 	public void restart();
 
-	public void receiveStroke(Strokes strokes);
+	public void receiveMoveStroke(MoveTypes moveType);
 	
 }

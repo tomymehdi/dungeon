@@ -12,10 +12,6 @@ public interface BoardObtainer {
 
 	public Point getPlayerPosition();
 	
-	public Integer getPlayerLoadedHealth();
-	
-	public Integer getPlayerLoadedMaxHealth();
-
 	public String getBoardName();
 
 	public Putable getBoardElem(Point point);
@@ -25,15 +21,5 @@ public interface BoardObtainer {
 	public int getBoardColums();
 
 	public File getFile();
-
-	public String getPlayerName();
-
-	public Integer getPlayerLoadedSteps();
-
-	Integer getPlayerLoadedExperience();
-
-	Integer getPlayerLoadedStrength();
-
-	public int getPlayerLoadedLevel();
-
+	
 }

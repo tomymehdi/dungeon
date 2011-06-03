@@ -47,13 +47,34 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 
 	@Override
 	public void parseWall(Point point, BoardLine cell) {
-		if (cell.getData(5) == 1) {
+		if (cell.getData(3) == 1) {
 			putCell(point, new BloodyFloor());
 		} else {
 			super.parseWall(point, cell);
 		}
+		setBoardCellVisivility(point, cell.getData(5));
 
 	};
+
+	private void setBoardCellVisivility(Point point, int num) {
+		if (num == 0) {
+			getBoardElem(point).setVisible();
+		}
+		getBoardElem(point).setNotVisible();
+
+	}
+
+	@Override
+	public void parseBonus(Point point, BoardLine cell) {
+		super.parseBonus(point, cell);
+		setBoardCellVisivility(point, cell.getData(5));
+	}
+
+	@Override
+	public void parseMonster(Point point, BoardLine cell) {
+		super.parseMonster(point, cell);
+		setBoardCellVisivility(point, cell.getData(5));
+	}
 
 	@Override
 	public Point getPlayerPosition() {
@@ -89,22 +110,22 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 		T game;
 		try {
 			game = gameImpClass.getConstructor(BoardObtainer.class,
-					GameListener.class, String.class).newInstance(this,
-					listener, playerName);
+					GameListener.class).newInstance(this, listener);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CorruptedFileException();
 		}
 		return game;
 	}
 
 	@Override
-	public String getPlayerName() {
-		return playerName;
-	}
-	
-	@Override
 	public int getPlayerLoadedLevel() {
 		return loadedLevel;
+	}
+
+	@Override
+	public String getPlayerName() {
+		return playerName;
 	}
 
 }

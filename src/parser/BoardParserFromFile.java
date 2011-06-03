@@ -84,15 +84,19 @@ public class BoardParserFromFile implements BoardObtainer {
 			throw new CorruptedFileException();
 		}
 
+		validation();
+
+	}
+
+	public void validation() {
 		protectionWalls();
 		putFloor();
 		if (!(board[getPlayerPosition().x][getPlayerPosition().y] instanceof Floor)) {
 			throw new CorruptedFileException();
 		}
-
 	}
 
-	private void parseBonus(Point point, BoardLine cell) {
+	public void parseBonus(Point point, BoardLine cell) {
 		putCell(point.x, point.y, new Bonus(point, cell.getData(0), cell
 				.getData(5)));
 	}
@@ -104,7 +108,7 @@ public class BoardParserFromFile implements BoardObtainer {
 		playerPosition = point;
 	}
 
-	private void parseMonster(Point point, BoardLine cell) {
+	public void parseMonster(Point point, BoardLine cell) {
 		putCell(point.x, point.y, new Monster(point, cell.getData(3), cell
 				.getData(4)));
 	}
@@ -129,7 +133,7 @@ public class BoardParserFromFile implements BoardObtainer {
 	public void putFloor() {
 		for (int i = 1; i < boardDimension.x - 1; i++) {
 			for (int j = 1; j < boardDimension.y - 1; j++) {
-				if (getBoardElem(i,j) == null) {
+				if (getBoardElem(i, j) == null) {
 					putCell(i, j, new Floor());
 				}
 			}
@@ -175,8 +179,8 @@ public class BoardParserFromFile implements BoardObtainer {
 	public Putable getBoardElem(Point position) {
 		return board[position.x][position.y];
 	}
-	
-	public Putable getBoardElem(int x, int y){
+
+	public Putable getBoardElem(int x, int y) {
 		return board[x][y];
 	}
 
@@ -191,48 +195,6 @@ public class BoardParserFromFile implements BoardObtainer {
 	@Override
 	public File getFile() {
 		return inputFile;
-	}
-
-	@Override
-	public Integer getPlayerLoadedHealth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getPlayerLoadedMaxHealth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getPlayerLoadedExperience() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getPlayerLoadedSteps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Integer getPlayerLoadedStrength() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPlayerName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getPlayerLoadedLevel() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

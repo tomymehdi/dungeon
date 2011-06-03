@@ -13,9 +13,9 @@ public class Player extends Character {
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
 		this.steps = 0;
+		setHealth(playerData.getHealth());
 		setMaxHealth(playerData.getMaxHealth());
 		setStrength(playerData.getStrength());
-		setHealth(playerData.getMaxHealth());
 	}
 
 	public MoveTypes move(MoveTypes moveType) {
@@ -37,6 +37,7 @@ public class Player extends Character {
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
 		setMaxHealth(getLevel() * DungeonGameImp.LIFE);
+		setStrength(getStrength() + DungeonGameImp.STRENGTH);
 	}
 
 	public Integer getExperience() {
@@ -60,13 +61,49 @@ public class Player extends Character {
 		return steps;
 	}
 
-	public void setExperience(Integer playerLoadedExperience) {
-		experience = playerLoadedExperience;
+	public Integer getExperienceToLevelUp() {
+		return experienceToLevelUp;
 	}
 
-	public void setSteps(Integer playerLoadedSteps) {
-		steps = playerLoadedSteps;
-		
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((experience == null) ? 0 : experience.hashCode());
+		result = prime
+				* result
+				+ ((experienceToLevelUp == null) ? 0 : experienceToLevelUp
+						.hashCode());
+		result = prime * result + ((steps == null) ? 0 : steps.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (experience == null) {
+			if (other.experience != null)
+				return false;
+		} else if (!experience.equals(other.experience))
+			return false;
+		if (experienceToLevelUp == null) {
+			if (other.experienceToLevelUp != null)
+				return false;
+		} else if (!experienceToLevelUp.equals(other.experienceToLevelUp))
+			return false;
+		if (steps == null) {
+			if (other.steps != null)
+				return false;
+		} else if (!steps.equals(other.steps))
+			return false;
+		return true;
 	}
 
 }

@@ -50,4 +50,12 @@ public class Point {
 	public Point sub(Point p) {
 		return new Point(this.x - p.x, this.y - p.y);
 	}
+
+	public Point add(int i, int j) {
+		return add(new Point(i, j));
+	}
+
+	public Point sub(int i, int j) {
+		return sub(new Point(i, j));
+	}
 }
