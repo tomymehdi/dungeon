@@ -61,6 +61,10 @@ public class GameTests {
 			@Override
 			public void executeWhenFight() {
 			}
+
+			@Override
+			public void executeWhenLevelUp() {
+			}
 		});
 	}
 
@@ -108,6 +112,10 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedTest() {
+		File directory = new File("./savedGames");
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
 		new SaveGameOnFile(game);
 		File file = new File("./savedGames");
 		FilterFileList filterFileList = new FilterArrayFileList(file);
@@ -164,6 +172,10 @@ public class GameTests {
 			@Override
 			public void executeWhenFight() {
 			}
+
+			@Override
+			public void executeWhenLevelUp() {
+			}
 		});
 		assertEquals(new Integer(0), game.getPlayer().getExperience());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
@@ -172,6 +184,10 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
+		File directory = new File("./savedGames");
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
 		File file = new File("./savedGames/testWithPath");
 		new SaveGameOnFile(game, file);
 		FilterFileList filterFileList = new FilterArrayFileList(

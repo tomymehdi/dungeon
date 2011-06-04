@@ -11,15 +11,15 @@ public class PlayerData {
 	Point position;
 
 	public PlayerData(String name, int level, int experience, int health,
-			int maxHealth, int strength, Point position) {
+			int maxHealth, int strength, Point position, int steps) {
 		this.name = name;
-		this.level = level;
 		this.experience = experience;
 		this.health = health;
 		this.maxHealth = maxHealth;
 		this.strength = strength;
 		this.position = position;
 	}
+
 
 	public int getExperience() {
 		return experience;

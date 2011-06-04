@@ -23,7 +23,9 @@ public class Bonus extends Cell implements Putable {
 		Point point = new Point(game.getPlayer().getPosition().x, game
 				.getPlayer().getPosition().y);
 
-		game.getBoard()[point.x][point.y] = new Floor();
+		Floor f = new Floor();
+		f.setVisible();
+		game.getBoard()[point.x][point.y] = f;
 
 		game.getGameListener().executeWhenBonusGrabed(
 				new Point(point.x, point.y));
@@ -36,7 +38,7 @@ public class Bonus extends Cell implements Putable {
 	public int getAmountBonus() {
 		return bonusType.getBonusAmount();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Bonus";

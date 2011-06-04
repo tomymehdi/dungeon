@@ -13,7 +13,9 @@ public interface GameListener {
 	public void executeWhenGameLoosed();
 	
 	public void executeWhenGameWinned();
-	
+
 	public String playerNameRequest();
+
+	void executeWhenLevelUp();
 
 }

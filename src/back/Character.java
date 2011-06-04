@@ -1,8 +1,8 @@
 package back;
 
 /**
- * @author tomas
- * Abstract class that extends cell. So it can ve visible or invisible in the board.
+ * @author tomas Abstract class that extends cell. So it can ve visible or
+ *         invisible in the board.
  */
 public abstract class Character extends Cell {
 
@@ -172,6 +172,10 @@ public abstract class Character extends Cell {
 		} else if (!strength.equals(other.strength))
 			return false;
 		return true;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 }

@@ -203,4 +203,9 @@ public class BoardParserFromFile implements BoardObtainer {
 		return inputFile;
 	}
 
+	@Override
+	public int getPlayerSteps() {
+		return 0;
+	}
+
 }

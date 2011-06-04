@@ -41,9 +41,12 @@ public class DungeonPanel extends GamePanel {
 	private Map<String, Image> monsterImagesByName = new HashMap<String, Image>();
 	private Map<String, Image> bonusImagesByName = new HashMap<String, Image>();
 	private Monster monsterUnderMouse = null;
+
 	/**
-	 * @param dungeonGameFrame
-	 *            Call the super constructor and draw the pane. The interface
+	 * @param game
+	 * @param dataPanel
+	 * @param dungeonListener
+	 * Call the super constructor and draw the pane. The interface
 	 *            DungeonPanelListener that extends the professor ship interface
 	 *            GamePanelListener is used to make an implementation of the
 	 *            "onMouseMoved" method. It allows us to know in what cell is
@@ -58,7 +61,7 @@ public class DungeonPanel extends GamePanel {
 		monstersImagesInitialize();
 		bonusImagesInitialize();
 		drawDungeon(game);
-		this.setVisible(true);
+		setVisible(true);
 	}
 
 	/**
@@ -254,10 +257,10 @@ public class DungeonPanel extends GamePanel {
 	}
 
 	/**
-	 * @param dungeonGameFrame
-	 * @param moveType
+	 * @param game of class Game
+	 * @param moveType instance of enumerative MoveTypes
 	 * 
-	 *            Redraw if necessary the DungeonPanel.
+	 * Redraw if necessary the DungeonPanel.
 	 */
 	public void drawPlayerMove(Game game,
 			MoveTypes moveType) {
@@ -377,42 +380,6 @@ public class DungeonPanel extends GamePanel {
 	}
 
 	/**
-	 * Geter of the player images.
-	 * 
-	 * @return
-	 */
-	public Image getPlayerImage() {
-		return playerImage;
-	}
-
-	/**
-	 * Getter of the bonus images
-	 * 
-	 * @return
-	 */
-	public Map<String, Image> getMonsterImagesByName() {
-		return monsterImagesByName;
-	}
-
-	/**
-	 * Getter of the bonus images.
-	 * 
-	 * @return
-	 */
-	public Map<String, Image> getBonusImagesByName() {
-		return bonusImagesByName;
-	}
-
-	/**
-	 * Getter of the board images.
-	 * 
-	 * @return
-	 */
-	public Map<Class<? extends Putable>, Image> getBoardImagesByClass() {
-		return boardImagesByClass;
-	}
-
-	/**
 	 * Method to initialize player image.
 	 */
 	private void playerImage() {
@@ -471,6 +438,33 @@ public class DungeonPanel extends GamePanel {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	public void drawLevelUp(Game game) {
+		Image image;
+		Image bloodyFloor;
+		Image floor;
+		Point playerPos = new Point(game.getPlayer()
+				.getPosition().x, game.getPlayer()
+				.getPosition().y);
+		floor = boardImagesByClass.get(Floor.class);
+		bloodyFloor = boardImagesByClass.get(BloodyFloor.class);
+		bloodyFloor = overlap(floor, bloodyFloor);
+
+		clear(playerPos.x - 1, playerPos.y - 1);
+		if (game.getBoard()[playerPos.x][playerPos.y] instanceof BloodyFloor) {
+			image = overlap(bloodyFloor, playerImage);
+			image = drawString(image, game.getPlayer()
+					.getLevel().toString(), Color.WHITE);
+			put(image, playerPos.x - 1, playerPos.y - 1);
+		} else {
+			image = overlap(floor, playerImage);
+			image = drawString(image, game.getPlayer()
+					.getLevel().toString(), Color.WHITE);
+
+			put(image, playerPos.x - 1, playerPos.y - 1);
+		}
+		updateUI();
 	}
 
 }

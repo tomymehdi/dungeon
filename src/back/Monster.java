@@ -31,12 +31,17 @@ public class Monster extends Character implements Putable {
 	private MonsterTypes monsterType;
 
 	public Monster(Point position, int numberMonsterType, int level) {
+		this(position, numberMonsterType, level, MonsterTypes.getMonsterType(
+				numberMonsterType).getMaxLife(level));
+	}
+
+	public Monster(Point position, int numberMonsterType, int level, int health) {
 		super(MonsterTypes.getMonsterType(numberMonsterType).getName(), level,
 				position);
 		monsterType = MonsterTypes.getMonsterType(numberMonsterType);
 		setMaxHealth(monsterType.getMaxLife(level));
 		setStrength(monsterType.getStrength(level));
-		setHealth(getMaxHealth());
+		setHealth(health);
 	}
 
 	public MonsterTypes getMonsterType() {
@@ -61,6 +66,7 @@ public class Monster extends Character implements Putable {
 	}
 
 	@Override
-	public void standOver(DungeonGameImp game) {}
+	public void standOver(DungeonGameImp game) {
+	}
 
 }

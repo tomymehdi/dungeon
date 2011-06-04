@@ -12,6 +12,7 @@ import back.Floor;
 import back.Game;
 import back.GameListener;
 import back.LoadGame;
+import back.Monster;
 import back.Point;
 
 public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
@@ -42,6 +43,7 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 		playerLoadedMaxHealth = playerData.getData(5);
 		playerLoadedStrength = playerData.getData(6);
 		playerLoadedSteps = playerData.getData(7);
+		loadedLevel = playerData.getData(8);
 		playerName = playerData.getPlayerName();
 
 	}
@@ -53,12 +55,12 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 			getBoardElem(point).setNotVisible();
 		}
 	}
-	
+
 	@Override
 	public void parseWall(Point point, BoardLine cell) {
 		if (cell.getData(3) == 2) {
 			putCell(point, new BloodyFloor());
-		} else if(cell.getData(3) == 1){
+		} else if (cell.getData(3) == 1) {
 			putCell(point, new Floor());
 		} else {
 			super.parseWall(point, cell);
@@ -74,8 +76,15 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 
 	@Override
 	public void parseMonster(Point point, BoardLine cell) {
-		super.parseMonster(point, cell);
-		setBoardCellVisivility(point, cell.getData(5));
+		putCell(point.x,
+				point.y,
+				new Monster(point, cell.getData(3), cell.getData(4), Math
+						.abs(cell.getData(5))));
+		if (cell.getData(5) < 0) {
+			setBoardCellVisivility(point, 0);
+		} else if (cell.getData(5) > 0) {
+			setBoardCellVisivility(point, 1);
+		}
 	}
 
 	@Override

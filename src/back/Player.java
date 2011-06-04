@@ -6,16 +6,21 @@ public class Player extends Character {
 
 	private Integer experience;
 	private Integer experienceToLevelUp;
-	private Integer steps;
+	private Integer steps = 0;
 
 	public Player(PlayerData playerData) {
 		super(playerData.getName(), 1, playerData.getPosition());
 		this.experience = 0;
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
-		this.steps = 0;
 		setHealth(playerData.getHealth());
 		setMaxHealth(playerData.getMaxHealth());
 		setStrength(playerData.getStrength());
+	}
+
+	public Player(PlayerData playerData, int level, int steps) {
+		this(playerData);
+		this.steps = steps;
+		setLevel(level);
 	}
 
 	public MoveTypes move(MoveTypes moveType) {

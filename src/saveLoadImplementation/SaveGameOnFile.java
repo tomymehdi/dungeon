@@ -14,8 +14,7 @@ import back.SaveGame;
 import back.Wall;
 
 /**
- * @author tomas
- *	SaveGame implementation that save on a file.
+ * @author tomas SaveGame implementation that save on a file.
  */
 public class SaveGameOnFile implements SaveGame {
 
@@ -44,8 +43,8 @@ public class SaveGameOnFile implements SaveGame {
 	public SaveGameOnFile(Game gameToSave, File placeToSave) {
 		this.gameToSave = gameToSave;
 		this.placeToSave = placeToSave;
-		FilterFileList filterFileList = new FilterArrayFileList(placeToSave
-				.getParentFile());
+		FilterFileList filterFileList = new FilterArrayFileList(
+				placeToSave.getParentFile());
 		filterFileList = filterFileList.filter(placeToSave.getName());
 		int number = filterFileList.size();
 		if (number > 0) {
@@ -62,14 +61,14 @@ public class SaveGameOnFile implements SaveGame {
 	}
 
 	/**
-	 * 	The format of the file saved is: board
-	 *      dimension (10,11) board name ("Board name") player (1,row pos, col
-	 *      pos,exp,health,max health, strength, name) 
-	 *      walls (2,row pos, col pos, 0 ,0, [0 is visible 1 not visible]) 
-	 *	bloodyFloor(2,row pos, col pos, 2 ,0, [0 is visible 1 not visible])
-	 *	floor(2,row pos, col pos, 1 ,0,[0 is visible 1 not visible])
-	 *	monsters (3,row pos, col pos, monster type, level, [0 is visible 1 not visible]) bonus (4 or
-	 *      5, row pos, col pos, 0,[0 is visible 1 not visible],amount of bonus)
+	 * The format of the file saved is: board dimension (10,11) board name
+	 * ("Board name") player (1,row pos, col pos,exp,health,max health,
+	 * strength, steps, level, name) walls (2,row pos, col pos, 0 ,0, [0 is
+	 * visible 1 not visible]) bloodyFloor(2,row pos, col pos, 2 ,0, [0 is
+	 * visible 1 not visible]) floor(2,row pos, col pos, 1 ,0,[0 is visible 1
+	 * not visible]) monsters (3,row pos, col pos, monster type, level, [0 is
+	 * visible 1 not visible]) bonus (4 or 5, row pos, col pos, 0,[0 is visible
+	 * 1 not visible],amount of bonus)
 	 **/
 	public void save() throws IOException {
 		placeToSave.createNewFile();
@@ -83,9 +82,8 @@ public class SaveGameOnFile implements SaveGame {
 		out.newLine();
 		out.write(gameToSave.getBoardName());
 		out.newLine();
-		out
-				.write("#Player current position, "
-						+ "current exp, current health, maxHealth, current strength, steps, name");
+		out.write("#Player current position, "
+				+ "current exp, current health, maxHealth, current strength, steps, name");
 		out.newLine();
 		out.write(1 + "," + (gameToSave.getPlayer().getPosition().x - 1) + ","
 				+ (gameToSave.getPlayer().getPosition().y - 1) + ","
@@ -94,6 +92,7 @@ public class SaveGameOnFile implements SaveGame {
 				+ gameToSave.getPlayer().getMaxHealth() + ","
 				+ gameToSave.getPlayer().getStrength() + ","
 				+ gameToSave.getPlayer().getSteps() + ","
+				+ gameToSave.getPlayer().getLevel() + ","
 				+ gameToSave.getPlayer().getName());
 		out.newLine();
 		out.write("#Map");
@@ -109,8 +108,8 @@ public class SaveGameOnFile implements SaveGame {
 						out.write("1");
 					}
 					out.newLine();
-				} else if (Floor.class
-						.equals((gameToSave.getBoard()[i][j]).getClass())) {
+				} else if (Floor.class.equals((gameToSave.getBoard()[i][j])
+						.getClass())) {
 					out.write(2 + "," + (i - 1) + "," + (j - 1) + "," + 1 + ","
 							+ 0 + ",");
 					if (gameToSave.getBoard()[i][j].isVisible()) {
@@ -119,7 +118,7 @@ public class SaveGameOnFile implements SaveGame {
 						out.write("1");
 					}
 					out.newLine();
-				}else if (BloodyFloor.class
+				} else if (BloodyFloor.class
 						.equals((gameToSave.getBoard()[i][j]).getClass())) {
 					out.write(2 + "," + (i - 1) + "," + (j - 1) + "," + 2 + ","
 							+ 0 + ",");
@@ -143,16 +142,20 @@ public class SaveGameOnFile implements SaveGame {
 							+ ((Monster) gameToSave.getBoard()[i][j])
 									.getLevel() + ",");
 					if (gameToSave.getBoard()[i][j].isVisible()) {
-						out.write("0");
+						out.write((((Monster) gameToSave.getBoard()[i][j])
+								.getHealth() * -1) + "");
 					} else {
-						out.write("1");
+						out.write((((Monster) gameToSave.getBoard()[i][j])
+								.getHealth()) + "");
 					}
 					out.newLine();
 				} else if (Bonus.class.equals((gameToSave.getBoard()[i][j])
 						.getClass())) {
 					out.write((((Bonus) gameToSave.getBoard()[i][j])
 							.getBonusType().ordinal() + 4)
-							+ "," + (i - 1) + "," + (j - 1) + "," + 0 + ",");
+							+ ","
+							+ (i - 1)
+							+ "," + (j - 1) + "," + 0 + ",");
 					if (gameToSave.getBoard()[i][j].isVisible()) {
 						out.write("0");
 					} else {

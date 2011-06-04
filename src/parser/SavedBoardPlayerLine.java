@@ -4,7 +4,7 @@ import back.Point;
 
 public class SavedBoardPlayerLine extends Lines {
 
-	private static int elemsCuantity = 9;
+	private static int elemsCuantity = 10;
 	private Point boardDimension;
 	private String playerName;
 

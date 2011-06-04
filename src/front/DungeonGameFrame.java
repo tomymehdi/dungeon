@@ -69,13 +69,16 @@ public class DungeonGameFrame extends GameFrame {
 					LevelSelector levelSelector = new LevelSelectorImp(
 							DungeonGameFrame.this);
 					file = levelSelector.getLevelSelected();
-					BoardObtainer boardObtainer = new BoardParserFromFile(file);
-					game = new DungeonGameImp(boardObtainer,
-							new DungeonGameListenerImp());
-					drawDungeonPanel();
-					drawDataPanel();
-					dataPanel.refresh(game, dungeonPanel);
-					dungeonPanel.updateUI();
+					if (file != null) {
+						BoardObtainer boardObtainer = new BoardParserFromFile(
+								file);
+						game = new DungeonGameImp(boardObtainer,
+								new DungeonGameListenerImp());
+						drawDungeonPanel();
+						drawDataPanel();
+						dataPanel.refresh(game, dungeonPanel);
+						dungeonPanel.updateUI();
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,
@@ -238,7 +241,7 @@ public class DungeonGameFrame extends GameFrame {
 	/**
 	 * Getter of the dungeon panel.
 	 * 
-	 * @return
+	 * @return DungeonPanel
 	 */
 	public DungeonPanel getDungeonPanel() {
 		return dungeonPanel;
@@ -247,7 +250,7 @@ public class DungeonGameFrame extends GameFrame {
 	/**
 	 * Getter of the data panel.
 	 * 
-	 * @return
+	 * @return DataPanel
 	 */
 	public DataPanel getDataPanel() {
 		return dataPanel;
@@ -344,6 +347,11 @@ public class DungeonGameFrame extends GameFrame {
 		public void executeWhenFight() {
 			dataPanel.refresh(game, dungeonPanel);
 			dataPanel.updateUI();
+		}
+
+		@Override
+		public void executeWhenLevelUp() {
+			dungeonPanel.drawLevelUp(game);
 		}
 	}
 

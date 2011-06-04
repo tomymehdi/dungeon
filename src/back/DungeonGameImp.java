@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author tomas
- *	Back end most important class. It contents all the data to play a Dungeon Game.
- *	This class implements Game.
+ * @author tomas Back end most important class. It contents all the data to play
+ *         a Dungeon Game. This class implements Game.
  */
 public class DungeonGameImp implements Game {
 
@@ -30,7 +29,8 @@ public class DungeonGameImp implements Game {
 		boardDimension = boardObtainer.getBoardDimension();
 		board = boardObtainer.getBoard();
 		PlayerData playerData = new PlayerData(null, 0, 0, LIFE, LIFE,
-				STRENGTH, boardObtainer.getPlayerPosition());
+				STRENGTH, boardObtainer.getPlayerPosition(),
+				boardObtainer.getPlayerSteps());
 		if (!(boardObtainer instanceof LoadGame)) {
 			playerData.setName(gameListener.playerNameRequest());
 			player = new Player(playerData);
@@ -45,13 +45,18 @@ public class DungeonGameImp implements Game {
 					.getPlayerLoadedStrength());
 			playerData.setExperience(((LoadGame<Game>) boardObtainer)
 					.getPlayerLoadedExperience());
-			player = new Player(playerData);
+			player = new Player(playerData,
+					((LoadGame<Game>) boardObtainer).getPlayerLoadedLevel(),
+					((LoadGame<Game>) boardObtainer).getPlayerLoadedSteps());
 		}
 		firstDiscoveredCells();
 	}
 
 	private void firstDiscoveredCells() {
 		Point p = player.getPosition();
+
+		board[p.x][p.y].setVisible();
+
 		board[p.x + 1][p.y - 1].setVisible();
 		board[p.x + 1][p.y].setVisible();
 		board[p.x + 1][p.y + 1].setVisible();
@@ -74,13 +79,16 @@ public class DungeonGameImp implements Game {
 	public void receiveMoveStroke(MoveTypes moveType) {
 		Point nextPlayerPosition = player.getPosition().add(
 				moveType.getDirection());
-
+		int playerLevelBeforeFight = player.getLevel();
 		if (board[nextPlayerPosition.x][nextPlayerPosition.y]
 				.allowMovement(this)) {
 			MoveTypes moveMade = player.move(moveType);
 			dicoverBoard(nextPlayerPosition, moveType);
 			gameListener.executeWhenPlayerMoves(moveMade);
 			board[nextPlayerPosition.x][nextPlayerPosition.y].standOver(this);
+		}
+		if (player.getLevel() != playerLevelBeforeFight) {
+			gameListener.executeWhenLevelUp();
 		}
 	}
 
@@ -111,11 +119,12 @@ public class DungeonGameImp implements Game {
 
 		if (countDiscover > 0) {
 			player.winLife(countDiscover * player.getLevel());
-			for (Putable[] p1 : board) {
-				for (Putable p2 : p1) {
-					if (p2.isVisible() && p2 instanceof Character) {
-						((Character) p2).winLife(countDiscover
-								* ((Character) p2).getLevel());
+			for (int i = 1; i < boardDimension.x - 1; i++) {
+				for (int j = 1; j < boardDimension.y - 1; j++) {
+					if (board[i][j].isVisible()
+							&& board[i][j] instanceof Character) {
+						((Character) board[i][j]).winLife(countDiscover
+								* ((Character) board[i][j]).getLevel());
 					}
 				}
 			}
@@ -145,16 +154,20 @@ public class DungeonGameImp implements Game {
 	 */
 	public void fightEnd(Character character) {
 		if (character.isDead()) {
-			Point point = new Point(character.getPosition().x, character
-					.getPosition().y);
-			board[point.x][point.y] = new BloodyFloor();
+			Point point = new Point(character.getPosition().x,
+					character.getPosition().y);
+			BloodyFloor bf = new BloodyFloor();
+			bf.setVisible();
+			board[point.x][point.y] = bf;
 			gameListener.executeWhenCharacterDie(point);
 
 		}
 		if (player.isDead()) {
-			Point point = new Point(player.getPosition().x, player
-					.getPosition().y);
-			board[point.x][point.y] = new BloodyFloor();
+			Point point = new Point(player.getPosition().x,
+					player.getPosition().y);
+			BloodyFloor bf = new BloodyFloor();
+			bf.setVisible();
+			board[point.x][point.y] = bf;
 			gameListener.executeWhenCharacterDie(point);
 			loosed();
 		}
@@ -193,18 +206,22 @@ public class DungeonGameImp implements Game {
 	}
 
 	/**
-	 * @see back.Game#restart() The desition of making restart a method of a game and
-	 * not a class like loadGame is that a restart game need the same boardObtainer that
-	 * the instance of the game. Then is have no sense make a new instance.
+	 * @see back.Game#restart() The desition of making restart a method of a
+	 *      game and not a class like loadGame is that a restart game need the
+	 *      same boardObtainer that the instance of the game. Then is have no
+	 *      sense make a new instance.
 	 **/
 	@Override
 	public void restart() {
 		File file = boardObtainer.getFile();
 		try {
-			board = boardObtainer.getClass().getConstructor(File.class).newInstance(file).getBoard();
-		} catch (Exception e) {		} 
+			board = boardObtainer.getClass().getConstructor(File.class)
+					.newInstance(file).getBoard();
+		} catch (Exception e) {
+		}
 		PlayerData playerData = new PlayerData(player.getName(), 0, 0, LIFE,
-				LIFE, STRENGTH, boardObtainer.getPlayerPosition());
+				LIFE, STRENGTH, boardObtainer.getPlayerPosition(),
+				player.getSteps());
 		player = new Player(playerData);
 	}
 
