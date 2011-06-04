@@ -140,12 +140,20 @@ public class BoardParserFromFile implements BoardObtainer {
 
 	public void protectionWalls() {
 		for (int i = 0; i < boardDimension.y; i++) {
-			putCell(0, i, new Wall());
-			putCell(boardDimension.x - 1, i, new Wall());
+			Wall aux = new Wall();
+			aux.setVisible();
+			putCell(0, i, aux);
+			Wall aux1 = new Wall();
+			aux1.setVisible();
+			putCell(boardDimension.x - 1, i, aux1);
 		}
 		for (int i = 0; i < boardDimension.x; i++) {
-			putCell(i, 0, new Wall());
-			putCell(i, boardDimension.y - 1, new Wall());
+			Wall aux = new Wall();
+			aux.setVisible();
+			putCell(i, 0, aux);
+			Wall aux1 = new Wall();
+			aux1.setVisible();
+			putCell(i, boardDimension.y - 1, aux1);
 		}
 
 	}
