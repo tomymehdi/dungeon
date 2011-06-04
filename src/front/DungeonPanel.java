@@ -1,13 +1,25 @@
 package front;
 
+import static professorShipSrc.ImageUtils.drawString;
+import static professorShipSrc.ImageUtils.loadImage;
+import static professorShipSrc.ImageUtils.overlap;
+
 import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.swing.JOptionPane;
+
+import professorShipSrc.GamePanel;
 import back.BloodyFloor;
 import back.Bonus;
+import back.Character;
 import back.Floor;
+import back.Game;
 import back.Monster;
 import back.MoveTypes;
 import back.Point;
@@ -15,7 +27,7 @@ import back.Putable;
 import back.Wall;
 
 /**
- * @author tmehdi Class that extends the professorship class GamePanel. This
+ * @author tmehdi Class that extends the professor ship class GamePanel. This
  *         class is used for the Dungeon panel that is into the
  *         DungeonGameFrame.
  */
@@ -23,48 +35,29 @@ public class DungeonPanel extends GamePanel {
 
 	private static final long serialVersionUID = 1L;
 	private static final int CELL_SIZE = 30;
-
+	
+	private Image playerImage;
+	private Map<Class<? extends Putable>, Image> boardImagesByClass = new HashMap<Class<? extends Putable>, Image>();
+	private Map<String, Image> monsterImagesByName = new HashMap<String, Image>();
+	private Map<String, Image> bonusImagesByName = new HashMap<String, Image>();
 	private Monster monsterUnderMouse = null;
-
 	/**
 	 * @param dungeonGameFrame
 	 *            Call the super constructor and draw the pane. The interface
-	 *            DungeonPanelListener that extends the professorship inteface
+	 *            DungeonPanelListener that extends the professor ship interface
 	 *            GamePanelListener is used to make an implementation of the
 	 *            "onMouseMoved" method. It allows us to know in what cell is
-	 *            and make the diferent actions.
+	 *            and make the different actions.
 	 */
-	public DungeonPanel(final DungeonGameFrame dungeonGameFrame) {
-		super(dungeonGameFrame.game.getBoardDimension().x - 2,
-				dungeonGameFrame.game.getBoardDimension().y - 2, CELL_SIZE,
-				new DungeonPanelListener() {
-
-					@Override
-					public void onMouseMoved(int row, int column) {
-
-						Monster monster = dungeonGameFrame.getDungeonPanel()
-								.getMonsterUnderMouse();
-						if (monster != null) {
-							dungeonGameFrame.getDataPanel().removeCharacter(
-									monster);
-							dungeonGameFrame.getDungeonPanel()
-									.setMonsterUnderMouse(null);
-						}
-						Putable putable = dungeonGameFrame.game.getBoard()[row + 1][column + 1];
-						if (putable instanceof Monster) {
-							dungeonGameFrame.getDungeonPanel()
-									.setMonsterUnderMouse((Monster) putable);
-							dungeonGameFrame.getDataPanel().addCharacter(
-									dungeonGameFrame.getDungeonPanel()
-											.getMonsterUnderMouse());
-						}
-						dungeonGameFrame.getDataPanel().refresh(
-								dungeonGameFrame);
-						dungeonGameFrame.getDataPanel().updateUI();
-
-					}
-				}, Color.BLACK);
-		drawDungeon(dungeonGameFrame);
+	public DungeonPanel(Game game, DataPanel dataPanel, DungeonPanelListener dungeonListener) {
+		super(game.getBoardDimension().x - 2,
+				game.getBoardDimension().y - 2, CELL_SIZE, dungeonListener
+				, Color.BLACK);
+		playerImage();
+		boardImagesByClass();
+		monstersImagesInitialize();
+		bonusImagesInitialize();
+		drawDungeon(game);
 		this.setVisible(true);
 	}
 
@@ -82,11 +75,9 @@ public class DungeonPanel extends GamePanel {
 	 */
 	public void dwarFullDungeon(DungeonGameFrame dungeonGameFrame) {
 		Image image;
-		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
-				Floor.class);
-		Image bloodyFloorImage = ImageUtils
-				.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass()
-						.get(BloodyFloor.class));
+		Image floorImage = boardImagesByClass.get(Floor.class);
+		Image bloodyFloorImage = overlap(floorImage,
+				boardImagesByClass.get(BloodyFloor.class));
 		int row = dungeonGameFrame.game.getBoardDimension().x - 2;
 		int col = dungeonGameFrame.game.getBoardDimension().y - 2;
 
@@ -94,21 +85,22 @@ public class DungeonPanel extends GamePanel {
 			for (int j = 1; j <= col; j++) {
 				Putable cell = dungeonGameFrame.game.getBoard()[i][j];
 				if (cell.getClass().equals(Monster.class)) {
-					image = dungeonGameFrame.getMonsterImagesByName().get(
-							((Monster) cell).getMonsterType().toString());
-					image = ImageUtils.overlap(floorImage, image);
+					image = monsterImagesByName.get(((Monster) cell)
+							.getMonsterType().toString());
+					image = overlap(floorImage, image);
+					image = drawString(image, ((Character) cell).getLevel()
+							.toString(), Color.WHITE);
 					put(image, i - 1, j - 1);
 				} else if (cell.getClass().equals(Bonus.class)) {
-					image = dungeonGameFrame.getBonusImagesByName().get(
-							((Bonus) cell).getBonusType().toString());
-					image = ImageUtils.overlap(floorImage, image);
-					image = ImageUtils.drawString(image, (((Bonus) cell)
-							.getBonusType().getBonusAmount()).toString(),
-							Color.RED);
+					image = bonusImagesByName.get(((Bonus) cell).getBonusType()
+							.toString());
+					image = overlap(floorImage, image);
+					image = drawString(image,
+							(((Bonus) cell).getBonusType().getBonusAmount())
+									.toString(), Color.RED);
 					put(image, i - 1, j - 1);
 				} else {
-					image = dungeonGameFrame.getBoardImagesByClass().get(
-							cell.getClass());
+					image = boardImagesByClass.get(cell.getClass());
 					if (cell.getClass().equals(Wall.class)) {
 						put(image, i - 1, j - 1);
 					} else if (cell.getClass().equals(BloodyFloor.class)) {
@@ -123,11 +115,11 @@ public class DungeonPanel extends GamePanel {
 		Point p = new Point(dungeonGameFrame.game.getPlayer().getPosition());
 
 		if (dungeonGameFrame.game.getBoard()[p.x][p.y] instanceof BloodyFloor) {
-			image = ImageUtils.overlap(bloodyFloorImage, dungeonGameFrame
-					.getPlayerImage());
+			image = overlap(bloodyFloorImage, playerImage);
 		}
-		image = ImageUtils.overlap(floorImage, dungeonGameFrame
-				.getPlayerImage());
+		image = overlap(floorImage, playerImage);
+		image = drawString(image, dungeonGameFrame.game.getPlayer().getLevel()
+				.toString(), Color.WHITE);
 		put(image, p.x - 1, p.y - 1);
 	}
 
@@ -136,63 +128,65 @@ public class DungeonPanel extends GamePanel {
 	 * 
 	 *            Draw the dungeon panel when a game begins.
 	 */
-	private void drawDungeon(DungeonGameFrame dungeonGameFrame) {
-		drawRestOfDungeon(dungeonGameFrame);
-		drawDungeonArroundPlayer(dungeonGameFrame);
+	private void drawDungeon(Game game) {
+		drawRestOfDungeon(game);
+		drawDungeonArroundPlayer(game);
 
 	}
 
 	/**
 	 * @param dungeonGameFrame
-	 * Draw all the visible cells (it's just for loaded games in this game implementation)
+	 *            Draw all the visible cells (it's just for loaded games in this
+	 *            game implementation)
 	 */
-	private void drawRestOfDungeon(DungeonGameFrame dungeonGameFrame) {
+	private void drawRestOfDungeon(Game game) {
 		Image image;
 		List<Point> points = new ArrayList<Point>();
-		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
-				Floor.class);
-		Image bloodyFloorImage = ImageUtils
-				.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass()
-						.get(BloodyFloor.class));
+		Image floorImage = boardImagesByClass.get(Floor.class);
+		Image bloodyFloorImage = overlap(floorImage,
+				boardImagesByClass.get(BloodyFloor.class));
 
-		int row = dungeonGameFrame.game.getBoardDimension().x - 2;
-		int col = dungeonGameFrame.game.getBoardDimension().y - 2;
+		int row = game.getBoardDimension().x - 2;
+		int col = game.getBoardDimension().y - 2;
 
 		for (int i = 1; i <= row; i++) {
 			for (int j = 1; j <= col; j++) {
-				Putable cell = dungeonGameFrame.game.getBoard()[i][j];
+				Putable cell = game.getBoard()[i][j];
 				if (cell.isVisible() && cell.getClass().equals(Monster.class)) {
-					image = dungeonGameFrame.getMonsterImagesByName().get(
-							((Monster) cell).getMonsterType().toString());
-					image = ImageUtils.overlap(floorImage, image);
+					image = monsterImagesByName.get(((Monster) cell)
+							.getMonsterType().toString());
+					image = overlap(floorImage, image);
+					image = drawString(image, ((Character) cell).getLevel()
+							.toString(), Color.WHITE);
 					put(image, i - 1, j - 1);
-					points.add(new Point(i,j));
-				} else if (cell.isVisible() && cell.getClass().equals(Bonus.class)) {
-					image = dungeonGameFrame.getBonusImagesByName().get(
-							((Bonus) cell).getBonusType().toString());
-					image = ImageUtils.overlap(floorImage, image);
-					image = ImageUtils.drawString(image, (((Bonus) cell)
-							.getBonusType().getBonusAmount()).toString(),
-							Color.RED);
+					points.add(new Point(i, j));
+				} else if (cell.isVisible()
+						&& cell.getClass().equals(Bonus.class)) {
+					image = bonusImagesByName.get(((Bonus) cell).getBonusType()
+							.toString());
+					image = overlap(floorImage, image);
+					image = drawString(image,
+							(((Bonus) cell).getBonusType().getBonusAmount())
+									.toString(), Color.RED);
 					put(image, i - 1, j - 1);
-					points.add(new Point(i,j));
+					points.add(new Point(i, j));
 				} else {
 					if (cell.isVisible() && cell.getClass().equals(Wall.class)) {
-						image = dungeonGameFrame.getBoardImagesByClass().get(
-								cell.getClass());
+						image = boardImagesByClass.get(cell.getClass());
 						put(image, i - 1, j - 1);
-						points.add(new Point(i,j));
-					} else if (cell.isVisible() && cell.getClass().equals(BloodyFloor.class)) {
+						points.add(new Point(i, j));
+					} else if (cell.isVisible()
+							&& cell.getClass().equals(BloodyFloor.class)) {
 						put(bloodyFloorImage, i - 1, j - 1);
-						points.add(new Point(i,j));
-					} else if (cell.isVisible() ){
+						points.add(new Point(i, j));
+					} else if (cell.isVisible()) {
 						put(floorImage, i - 1, j - 1);
-						points.add(new Point(i,j));
+						points.add(new Point(i, j));
 					}
 				}
 			}
 		}
-		
+
 	}
 
 	/**
@@ -200,37 +194,36 @@ public class DungeonPanel extends GamePanel {
 	 *            Draw the 8 cells around the player and the cell under the
 	 *            player. Before that draw the player
 	 */
-	private void drawDungeonArroundPlayer(DungeonGameFrame dungeonGameFrame) {
+	private void drawDungeonArroundPlayer(Game game) {
 		Image image;
-		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
-				Floor.class);
-		Image bloodyFloorImage = ImageUtils
-				.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass()
-						.get(BloodyFloor.class));
+		Image floorImage = boardImagesByClass.get(Floor.class);
+		Image bloodyFloorImage = overlap(floorImage,
+				boardImagesByClass.get(BloodyFloor.class));
 
-		Point pPos = dungeonGameFrame.game.getPlayer().getPosition();
+		Point pPos = game.getPlayer().getPosition();
 		pPos = pPos.sub(2, 2);
 
 		for (int i = 1; i <= 3; i++) {
 			for (int j = 1; j <= 3; j++) {
-				Putable cell = dungeonGameFrame.game.getBoard()[pPos.x + i][pPos.y
+				Putable cell = game.getBoard()[pPos.x + i][pPos.y
 						+ j];
 				if (cell.getClass().equals(Monster.class)) {
-					image = dungeonGameFrame.getMonsterImagesByName().get(
-							((Monster) cell).getMonsterType().toString());
-					image = ImageUtils.overlap(floorImage, image);
+					image = monsterImagesByName.get(((Monster) cell)
+							.getMonsterType().toString());
+					image = overlap(floorImage, image);
+					image = drawString(image, ((Character) cell).getLevel()
+							.toString(), Color.WHITE);
 					put(image, pPos.x + i - 1, pPos.y + j - 1);
 				} else if (cell.getClass().equals(Bonus.class)) {
-					image = dungeonGameFrame.getBonusImagesByName().get(
-							((Bonus) cell).getBonusType().toString());
-					image = ImageUtils.overlap(floorImage, image);
-					image = ImageUtils.drawString(image, (((Bonus) cell)
-							.getBonusType().getBonusAmount()).toString(),
-							Color.RED);
+					image = bonusImagesByName.get(((Bonus) cell).getBonusType()
+							.toString());
+					image = overlap(floorImage, image);
+					image = drawString(image,
+							(((Bonus) cell).getBonusType().getBonusAmount())
+									.toString(), Color.RED);
 					put(image, pPos.x + i - 1, pPos.y + j - 1);
 				} else {
-					image = dungeonGameFrame.getBoardImagesByClass().get(
-							cell.getClass());
+					image = boardImagesByClass.get(cell.getClass());
 					if (cell.getClass().equals(Wall.class)) {
 						put(image, pPos.x + i - 1, pPos.y + j - 1);
 					} else if (cell.getClass().equals(BloodyFloor.class)) {
@@ -242,14 +235,14 @@ public class DungeonPanel extends GamePanel {
 			}
 		}
 
-		Point p = new Point(dungeonGameFrame.game.getPlayer().getPosition());
+		Point p = new Point(game.getPlayer().getPosition());
 
-		if (dungeonGameFrame.game.getBoard()[p.x][p.y] instanceof BloodyFloor) {
-			image = ImageUtils.overlap(bloodyFloorImage, dungeonGameFrame
-					.getPlayerImage());
+		if (game.getBoard()[p.x][p.y] instanceof BloodyFloor) {
+			image = overlap(bloodyFloorImage, playerImage);
 		}
-		image = ImageUtils.overlap(floorImage, dungeonGameFrame
-				.getPlayerImage());
+		image = overlap(floorImage, playerImage);
+		image = drawString(image, game.getPlayer().getLevel()
+				.toString(), Color.WHITE);
 		put(image, p.x - 1, p.y - 1);
 	}
 
@@ -266,77 +259,74 @@ public class DungeonPanel extends GamePanel {
 	 * 
 	 *            Redraw if necessary the DungeonPanel.
 	 */
-	public void drawPlayerMove(DungeonGameFrame dungeonGameFrame,
+	public void drawPlayerMove(Game game,
 			MoveTypes moveType) {
 		Image bloodyFloor;
 		Image floor;
-		Point afterMove = new Point(dungeonGameFrame.game.getPlayer()
-				.getPosition().x, dungeonGameFrame.game.getPlayer()
+		Point afterMove = new Point(game.getPlayer()
+				.getPosition().x, game.getPlayer()
 				.getPosition().y);
 		Point beforeMove = afterMove.sub(moveType.getDirection());
-		floor = dungeonGameFrame.getBoardImagesByClass().get(Floor.class);
-		bloodyFloor = dungeonGameFrame.getBoardImagesByClass().get(
-				BloodyFloor.class);
-		bloodyFloor = ImageUtils.overlap(floor, bloodyFloor);
-		if (dungeonGameFrame.game.getBoard()[beforeMove.x][beforeMove.y]
+		floor = boardImagesByClass.get(Floor.class);
+		bloodyFloor = boardImagesByClass.get(BloodyFloor.class);
+		bloodyFloor = overlap(floor, bloodyFloor);
+		clear(beforeMove.x - 1, beforeMove.y - 1);
+		if (game.getBoard()[beforeMove.x][beforeMove.y]
 				.getClass().equals(BloodyFloor.class)) {
-			clear(beforeMove.x - 1, beforeMove.y - 1);
 			put(bloodyFloor, beforeMove.x - 1, beforeMove.y - 1);
 		} else {
-			clear(beforeMove.x - 1, beforeMove.y - 1);
 			put(floor, beforeMove.x - 1, beforeMove.y - 1);
 		}
 
-		if (dungeonGameFrame.game.getBoard()[afterMove.x][afterMove.y]
+		clear(afterMove.x - 1, afterMove.y - 1);
+		Image image;
+		if (game.getBoard()[afterMove.x][afterMove.y]
 				.getClass().equals(BloodyFloor.class)) {
-			clear(afterMove.x - 1, afterMove.y - 1);
-			put(ImageUtils.overlap(bloodyFloor, dungeonGameFrame
-					.getPlayerImage()), afterMove.x - 1, afterMove.y - 1);
+			image = overlap(bloodyFloor, playerImage);
+			image = drawString(image, game.getPlayer()
+					.getLevel().toString(), Color.WHITE);
+			put(image, afterMove.x - 1, afterMove.y - 1);
 		} else {
-			clear(afterMove.x - 1, afterMove.y - 1);
-			put(ImageUtils.overlap(floor, dungeonGameFrame.getPlayerImage()),
-					afterMove.x - 1, afterMove.y - 1);
+			image = overlap(floor, playerImage);
+			image = drawString(image, game.getPlayer()
+					.getLevel().toString(), Color.WHITE);
+
+			put(image, afterMove.x - 1, afterMove.y - 1);
 		}
-		dungeonGameFrame.getDataPanel().refresh(dungeonGameFrame);
-		dungeonGameFrame.getDataPanel().updateUI();
 		updateUI();
 	}
 
 	/**
-	 * @param dungeonGameFrame
 	 * @param p
 	 * 
 	 *            Draw blood on the floor where a character die.
 	 */
-	public void drawDiedCharacter(DungeonGameFrame dungeonGameFrame, Point p) {
-		Image imagFloor = dungeonGameFrame.getBoardImagesByClass().get(
-				Floor.class);
-		Image imagBloodFloor = dungeonGameFrame.getBoardImagesByClass().get(
-				BloodyFloor.class);
+	public void drawDiedCharacter(Point p) {
+		Image imagFloor = boardImagesByClass.get(Floor.class);
+		Image imagBloodFloor = boardImagesByClass.get(BloodyFloor.class);
 		clear(p.x - 1, p.y - 1);
-		put(ImageUtils.overlap(imagFloor, imagBloodFloor), p.x - 1, p.y - 1);
+		put(overlap(imagFloor, imagBloodFloor), p.x - 1, p.y - 1);
 		repaint();
 
 	}
+
 
 	/**
-	 * @param dungeonGameFrame
 	 * @param p
 	 * 
-	 *            Remove de image of the bonus and draw a floor.
+	 *        Remove the image of the bonus and draw a floor.
 	 */
-	public void drawGrabedBonus(DungeonGameFrame dungeonGameFrame, Point p) {
-		Image floor = dungeonGameFrame.getBoardImagesByClass().get(Floor.class);
+	public void drawGrabedBonus(Point p) {
+		Image floor = boardImagesByClass.get(Floor.class);
 		clear(p.x - 1, p.y - 1);
-		put(ImageUtils.overlap(floor, dungeonGameFrame.getPlayerImage()),
-				p.x - 1, p.y - 1);
+		put(overlap(floor, playerImage), p.x - 1, p.y - 1);
 		repaint();
 
 	}
 
-	public void drawDiscoveredCell(DungeonGameFrame dungeonGameFrame,
+	public void drawDiscoveredCell(Game game,
 			MoveTypes dir) {
-		Point pPos = dungeonGameFrame.game.getPlayer().getPosition();
+		Point pPos = game.getPlayer().getPosition();
 		List<Point> points = new ArrayList<Point>();
 		points.add(pPos.add(dir.getDirection()));
 		if (dir == MoveTypes.LEFT || dir == MoveTypes.RIGHT) {
@@ -348,32 +338,31 @@ public class DungeonPanel extends GamePanel {
 		}
 
 		Image image;
-		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
-				Floor.class);
-		Image bloodyFloorImage = ImageUtils
-				.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass()
-						.get(BloodyFloor.class));
+		Image floorImage = boardImagesByClass.get(Floor.class);
+		Image bloodyFloorImage = overlap(floorImage,
+				boardImagesByClass.get(BloodyFloor.class));
 
 		for (Point p : points) {
-			if (dungeonGameFrame.game.getBoard()[p.x][p.y].isVisible()) {
-				dungeonGameFrame.game.getBoard()[p.x][p.y].setVisible();
-				Putable cell = dungeonGameFrame.game.getBoard()[p.x][p.y];
+			if (game.getBoard()[p.x][p.y].isVisible()) {
+				game.getBoard()[p.x][p.y].setVisible();
+				Putable cell = game.getBoard()[p.x][p.y];
 				if (cell.getClass().equals(Monster.class)) {
-					image = dungeonGameFrame.getMonsterImagesByName().get(
-							((Monster) cell).getMonsterType().toString());
-					image = ImageUtils.overlap(floorImage, image);
+					image = monsterImagesByName.get(((Monster) cell)
+							.getMonsterType().toString());
+					image = overlap(floorImage, image);
+					image = drawString(image, ((Character) cell).getLevel()
+							.toString(), Color.WHITE);
 					put(image, p.x - 1, p.y - 1);
 				} else if (cell.getClass().equals(Bonus.class)) {
-					image = dungeonGameFrame.getBonusImagesByName().get(
-							((Bonus) cell).getBonusType().toString());
-					image = ImageUtils.overlap(floorImage, image);
-					image = ImageUtils.drawString(image, (((Bonus) cell)
-							.getBonusType().getBonusAmount()).toString(),
-							Color.RED);
+					image = bonusImagesByName.get(((Bonus) cell).getBonusType()
+							.toString());
+					image = overlap(floorImage, image);
+					image = drawString(image,
+							(((Bonus) cell).getBonusType().getBonusAmount())
+									.toString(), Color.RED);
 					put(image, p.x - 1, p.y - 1);
 				} else {
-					image = dungeonGameFrame.getBoardImagesByClass().get(
-							cell.getClass());
+					image = boardImagesByClass.get(cell.getClass());
 					if (cell.getClass().equals(Wall.class)) {
 						put(image, p.x - 1, p.y - 1);
 					} else if (cell.getClass().equals(BloodyFloor.class)) {
@@ -386,4 +375,102 @@ public class DungeonPanel extends GamePanel {
 		}
 
 	}
+
+	/**
+	 * Geter of the player images.
+	 * 
+	 * @return
+	 */
+	public Image getPlayerImage() {
+		return playerImage;
+	}
+
+	/**
+	 * Getter of the bonus images
+	 * 
+	 * @return
+	 */
+	public Map<String, Image> getMonsterImagesByName() {
+		return monsterImagesByName;
+	}
+
+	/**
+	 * Getter of the bonus images.
+	 * 
+	 * @return
+	 */
+	public Map<String, Image> getBonusImagesByName() {
+		return bonusImagesByName;
+	}
+
+	/**
+	 * Getter of the board images.
+	 * 
+	 * @return
+	 */
+	public Map<Class<? extends Putable>, Image> getBoardImagesByClass() {
+		return boardImagesByClass;
+	}
+
+	/**
+	 * Method to initialize player image.
+	 */
+	private void playerImage() {
+		try {
+			playerImage = loadImage("./resources/images/hero.png");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize board images.
+	 */
+	private void boardImagesByClass() {
+		try {
+			boardImagesByClass.put(Wall.class,
+					loadImage("./resources/images/wall.png"));
+			boardImagesByClass.put(Floor.class,
+					loadImage("./resources/images/background.png"));
+			boardImagesByClass.put(BloodyFloor.class,
+					loadImage("./resources/images/blood.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize bonus images.
+	 */
+	private void bonusImagesInitialize() {
+		try {
+			bonusImagesByName.put("LIFE",
+					loadImage("./resources/images/healthBoost.png"));
+			bonusImagesByName.put("STRENGTH",
+					loadImage("./resources/images/attackBoost.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Method to initialize monsters images.
+	 */
+	private void monstersImagesInitialize() {
+		try {
+			monsterImagesByName.put("GOLEM",
+					loadImage("./resources/images/golem.png"));
+			monsterImagesByName.put("DRAGON",
+					loadImage("./resources/images/dragon.png"));
+			monsterImagesByName.put("SNAKE",
+					loadImage("./resources/images/serpent.png"));
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 }

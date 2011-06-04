@@ -7,11 +7,16 @@ import java.io.IOException;
 
 import back.BloodyFloor;
 import back.Bonus;
+import back.Floor;
 import back.Game;
 import back.Monster;
 import back.SaveGame;
 import back.Wall;
 
+/**
+ * @author tomas
+ *	SaveGame implementation that save on a file.
+ */
 public class SaveGameOnFile implements SaveGame {
 
 	private Game gameToSave;
@@ -57,12 +62,13 @@ public class SaveGameOnFile implements SaveGame {
 	}
 
 	/**
-	 * @see back.SaveGame#save() The format of the file saved is: board
-	 *      dimension (10,11) board name ("Board name") player (row pos, col
+	 * 	The format of the file saved is: board
+	 *      dimension (10,11) board name ("Board name") player (1,row pos, col
 	 *      pos,exp,health,max health, strength, name) 
-	 *      walls (2,row pos, col pos, 0 ,0, [0 is visible 1 not visible]) bloody walls(2,row pos, col
-	 *      pos, 1 ,0, [0 is visible 1 not visible]) monsters (3,row pos, col
-	 *      pos, monster type, level, [0 is visible 1 not visible]) bonus (4 or
+	 *      walls (2,row pos, col pos, 0 ,0, [0 is visible 1 not visible]) 
+	 *	bloodyFloor(2,row pos, col pos, 2 ,0, [0 is visible 1 not visible])
+	 *	floor(2,row pos, col pos, 1 ,0,[0 is visible 1 not visible])
+	 *	monsters (3,row pos, col pos, monster type, level, [0 is visible 1 not visible]) bonus (4 or
 	 *      5, row pos, col pos, 0,[0 is visible 1 not visible],amount of bonus)
 	 **/
 	public void save() throws IOException {
@@ -103,9 +109,19 @@ public class SaveGameOnFile implements SaveGame {
 						out.write("1");
 					}
 					out.newLine();
-				} else if (BloodyFloor.class
+				} else if (Floor.class
 						.equals((gameToSave.getBoard()[i][j]).getClass())) {
 					out.write(2 + "," + (i - 1) + "," + (j - 1) + "," + 1 + ","
+							+ 0 + ",");
+					if (gameToSave.getBoard()[i][j].isVisible()) {
+						out.write("0");
+					} else {
+						out.write("1");
+					}
+					out.newLine();
+				}else if (BloodyFloor.class
+						.equals((gameToSave.getBoard()[i][j]).getClass())) {
+					out.write(2 + "," + (i - 1) + "," + (j - 1) + "," + 2 + ","
 							+ 0 + ",");
 					if (gameToSave.getBoard()[i][j].isVisible()) {
 						out.write("0");

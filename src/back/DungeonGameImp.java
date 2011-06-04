@@ -4,6 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author tomas
+ *	Back end most important class. It contents all the data to play a Dungeon Game.
+ *	This class implements Game.
+ */
 public class DungeonGameImp implements Game {
 
 	final static Integer LEVEL = 3;

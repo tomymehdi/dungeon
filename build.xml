@@ -11,11 +11,11 @@
 	<!-- Ejecuta los tests. -->
 	<target name="tests" depends="compile">
 		<junit>
-			<formatter type="brief" usefile="false" />
-			<classpath path="lib/junit-4.7.jar;bin" />
-				<test name="tests.src.GameTests" />
-				<test name="tests.src.ParserTests" />
-				<test name="tests.src.PlayerTests" />
+			<formatter type="brief" usefile="false"/>
+				<classpath path="lib/junit-4.7.jar;bin" />
+					<test name="tests.GameTests" />
+					<test name="tests.ParserTests" />
+					<test name="tests.PlayerTests" />
 		</junit>
 	</target>
 	<!-- Crea el jar ejecutable con todo el proyecto compilado. -->

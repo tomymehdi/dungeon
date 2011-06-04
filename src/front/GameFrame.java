@@ -28,7 +28,7 @@ public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 	public GameFrame(String name) {
 		super(name);
 		setTitle(name);
-		setSize(17 * CELL_SIZE + 17, 17 * CELL_SIZE + 60);
+		setSize(13 * CELL_SIZE + 26, 11 * CELL_SIZE + 20);
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu("File");
 		newGameItem = fileMenu.add("New game");
@@ -84,7 +84,7 @@ public abstract class GameFrame extends JFrame implements DefaultGameMenuBar {
 	public void setExitGameItemAction(ActionListener a) {
 		exitGameItem.addActionListener(a);
 	}
-	
+
 	public abstract void addKeyListener();
 
 	public abstract void createDefaultJMenuActionListeners();

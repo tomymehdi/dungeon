@@ -1,7 +1,10 @@
 package back;
 
+/**
+ * @author tomas
+ *	A beautiful enumerate for the different types of Bonuses.
+ */
 public enum BonusTypes {
-	
 	
 	LIFE("Life", 0, new GrabBonus(){
 

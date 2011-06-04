@@ -9,6 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import back.Game;
 import back.Monster;
 import back.Player;
 import back.Point;
@@ -28,21 +29,24 @@ public class DataPanel extends JPanel {
 	private Map<Monster, JLabel[]> monstersLabels = new HashMap<Monster, JLabel[]>();
 
 	public DataPanel(Player player, Color color) {
+		setBackground(Color.WHITE);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		addCharacter(player);
 	}
 
 	public void addCharacter(Player character) {
 		JLabel[] playerLabel = new JLabel[6];
-		playerLabel[0] = new JLabel(character.getName());
-		playerLabel[0].setFont(new Font("Serif",Font.BOLD,30));
+		playerLabel[0] = new JLabel("  " + character.getName());
+		playerLabel[0].setFont(new Font("Serif", Font.BOLD, 16));
 		playerLabel[0].setForeground(Color.BLUE);
-		playerLabel[1] = new JLabel("Health: " + character.getHealth() + "/"
-				+ character.getMaxHealth());
-		playerLabel[2] = new JLabel("Strength: " + character.getStrength());
-		playerLabel[3] = new JLabel("Level: " + character.getLevel());
-		playerLabel[4] = new JLabel("Experience: " + character.getExperience()
-				+ "/" + character.getExperienceToLevelUp()+ "  ");
+		playerLabel[1] = new JLabel("  " + "Health: " + character.getHealth()
+				+ "/" + character.getMaxHealth());
+		playerLabel[2] = new JLabel("  " + "Strength: "
+				+ character.getStrength());
+		playerLabel[3] = new JLabel("  " + "Level: " + character.getLevel());
+		playerLabel[4] = new JLabel("  " + "Experience: "
+				+ character.getExperience() + "/"
+				+ character.getExperienceToLevelUp() + "  ");
 		playerLabel[5] = new JLabel(" ");
 		this.playerLabel = playerLabel;
 		for (JLabel pl : playerLabel) {
@@ -51,15 +55,15 @@ public class DataPanel extends JPanel {
 	}
 
 	public void addCharacter(Monster character) {
-		JLabel[] playerLabel = new JLabel[5];
-		playerLabel[0] = new JLabel(character.getName());
-		playerLabel[0].setFont(new Font("Serif",Font.BOLD,25));
+		JLabel[] playerLabel = new JLabel[4];
+		playerLabel[0] = new JLabel("  " + character.getName());
+		playerLabel[0].setFont(new Font("Serif", Font.BOLD, 12));
 		playerLabel[0].setForeground(Color.RED);
-		playerLabel[1] = new JLabel("Health: " + character.getHealth() + "/"
-				+ character.getMaxHealth());
-		playerLabel[2] = new JLabel("Strength: " + character.getStrength());
-		playerLabel[3] = new JLabel("Level: " + character.getLevel());
-		playerLabel[4] = new JLabel(" ");
+		playerLabel[1] = new JLabel("  " + "Health: " + character.getHealth()
+				+ "/" + character.getMaxHealth());
+		playerLabel[2] = new JLabel("  " + "Strength: "
+				+ character.getStrength());
+		playerLabel[3] = new JLabel("  " + "Level: " + character.getLevel());
 		for (JLabel pl : playerLabel) {
 			add(pl);
 		}
@@ -73,16 +77,15 @@ public class DataPanel extends JPanel {
 		}
 	}
 
-	public void refresh(DungeonGameFrame dungeonGameFrame) {
+	public void refresh(Game game, DungeonPanel dungeonPanel) {
 		Putable[] posibleMonsters = new Putable[5];
-		Point p = dungeonGameFrame.game.getPlayer().getPosition();
+		Point p = game.getPlayer().getPosition();
 
-		posibleMonsters[0] = dungeonGameFrame.game.getBoard()[p.x + 1][p.y];
-		posibleMonsters[1] = dungeonGameFrame.game.getBoard()[p.x - 1][p.y];
-		posibleMonsters[2] = dungeonGameFrame.game.getBoard()[p.x][p.y + 1];
-		posibleMonsters[3] = dungeonGameFrame.game.getBoard()[p.x][p.y - 1];
-		posibleMonsters[4] = dungeonGameFrame.getDungeonPanel()
-				.getMonsterUnderMouse();
+		posibleMonsters[0] = game.getBoard()[p.x + 1][p.y];
+		posibleMonsters[1] = game.getBoard()[p.x - 1][p.y];
+		posibleMonsters[2] = game.getBoard()[p.x][p.y + 1];
+		posibleMonsters[3] = game.getBoard()[p.x][p.y - 1];
+		posibleMonsters[4] = dungeonPanel.getMonsterUnderMouse();
 
 		removeAll();
 
@@ -92,7 +95,7 @@ public class DataPanel extends JPanel {
 			}
 		}
 
-		addCharacter(dungeonGameFrame.game.getPlayer());
+		addCharacter(game.getPlayer());
 		for (Putable put : posibleMonsters) {
 			if (put != null && put instanceof Monster) {
 				addCharacter((Monster) put);

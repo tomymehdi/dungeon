@@ -40,13 +40,13 @@ public class SavedBoardPlayerLine extends Lines {
 	@Override
 	protected void lineCheck() {
 
-		// TODO AGREGAR MAS VALIDACIONES
-		if (data[1] < 0 || data[1] >= boardDimension.x-2 || data[2] < 0
-				|| data[2] >= boardDimension.y ) {
+		if (data[1] < 0 || data[1] >= boardDimension.x - 2 || data[2] < 0
+				|| data[2] >= boardDimension.y || data[3] < 0
+				|| data[3] > data[4] || data[5] < 0) {
 			throw new CorruptedFileException();
 		}
 	}
-	
+
 	public String getPlayerName() {
 		return playerName;
 	}

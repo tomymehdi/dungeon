@@ -1,5 +1,9 @@
 package back;
 
+/**
+ * @author tomas
+ * Abstract class that extends cell. So it can ve visible or invisible in the board.
+ */
 public abstract class Character extends Cell {
 
 	private String name;

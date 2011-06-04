@@ -8,6 +8,7 @@ import parser.CorruptedFileException;
 import parser.SavedBoardPlayerLine;
 import back.BloodyFloor;
 import back.BoardObtainer;
+import back.Floor;
 import back.Game;
 import back.GameListener;
 import back.LoadGame;
@@ -55,8 +56,10 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 	
 	@Override
 	public void parseWall(Point point, BoardLine cell) {
-		if (cell.getData(3) == 1) {
+		if (cell.getData(3) == 2) {
 			putCell(point, new BloodyFloor());
+		} else if(cell.getData(3) == 1){
+			putCell(point, new Floor());
 		} else {
 			super.parseWall(point, cell);
 		}
