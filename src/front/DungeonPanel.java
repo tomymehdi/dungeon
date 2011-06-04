@@ -137,6 +137,70 @@ public class DungeonPanel extends GamePanel {
 	 *            Draw the dungeon panel when a game begins.
 	 */
 	private void drawDungeon(DungeonGameFrame dungeonGameFrame) {
+		drawRestOfDungeon(dungeonGameFrame);
+		drawDungeonArroundPlayer(dungeonGameFrame);
+
+	}
+
+	/**
+	 * @param dungeonGameFrame
+	 * Draw all the visible cells (it's just for loaded games in this game implementation)
+	 */
+	private void drawRestOfDungeon(DungeonGameFrame dungeonGameFrame) {
+		Image image;
+		List<Point> points = new ArrayList<Point>();
+		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
+				Floor.class);
+		Image bloodyFloorImage = ImageUtils
+				.overlap(floorImage, dungeonGameFrame.getBoardImagesByClass()
+						.get(BloodyFloor.class));
+
+		int row = dungeonGameFrame.game.getBoardDimension().x - 2;
+		int col = dungeonGameFrame.game.getBoardDimension().y - 2;
+
+		for (int i = 1; i <= row; i++) {
+			for (int j = 1; j <= col; j++) {
+				Putable cell = dungeonGameFrame.game.getBoard()[i][j];
+				if (cell.isVisible() && cell.getClass().equals(Monster.class)) {
+					image = dungeonGameFrame.getMonsterImagesByName().get(
+							((Monster) cell).getMonsterType().toString());
+					image = ImageUtils.overlap(floorImage, image);
+					put(image, i - 1, j - 1);
+					points.add(new Point(i,j));
+				} else if (cell.isVisible() && cell.getClass().equals(Bonus.class)) {
+					image = dungeonGameFrame.getBonusImagesByName().get(
+							((Bonus) cell).getBonusType().toString());
+					image = ImageUtils.overlap(floorImage, image);
+					image = ImageUtils.drawString(image, (((Bonus) cell)
+							.getBonusType().getBonusAmount()).toString(),
+							Color.RED);
+					put(image, i - 1, j - 1);
+					points.add(new Point(i,j));
+				} else {
+					if (cell.isVisible() && cell.getClass().equals(Wall.class)) {
+						image = dungeonGameFrame.getBoardImagesByClass().get(
+								cell.getClass());
+						put(image, i - 1, j - 1);
+						points.add(new Point(i,j));
+					} else if (cell.isVisible() && cell.getClass().equals(BloodyFloor.class)) {
+						put(bloodyFloorImage, i - 1, j - 1);
+						points.add(new Point(i,j));
+					} else if (cell.isVisible() ){
+						put(floorImage, i - 1, j - 1);
+						points.add(new Point(i,j));
+					}
+				}
+			}
+		}
+		
+	}
+
+	/**
+	 * @param dungeonGameFrame
+	 *            Draw the 8 cells around the player and the cell under the
+	 *            player. Before that draw the player
+	 */
+	private void drawDungeonArroundPlayer(DungeonGameFrame dungeonGameFrame) {
 		Image image;
 		Image floorImage = dungeonGameFrame.getBoardImagesByClass().get(
 				Floor.class);
@@ -146,6 +210,7 @@ public class DungeonPanel extends GamePanel {
 
 		Point pPos = dungeonGameFrame.game.getPlayer().getPosition();
 		pPos = pPos.sub(2, 2);
+
 		for (int i = 1; i <= 3; i++) {
 			for (int j = 1; j <= 3; j++) {
 				Putable cell = dungeonGameFrame.game.getBoard()[pPos.x + i][pPos.y

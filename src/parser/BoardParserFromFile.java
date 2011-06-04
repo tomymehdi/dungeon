@@ -83,9 +83,7 @@ public class BoardParserFromFile implements BoardObtainer {
 		if (!nameFlag || !playerFlag || !dimensionFlag) {
 			throw new CorruptedFileException();
 		}
-
 		validation();
-
 	}
 
 	public void validation() {

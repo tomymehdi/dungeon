@@ -45,6 +45,14 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 
 	}
 
+	private void setBoardCellVisivility(Point point, int num) {
+		if (num == 0) {
+			getBoardElem(point).setVisible();
+		} else {
+			getBoardElem(point).setNotVisible();
+		}
+	}
+	
 	@Override
 	public void parseWall(Point point, BoardLine cell) {
 		if (cell.getData(3) == 1) {
@@ -53,21 +61,12 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 			super.parseWall(point, cell);
 		}
 		setBoardCellVisivility(point, cell.getData(5));
-
 	};
-
-	private void setBoardCellVisivility(Point point, int num) {
-		if (num == 0) {
-			getBoardElem(point).setVisible();
-		}
-		getBoardElem(point).setNotVisible();
-
-	}
 
 	@Override
 	public void parseBonus(Point point, BoardLine cell) {
 		super.parseBonus(point, cell);
-		setBoardCellVisivility(point, cell.getData(5));
+		setBoardCellVisivility(point, cell.getData(4));
 	}
 
 	@Override

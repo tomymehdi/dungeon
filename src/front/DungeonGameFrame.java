@@ -169,9 +169,11 @@ public class DungeonGameFrame extends GameFrame {
 						try {
 							new SaveGameOnFile(game, file);
 						} catch (SavingCorruptedException e1) {
-							JOptionPane.showMessageDialog(null,
-									"Files saving error occours. Try again later.",
-									"Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane
+									.showMessageDialog(
+											null,
+											"Files saving error occours. Try again later.",
+											"Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
@@ -203,9 +205,11 @@ public class DungeonGameFrame extends GameFrame {
 						dungeonPanel.updateUI();
 					} catch (CorruptedFileException e2) {
 						e2.printStackTrace();
-						JOptionPane.showMessageDialog(null,
-								"Files loading error occours. Try again later.",
-								"Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"Files loading error occours. Try again later.",
+										"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
