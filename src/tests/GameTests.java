@@ -31,7 +31,7 @@ public class GameTests {
 	@Before
 	public void setup() {
 		game = new DungeonGameImp(new BoardParserFromFile(new File(
-				"./testBoard/boardForTest1")),new DungeonGameListener() {
+				"./testBoard/boardForTest1.board")),new DungeonGameListener() {
 
 			@Override
 			public String playerNameRequest() {
@@ -123,11 +123,11 @@ public class GameTests {
 		int number = filterFileList.size();
 		if (number > 1) {
 			File f = new File("./savedGames/savedGame" + "(" + (number - 1)
-					+ ")");
+					+ ")" + ".board");
 			assertTrue(f.exists());
 			f.delete();
 		} else {
-			File f = new File("./savedGames/savedGame");
+			File f = new File("./savedGames/savedGame.board");
 			assertTrue(f.exists());
 			f.delete();
 		}
@@ -135,7 +135,7 @@ public class GameTests {
 
 	@Test
 	public void loadGameTest() {
-		File file = new File("./savedGames/testWithPath");
+		File file = new File("./savedGames/testWithPath.board");
 		new SaveGameOnFile(game, file);
 		LoadGame<DungeonGameImp> loadGame = new LoadGameFromFile<DungeonGameImp>(file);
 		DungeonGameImp game = loadGame.getGame(DungeonGameImp.class, new DungeonGameListener() {
@@ -184,11 +184,11 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
-		File directory = new File("./savedGames");
+		File directory = new File("./savedGames.board");
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
-		File file = new File("./savedGames/testWithPath");
+		File file = new File("./savedGames/testWithPath.board");
 		new SaveGameOnFile(game, file);
 		FilterFileList filterFileList = new FilterArrayFileList(
 				file.getParentFile());

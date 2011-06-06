@@ -22,12 +22,15 @@ public class LevelSelectorImp extends JFrame implements LevelSelector {
 		String[] listBoards;
 		File directory = new File("." + File.separator + "boards");
 		listBoards = directory.list();
+		for(int i = 0 ; i < listBoards.length ; i++){
+			listBoards[i] = listBoards[i].replace(".board", "");
+		}
 		Object levelSelected = JOptionPane.showInputDialog(frameToShowOn,
 				"Select level", "Levels selector",
 				JOptionPane.QUESTION_MESSAGE, null, listBoards, listBoards[0]);
 		if (levelSelected != null) {
 			this.levelSelected = new File("." + File.separator + "boards"
-					+ File.separator + levelSelected);
+					+ File.separator + levelSelected + ".board");
 		}
 
 	}

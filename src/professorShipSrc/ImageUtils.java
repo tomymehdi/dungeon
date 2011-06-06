@@ -13,7 +13,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 /**
- * Clase con m√©todos √∫tiles para el manejo de im√°genes.
+ * Clase con mÈtodos ˙tiles para el manejo de im·genes.
  */
 public class ImageUtils {
 
@@ -31,7 +31,7 @@ public class ImageUtils {
 	}
 
 	/**
-	 * Dibuja un texto en el v√©rtice inferior derecho de la imagen, con el color indicado. Retorna una imagen nueva con
+	 * Dibuja un texto en el vÈrtice inferior derecho de la imagen, con el color indicado. Retorna una imagen nueva con
 	 * los cambios, la imagen original no se modifica.
 	 */
 	public static Image drawString(Image img, String text, Color color) {
@@ -48,7 +48,7 @@ public class ImageUtils {
 	}
 
 	/**
-	 * Superpone dos im√°genes. Retorna una nueva imagen con las 2 im√°genes recibidas superpuestas. Las
+	 * Superpone dos im·genes. Retorna una nueva imagen con las 2 im·genes recibidas superpuestas. Las
 	 * originales no se modifican.
 	 */
 	public static Image overlap(Image image1, Image image2) {

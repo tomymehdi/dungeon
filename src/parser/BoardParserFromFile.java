@@ -63,7 +63,6 @@ public class BoardParserFromFile implements BoardObtainer {
 						parsePlayer(line);
 						playerFlag = true;
 					} else {
-
 						BoardLine cell = new BoardLine(line, boardDimension);
 						Point point = (new Point(cell.getData(1), cell
 								.getData(2))).add(new Point(1, 1));

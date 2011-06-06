@@ -29,9 +29,9 @@ public class SaveGameOnFile implements SaveGame {
 		int number = filterFileList.size();
 		if (number > 0) {
 			placeToSave = new File("./savedGames/savedGame" + "(" + number
-					+ ")");
+					+ ").board");
 		} else {
-			placeToSave = new File("./savedGames/savedGame");
+			placeToSave = new File("./savedGames/savedGame.board");
 		}
 		try {
 			save();
