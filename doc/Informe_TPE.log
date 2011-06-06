@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2009.9.30)  6 JUN 2011 10:35
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2009.9.30)  6 JUN 2011 11:32
 entering extended mode
  %&-line parsing enabled.
 **Informe_TPE.tex
@@ -176,7 +176,7 @@ Package: listings 2007/02/22 1.4 (Carsten Heinz)
 LaTeX Warning: Unused global option(s):
     [14.5pt].
 
-(./Informe_TPE.aux)
+No file Informe_TPE.aux.
 \openout1 = `Informe_TPE.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -191,7 +191,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
 LaTeX Font Info:    ... okay on input line 16.
- (/opt/texlive/texmf-dist/tex/context/base/supp-pdf.tex
+(/opt/texlive/texmf-dist/tex/context/base/supp-pdf.tex
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count104
 \scratchdimen=\dimen118
@@ -220,8 +220,8 @@ LaTeX Warning: No \author given.
 {/opt/texlive/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 (./Informe_TPE.aux) ) 
 Here is how much of TeX's memory you used:
- 2937 strings out of 493876
- 39833 string characters out of 1154527
+ 2935 strings out of 493876
+ 39801 string characters out of 1154527
  101729 words of memory out of 3000000
  6217 multiletter control sequences out of 10000+50000
  11670 words of font info for 30 fonts, out of 3000000 for 5000

@@ -80,7 +80,6 @@ public class DungeonGameFrame extends GameFrame {
 						dungeonPanel.updateUI();
 					}
 				} catch (Exception e1) {
-					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null,
 							"Level file is corrupt", "Error",
 							JOptionPane.ERROR_MESSAGE);
@@ -118,7 +117,8 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (game != null) {
-					File directory = new File("./savedGames");
+					File directory = new File("." + File.separator
+							+ "savedGames");
 					if (!directory.exists()) {
 						directory.mkdir();
 					}
@@ -137,13 +137,15 @@ public class DungeonGameFrame extends GameFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (game != null) {
-					File directory = new File("./savedGames");
+					File directory = new File("." + File.separator
+							+ "savedGames");
 					if (!directory.exists()) {
 						directory.mkdir();
 					}
 					File file;
 					JFileChooser fc = new JFileChooser();
-					fc.setCurrentDirectory(new File("./savedGames"));
+					fc.setCurrentDirectory(new File("." + File.separator
+							+ "savedGames"));
 					fc.showOpenDialog(DungeonGameFrame.this);
 					file = fc.getSelectedFile();
 					if (file == null) {
@@ -178,7 +180,8 @@ public class DungeonGameFrame extends GameFrame {
 				}
 				File file;
 				JFileChooser fc = new JFileChooser();
-				fc.setCurrentDirectory(new File("./savedGames"));
+				fc.setCurrentDirectory(new File("." + File.separator
+						+ "savedGames"));
 				fc.showOpenDialog(DungeonGameFrame.this);
 				file = fc.getSelectedFile();
 				if (file == null) {
@@ -195,7 +198,6 @@ public class DungeonGameFrame extends GameFrame {
 						dataPanel.updateUI();
 						dungeonPanel.updateUI();
 					} catch (CorruptedFileException e2) {
-						e2.printStackTrace();
 						JOptionPane
 								.showMessageDialog(
 										null,
