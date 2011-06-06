@@ -23,23 +23,23 @@ public class ParserTests {
 	@Before
 	public void setup() {
 		boardParser = new BoardParserFromFile(new File(
-				"./testBoard/boardForTest1"));
+				"./testBoard/boardForTest1.board"));
 	}
 
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAMonsterTest() {
-		new BoardParserFromFile(new File("./testBoard/boardForTest2"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest2.board"));
 	}
 
 	@Test(expected = CorruptedFileException.class)
 	public void startPlayerPositionOverAWallTest() {
-		new BoardParserFromFile(new File("./testBoard/boardForTest3"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest3.board"));
 	}
 
 	@Test
 	public void mapWithoutSurroundingWalls() {
 		BoardObtainer boardParser = new BoardParserFromFile(new File(
-				"./testBoard/boardForTest4"));
+				"./testBoard/boardForTest4.board"));
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(0, 0))
 				.getClass());
 		assertEquals(Wall.class, boardParser.getBoardElem(new Point(11, 0))
@@ -52,7 +52,7 @@ public class ParserTests {
 
 	@Test(expected = CorruptedFileException.class)
 	public void positionOutOfBoardDimensionsTest() {
-		new BoardParserFromFile(new File("./testBoard/boardForTest5"));
+		new BoardParserFromFile(new File("./testBoard/boardForTest5.board"));
 	}
 
 	@Test(expected = CorruptedFileException.class)

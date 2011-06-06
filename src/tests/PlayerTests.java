@@ -23,7 +23,7 @@ public class PlayerTests {
 	@Before
 	public void setup() {
 		boardParser = new BoardParserFromFile(new File(
-				"./testBoard/boardForTest1"));
+				"./testBoard/boardForTest1.board"));
 		player = new Player(new PlayerData("Tomas", 0, 0, 10, 10, 5,
 				boardParser.getPlayerPosition(),0));
 	}
