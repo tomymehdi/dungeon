@@ -28,8 +28,8 @@ public class SaveGameOnFile implements SaveGame {
 		filterFileList = filterFileList.filter("savedGame");
 		int number = filterFileList.size();
 		if (number > 0) {
-			placeToSave = new File("./savedGames/savedGame" + "(" + number
-					+ ").board");
+			placeToSave = new File("./savedGames/savedGame" + "(" + number + ")"
+					+ ".board");
 		} else {
 			placeToSave = new File("./savedGames/savedGame.board");
 		}
@@ -49,7 +49,7 @@ public class SaveGameOnFile implements SaveGame {
 		int number = filterFileList.size();
 		if (number > 0) {
 			this.placeToSave = new File(placeToSave.getPath() + "(" + number
-					+ ")");
+					+ ")"+ ").board");
 		} else {
 			this.placeToSave = new File(placeToSave.getPath());
 		}
