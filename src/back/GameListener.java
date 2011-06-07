@@ -16,6 +16,6 @@ public interface GameListener {
 
 	public String playerNameRequest();
 
-	void executeWhenLevelUp();
+	public void executeWhenLevelUp();
 
 }

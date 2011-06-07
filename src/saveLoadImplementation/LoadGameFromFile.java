@@ -13,6 +13,8 @@ import back.Game;
 import back.GameListener;
 import back.LoadGame;
 import back.Monster;
+import back.Player;
+import back.PlayerData;
 import back.Point;
 
 public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
@@ -76,10 +78,8 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 
 	@Override
 	public void parseMonster(Point point, BoardLine cell) {
-		putCell(point.x,
-				point.y,
-				new Monster(point, cell.getData(3), cell.getData(4), Math
-						.abs(cell.getData(5))));
+		putCell(point.x, point.y, new Monster(point, cell.getData(3), cell
+				.getData(4), Math.abs(cell.getData(5))));
 		if (cell.getData(5) < 0) {
 			setBoardCellVisivility(point, 0);
 		} else if (cell.getData(5) > 0) {
@@ -137,6 +137,15 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 	@Override
 	public String getPlayerName() {
 		return playerName;
+	}
+
+	@Override
+	public Player getLoadedPlayer() {
+		PlayerData playerData = new PlayerData(playerName, loadedLevel,
+				playerLoadedExperience, playerLoadedHealth,
+				playerLoadedMaxHealth, playerLoadedStrength,
+				playerLoadedPosition, playerLoadedSteps);
+		return new Player(playerData);
 	}
 
 }

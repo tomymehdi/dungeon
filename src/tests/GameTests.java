@@ -73,6 +73,7 @@ public class GameTests {
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Integer(4), game.getPlayer().getHealth());
+		System.out.println(game.getPlayer().getExperience());
 		assertEquals(new Integer(1), game.getPlayer().getExperience());
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Point(4, 3), game.getPlayer().getPosition());

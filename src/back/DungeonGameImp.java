@@ -21,35 +21,27 @@ public class DungeonGameImp implements Game {
 	private GameListener gameListener;
 	private BoardObtainer boardObtainer;
 
-	@SuppressWarnings("unchecked")
 	public DungeonGameImp(BoardObtainer boardObtainer, GameListener gameListener) {
 		this.boardObtainer = boardObtainer;
 		this.gameListener = gameListener;
 		boardName = boardObtainer.getBoardName();
 		boardDimension = boardObtainer.getBoardDimension();
 		board = boardObtainer.getBoard();
-		PlayerData playerData = new PlayerData(null, 0, 0, LIFE, LIFE,
-				STRENGTH, boardObtainer.getPlayerPosition(),
-				boardObtainer.getPlayerSteps());
+		setPlayer();
+		firstDiscoveredCells();
+	}
+
+	private void setPlayer() {
 		if (!(boardObtainer instanceof LoadGame)) {
-			playerData.setName(gameListener.playerNameRequest());
+			PlayerData playerData = new PlayerData(gameListener
+					.playerNameRequest(), 1, 0, LIFE, LIFE, STRENGTH,
+					boardObtainer.getPlayerPosition(), boardObtainer
+							.getPlayerSteps());
 			player = new Player(playerData);
 		} else {
-			playerData
-					.setName(((LoadGame<Game>) boardObtainer).getPlayerName());
-			playerData.setHealth(((LoadGame<Game>) boardObtainer)
-					.getPlayerLoadedHealth());
-			playerData.setMaxHealth(((LoadGame<Game>) boardObtainer)
-					.getPlayerLoadedMaxHealth());
-			playerData.setStrength(((LoadGame<Game>) boardObtainer)
-					.getPlayerLoadedStrength());
-			playerData.setExperience(((LoadGame<Game>) boardObtainer)
-					.getPlayerLoadedExperience());
-			player = new Player(playerData,
-					((LoadGame<Game>) boardObtainer).getPlayerLoadedLevel(),
-					((LoadGame<Game>) boardObtainer).getPlayerLoadedSteps());
+			player = ((LoadGame)boardObtainer).getLoadedPlayer();
 		}
-		firstDiscoveredCells();
+
 	}
 
 	private void firstDiscoveredCells() {
@@ -154,8 +146,8 @@ public class DungeonGameImp implements Game {
 	 */
 	public void fightEnd(Character character) {
 		if (character.isDead()) {
-			Point point = new Point(character.getPosition().x,
-					character.getPosition().y);
+			Point point = new Point(character.getPosition().x, character
+					.getPosition().y);
 			BloodyFloor bf = new BloodyFloor();
 			bf.setVisible();
 			board[point.x][point.y] = bf;
@@ -163,8 +155,8 @@ public class DungeonGameImp implements Game {
 
 		}
 		if (player.isDead()) {
-			Point point = new Point(player.getPosition().x,
-					player.getPosition().y);
+			Point point = new Point(player.getPosition().x, player
+					.getPosition().y);
 			BloodyFloor bf = new BloodyFloor();
 			bf.setVisible();
 			board[point.x][point.y] = bf;
@@ -220,8 +212,8 @@ public class DungeonGameImp implements Game {
 		} catch (Exception e) {
 		}
 		PlayerData playerData = new PlayerData(player.getName(), 0, 0, LIFE,
-				LIFE, STRENGTH, boardObtainer.getPlayerPosition(),
-				player.getSteps());
+				LIFE, STRENGTH, boardObtainer.getPlayerPosition(), player
+						.getSteps());
 		player = new Player(playerData);
 	}
 

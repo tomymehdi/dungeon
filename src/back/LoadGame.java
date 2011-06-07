@@ -6,9 +6,9 @@ public interface LoadGame<T extends Game> {
 	
 	public Integer getPlayerLoadedSteps();
 	
-	Integer getPlayerLoadedExperience();
+	public Integer getPlayerLoadedExperience();
 
-	Integer getPlayerLoadedStrength();
+	public Integer getPlayerLoadedStrength();
 	
 	public int getPlayerLoadedLevel();
 	
@@ -17,5 +17,6 @@ public interface LoadGame<T extends Game> {
 	public Integer getPlayerLoadedMaxHealth();
 	
 	public String getPlayerName();
-
+	
+	public Player getLoadedPlayer();
 }

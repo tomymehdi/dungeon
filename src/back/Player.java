@@ -9,18 +9,13 @@ public class Player extends Character {
 	private Integer steps = 0;
 
 	public Player(PlayerData playerData) {
-		super(playerData.getName(), 1, playerData.getPosition());
-		this.experience = 0;
+		super(playerData.getName(), playerData.getLevel(), playerData.getPosition());
 		this.experienceToLevelUp = EXPERIENCECONSTANT * getLevel();
-		setHealth(playerData.getHealth());
+		this.experience = playerData.getExperience();
 		setMaxHealth(playerData.getMaxHealth());
+		setHealth(playerData.getHealth());
 		setStrength(playerData.getStrength());
-	}
-
-	public Player(PlayerData playerData, int level, int steps) {
-		this(playerData);
-		this.steps = steps;
-		setLevel(level);
+		
 	}
 
 	public MoveTypes move(MoveTypes moveType) {

@@ -7,7 +7,7 @@ package back;
  */
 public abstract class Cell {
 	
-	boolean isVisible = false;
+	private boolean isVisible = false;
 
 	public boolean isVisible() {
 		return isVisible;

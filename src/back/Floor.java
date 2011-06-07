@@ -1,6 +1,7 @@
 package back;
 
 public class Floor extends Cell implements Putable {
+	
 	@Override
 	public String toString() {
 		return "Floor";

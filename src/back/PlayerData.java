@@ -2,24 +2,27 @@ package back;
 
 public class PlayerData {
 
-	String name;
-	int level;
-	int experience;
-	int maxHealth;
-	int health;
-	int strength;
-	Point position;
+	private String name;
+	private int level;
+	private int experience;
+	private int maxHealth;
+	private int health;
+	private int strength;
+	private Point position;
+	private int steps;
 
 	public PlayerData(String name, int level, int experience, int health,
 			int maxHealth, int strength, Point position, int steps) {
+		this.level = level;
 		this.name = name;
 		this.experience = experience;
 		this.health = health;
 		this.maxHealth = maxHealth;
 		this.strength = strength;
 		this.position = position;
+		this.steps = steps;
+		
 	}
-
 
 	public int getExperience() {
 		return experience;
@@ -31,10 +34,6 @@ public class PlayerData {
 
 	public int getHealth() {
 		return health;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
 	}
 
 	public String getName() {
@@ -53,20 +52,12 @@ public class PlayerData {
 		return strength;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public int getLevel() {
+		return level;
 	}
 
-	public void setMaxHealth(int maxHealth) {
-		this.maxHealth = maxHealth;
-	}
-
-	public void setPosition(Point position) {
-		this.position = position;
-	}
-
-	public void setStrength(int strength) {
-		this.strength = strength;
+	public int getSteps() {
+		return steps;
 	}
 
 }
