@@ -22,6 +22,6 @@ public interface BoardObtainer {
 
 	public File getFile();
 
-	public int getPlayerSteps();
+	public PlayerData getPlayerData();
 	
 }

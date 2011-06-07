@@ -18,5 +18,4 @@ public interface LoadGame<T extends Game> {
 	
 	public String getPlayerName();
 	
-	public Player getLoadedPlayer();
 }

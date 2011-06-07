@@ -7,8 +7,10 @@ import java.io.IOException;
 
 import back.BoardObtainer;
 import back.Bonus;
+import back.DungeonGameImp;
 import back.Floor;
 import back.Monster;
+import back.PlayerData;
 import back.Point;
 import back.Putable;
 import back.Wall;
@@ -203,8 +205,10 @@ public class BoardParserFromFile implements BoardObtainer {
 	}
 
 	@Override
-	public int getPlayerSteps() {
-		return 0;
+	public PlayerData getPlayerData() {
+		PlayerData playerData = new PlayerData(null, 1, 0, DungeonGameImp.LIFE, DungeonGameImp.LIFE, DungeonGameImp.STRENGTH,
+				playerPosition, 0);
+		return playerData;
 	}
 
 }

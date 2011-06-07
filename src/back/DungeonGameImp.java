@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class DungeonGameImp implements Game {
 
-	final static Integer LEVEL = 3;
-	final static Integer LIFE = 10;
-	final static Integer STRENGTH = 5;
+	public final static Integer LEVEL = 3;
+	public final static Integer LIFE = 10;
+	public final static Integer STRENGTH = 5;
 
 	private String boardName;
 	private Player player;
@@ -27,21 +27,12 @@ public class DungeonGameImp implements Game {
 		boardName = boardObtainer.getBoardName();
 		boardDimension = boardObtainer.getBoardDimension();
 		board = boardObtainer.getBoard();
-		setPlayer();
-		firstDiscoveredCells();
-	}
-
-	private void setPlayer() {
+		PlayerData playerData = boardObtainer.getPlayerData();
 		if (!(boardObtainer instanceof LoadGame)) {
-			PlayerData playerData = new PlayerData(gameListener
-					.playerNameRequest(), 1, 0, LIFE, LIFE, STRENGTH,
-					boardObtainer.getPlayerPosition(), boardObtainer
-							.getPlayerSteps());
-			player = new Player(playerData);
-		} else {
-			player = ((LoadGame)boardObtainer).getLoadedPlayer();
+			playerData.setName(gameListener.playerNameRequest());
 		}
-
+		player = new Player(playerData);
+		firstDiscoveredCells();
 	}
 
 	private void firstDiscoveredCells() {

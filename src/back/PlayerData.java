@@ -21,7 +21,7 @@ public class PlayerData {
 		this.strength = strength;
 		this.position = position;
 		this.steps = steps;
-		
+
 	}
 
 	public int getExperience() {
@@ -58,6 +58,10 @@ public class PlayerData {
 
 	public int getSteps() {
 		return steps;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

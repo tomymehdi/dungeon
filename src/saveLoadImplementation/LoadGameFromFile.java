@@ -13,7 +13,6 @@ import back.Game;
 import back.GameListener;
 import back.LoadGame;
 import back.Monster;
-import back.Player;
 import back.PlayerData;
 import back.Point;
 
@@ -140,12 +139,12 @@ public class LoadGameFromFile<T extends Game> extends BoardParserFromFile
 	}
 
 	@Override
-	public Player getLoadedPlayer() {
+	public PlayerData getPlayerData() {
 		PlayerData playerData = new PlayerData(playerName, loadedLevel,
 				playerLoadedExperience, playerLoadedHealth,
 				playerLoadedMaxHealth, playerLoadedStrength,
 				playerLoadedPosition, playerLoadedSteps);
-		return new Player(playerData);
+		return playerData;
 	}
 
 }

@@ -74,10 +74,7 @@ public class DungeonGameFrame extends GameFrame {
 								file);
 						game = new DungeonGameImp(boardObtainer,
 								new DungeonGameListenerImp());
-						setSize((game.getBoardDimension().y + 2)
-								* DungeonPanel.CELL_SIZE, (game
-								.getBoardDimension().x)
-								* DungeonPanel.CELL_SIZE - 7);
+						setSize();
 						drawDungeonPanel();
 						drawDataPanel();
 						dataPanel.refresh(game, dungeonPanel);
@@ -89,6 +86,7 @@ public class DungeonGameFrame extends GameFrame {
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
+
 		});
 
 		setRestartGameItemAction(new ActionListener() {
@@ -198,6 +196,7 @@ public class DungeonGameFrame extends GameFrame {
 								file);
 						game = loadGame.getGame(DungeonGameImp.class,
 								new DungeonGameListenerImp());
+						setSize();
 						drawDungeonPanel();
 						drawDataPanel();
 						dataPanel.updateUI();
@@ -226,6 +225,13 @@ public class DungeonGameFrame extends GameFrame {
 			}
 		});
 
+	}
+	
+	private void setSize() {
+		setSize((game.getBoardDimension().y + 2)
+				* DungeonPanel.CELL_SIZE, (game
+				.getBoardDimension().x)
+				* DungeonPanel.CELL_SIZE - 7);
 	}
 
 	/**
