@@ -132,6 +132,7 @@ public class GameTests {
 			assertTrue(f.exists());
 			f.delete();
 		}
+		directory.delete();
 	}
 
 	@Test
@@ -185,7 +186,7 @@ public class GameTests {
 
 	@Test
 	public void forWatchTheGameSavedWithPathTest() {
-		File directory = new File("./savedGames.board");
+		File directory = new File("./savedGames");
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
@@ -204,6 +205,7 @@ public class GameTests {
 			assertTrue(f.exists());
 			f.delete();
 		}
+		directory.delete();
 	}
 
 }

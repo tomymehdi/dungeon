@@ -231,7 +231,7 @@ public class DungeonGameFrame extends GameFrame {
 
 	private void setSize() {
 		setSize((game.getBoardDimension().y + 2) * DungeonPanel.CELL_SIZE,
-				(game.getBoardDimension().x) * DungeonPanel.CELL_SIZE - 7);
+				(game.getBoardDimension().x) * DungeonPanel.CELL_SIZE );
 	}
 
 	/**
