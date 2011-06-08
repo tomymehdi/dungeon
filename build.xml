@@ -20,6 +20,9 @@
 	</target>
 	<!-- Crea el jar ejecutable con todo el proyecto compilado. -->
 	<target name="dist" depends="compile, doc, tests">
+		<copy todir="bin/resources">
+					<fileset dir="resources" />
+				</copy>
 		<jar destfile="dungeon.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="front.App" />

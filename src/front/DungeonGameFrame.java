@@ -370,7 +370,7 @@ public class DungeonGameFrame extends GameFrame {
 	 */
 	private void setIcon() {
 		try {
-			setIconImage(loadImage("./resources/images/hero.png"));
+			setIconImage(loadImage("resources/images/hero.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);

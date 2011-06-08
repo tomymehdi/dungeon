@@ -386,7 +386,7 @@ public class DungeonPanel extends GamePanel {
 	 */
 	private void playerImage() {
 		try {
-			playerImage = loadImage("./resources/images/hero.png");
+			playerImage = loadImage("resources/images/hero.png");
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -399,11 +399,11 @@ public class DungeonPanel extends GamePanel {
 	private void boardImagesByClass() {
 		try {
 			boardImagesByClass.put(Wall.class,
-					loadImage("./resources/images/wall.png"));
+					loadImage("resources/images/wall.png"));
 			boardImagesByClass.put(Floor.class,
-					loadImage("./resources/images/background.png"));
+					loadImage("resources/images/background.png"));
 			boardImagesByClass.put(BloodyFloor.class,
-					loadImage("./resources/images/blood.png"));
+					loadImage("resources/images/blood.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -416,9 +416,9 @@ public class DungeonPanel extends GamePanel {
 	private void bonusImagesInitialize() {
 		try {
 			bonusImagesByName.put("LIFE",
-					loadImage("./resources/images/healthBoost.png"));
+					loadImage("resources/images/healthBoost.png"));
 			bonusImagesByName.put("STRENGTH",
-					loadImage("./resources/images/attackBoost.png"));
+					loadImage("resources/images/attackBoost.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -431,11 +431,11 @@ public class DungeonPanel extends GamePanel {
 	private void monstersImagesInitialize() {
 		try {
 			monsterImagesByName.put("GOLEM",
-					loadImage("./resources/images/golem.png"));
+					loadImage("resources/images/golem.png"));
 			monsterImagesByName.put("DRAGON",
-					loadImage("./resources/images/dragon.png"));
+					loadImage("resources/images/dragon.png"));
 			monsterImagesByName.put("SNAKE",
-					loadImage("./resources/images/serpent.png"));
+					loadImage("resources/images/serpent.png"));
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Unexpected Error", "Error",
 					JOptionPane.ERROR_MESSAGE);
