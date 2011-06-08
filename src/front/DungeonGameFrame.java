@@ -150,7 +150,9 @@ public class DungeonGameFrame extends GameFrame {
 							+ "savedGames"));
 					fc.showOpenDialog(DungeonGameFrame.this);
 					file = fc.getSelectedFile();
-					file = new File(file.getPath() + ".board");
+					if (!file.getPath().endsWith(".board")) {
+						file = new File(file.getPath() + ".board");
+					}
 					if (file == null) {
 						JOptionPane.showMessageDialog(null,
 								"You didn't select any file.");
@@ -226,12 +228,10 @@ public class DungeonGameFrame extends GameFrame {
 		});
 
 	}
-	
+
 	private void setSize() {
-		setSize((game.getBoardDimension().y + 2)
-				* DungeonPanel.CELL_SIZE, (game
-				.getBoardDimension().x)
-				* DungeonPanel.CELL_SIZE - 7);
+		setSize((game.getBoardDimension().y + 2) * DungeonPanel.CELL_SIZE,
+				(game.getBoardDimension().x) * DungeonPanel.CELL_SIZE - 7);
 	}
 
 	/**
