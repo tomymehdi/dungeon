@@ -41,19 +41,21 @@ public class SaveGameOnFile implements SaveGame {
 	}
 
 	public SaveGameOnFile(Game gameToSave, File placeToSave) {
-		this.gameToSave = gameToSave;
-		this.placeToSave = placeToSave;
+		if (placeToSave.getPath().endsWith(".board")) {
+			placeToSave = new File(placeToSave.getPath().replace(".board", "") );
+		}
 		FilterFileList filterFileList = new FilterArrayFileList(
 				placeToSave.getParentFile());
 		filterFileList = filterFileList.filter(placeToSave.getName());
 		int number = filterFileList.size();
 		if (number > 0) {
 			this.placeToSave = new File(placeToSave.getPath() + "(" + number
-					+ ")"+ ").board");
+					+ ")" + ".board" );
 		} else {
-			this.placeToSave = new File(placeToSave.getPath());
+			this.placeToSave = new File(placeToSave.getPath()+ ".board");
 		}
 		try {
+			this.gameToSave = gameToSave;
 			save();
 		} catch (IOException e) {
 			throw new SavingCorruptedException();

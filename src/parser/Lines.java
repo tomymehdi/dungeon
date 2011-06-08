@@ -32,7 +32,6 @@ public abstract class Lines {
 				}
 			}
 		} else {
-			System.out.println(line);
 			throw new CorruptedFileException();
 		}
 	}

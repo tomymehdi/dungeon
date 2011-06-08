@@ -150,9 +150,6 @@ public class DungeonGameFrame extends GameFrame {
 							+ "savedGames"));
 					fc.showOpenDialog(DungeonGameFrame.this);
 					file = fc.getSelectedFile();
-					if (!file.getPath().endsWith(".board")) {
-						file = new File(file.getPath() + ".board");
-					}
 					if (file == null) {
 						JOptionPane.showMessageDialog(null,
 								"You didn't select any file.");

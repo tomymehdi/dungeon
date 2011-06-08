@@ -31,7 +31,7 @@ public class GameTests {
 	@Before
 	public void setup() {
 		game = new DungeonGameImp(new BoardParserFromFile(new File(
-				"./testBoard/boardForTest1.board")),new DungeonGameListener() {
+				"./testBoard/boardForTest1.board")), new DungeonGameListener() {
 
 			@Override
 			public String playerNameRequest() {
@@ -73,7 +73,6 @@ public class GameTests {
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Integer(4), game.getPlayer().getHealth());
-		System.out.println(game.getPlayer().getExperience());
 		assertEquals(new Integer(1), game.getPlayer().getExperience());
 		game.receiveMoveStroke(MoveTypes.LEFT);
 		assertEquals(new Point(4, 3), game.getPlayer().getPosition());
@@ -88,8 +87,8 @@ public class GameTests {
 	@Test
 	public void goodFunctionamientOfWiningWhenKillMonsterLevel3Test() {
 		game.getPlayer().winLife(40);
-		Bonus bonus = new Bonus(new Point(7,7),4,50);
-		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
+		Bonus bonus = new Bonus(new Point(7, 7), 4, 50);
+		Bonus bonus2 = new Bonus(new Point(7, 7), 5, 50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(8, 2));
@@ -99,8 +98,8 @@ public class GameTests {
 	@Test
 	public void goodFunctionamientOfResetGameTest() {
 		game.getPlayer().winLife(40);
-		Bonus bonus = new Bonus(new Point(7,7),4,50);
-		Bonus bonus2 = new Bonus(new Point(7,7),5,50);
+		Bonus bonus = new Bonus(new Point(7, 7), 4, 50);
+		Bonus bonus2 = new Bonus(new Point(7, 7), 5, 50);
 		bonus.giveBonus(game.getPlayer());
 		bonus2.giveBonus(game.getPlayer());
 		game.getPlayer().setPosition(new Point(4, 6));
@@ -137,51 +136,59 @@ public class GameTests {
 
 	@Test
 	public void loadGameTest() {
-		File file = new File("./savedGames/testWithPath.board");
+		File directory = new File("./savedGames");
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
+		File file = new File("./savedGames/testWithPath");
 		new SaveGameOnFile(game, file);
-		LoadGame<DungeonGameImp> loadGame = new LoadGameFromFile<DungeonGameImp>(file);
-		DungeonGameImp game = loadGame.getGame(DungeonGameImp.class, new DungeonGameListener() {
+		File file2 = new File(file.getPath() + ".board");
+		LoadGame<DungeonGameImp> loadGame = new LoadGameFromFile<DungeonGameImp>(
+				file2);
+		DungeonGameImp game = loadGame.getGame(DungeonGameImp.class,
+				new DungeonGameListener() {
 
-			@Override
-			public String playerNameRequest() {
-				String name = null;
-				while (name == null || name.isEmpty()) {
-					name = JOptionPane.showInputDialog("Player name");
-				}
-				return name;
-			}
+					@Override
+					public String playerNameRequest() {
+						String name = null;
+						while (name == null || name.isEmpty()) {
+							name = JOptionPane.showInputDialog("Player name");
+						}
+						return name;
+					}
 
-			@Override
-			public void executeWhenPlayerMoves(MoveTypes moveType) {
-			}
+					@Override
+					public void executeWhenPlayerMoves(MoveTypes moveType) {
+					}
 
-			@Override
-			public void executeWhenGameWinned() {
-			}
+					@Override
+					public void executeWhenGameWinned() {
+					}
 
-			@Override
-			public void executeWhenGameLoosed() {
-			}
+					@Override
+					public void executeWhenGameLoosed() {
+					}
 
-			@Override
-			public void executeWhenCharacterDie(Point p) {
-			}
+					@Override
+					public void executeWhenCharacterDie(Point p) {
+					}
 
-			@Override
-			public void executeWhenBonusGrabed(Point p) {
-			}
+					@Override
+					public void executeWhenBonusGrabed(Point p) {
+					}
 
-			@Override
-			public void executeWhenFight() {
-			}
+					@Override
+					public void executeWhenFight() {
+					}
 
-			@Override
-			public void executeWhenLevelUp() {
-			}
-		});
+					@Override
+					public void executeWhenLevelUp() {
+					}
+				});
 		assertEquals(new Integer(0), game.getPlayer().getExperience());
 		assertEquals(new Point(4, 4), game.getPlayer().getPosition());
-		file.delete();
+		file2.delete();
+		directory.delete();
 	}
 
 	@Test
@@ -190,18 +197,19 @@ public class GameTests {
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
-		File file = new File("./savedGames/testWithPath.board");
+		File file = new File("./savedGames/testWithPath");
 		new SaveGameOnFile(game, file);
-		FilterFileList filterFileList = new FilterArrayFileList(
-				file.getParentFile());
+		FilterFileList filterFileList = new FilterArrayFileList(file
+				.getParentFile());
 		filterFileList = filterFileList.filter(file.getName());
 		int number = filterFileList.size();
 		if (number > 1) {
-			File f = new File(file.getPath() + "(" + (number - 1) + ")");
+			File f = new File(file.getPath() + "(" + (number - 1) + ")"
+					+ ".board");
 			assertTrue(f.exists());
 			f.delete();
 		} else {
-			File f = new File(file.getPath());
+			File f = new File(file.getPath() + ".board");
 			assertTrue(f.exists());
 			f.delete();
 		}
